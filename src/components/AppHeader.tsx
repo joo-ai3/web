@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FiShoppingCart, FiUser, FiMoon, FiSun, FiHeart } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
