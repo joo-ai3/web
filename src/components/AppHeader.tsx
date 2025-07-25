@@ -6,7 +6,8 @@ import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLang, useTranslation } from '../contexts/LangContext';
-import Logo from './Logo';
+<img src="/logo.png" alt="Soleva Logo" className="h-10" />
+
 import MobileMenu from './MobileMenu';
 
 export default function AppHeader() {
