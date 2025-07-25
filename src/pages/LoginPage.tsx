@@ -66,14 +66,19 @@ export default function LoginPage() {
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
         className="max-w-md mx-auto"
       >
         <GlassCard>
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-[#d1b16a]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.5, type: "spring", stiffness: 200 }}
+              className="w-20 h-20 bg-[#d1b16a]/20 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
               <FiLogIn size={32} className="text-[#d1b16a]" />
-            </div>
+            </motion.div>
             <h1 className="text-3xl font-bold mb-2 text-[#111]">{t("login")}</h1>
             <p className="text-gray-600">
               {lang === "ar" ? "مرحباً بعودتك إلى سوليفا" : "Welcome back to Soleva"}

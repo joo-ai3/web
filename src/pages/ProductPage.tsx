@@ -89,11 +89,11 @@ export default function ProductPage() {
               key={currentImageIndex}
               src={currentImage}
               alt={product.name[lang]}
-              className={`w-full rounded-2xl shadow-lg transition-opacity duration-500 ${isImageChanging ? 'opacity-0' : 'opacity-100'}`}
+              className={`w-full rounded-2xl shadow-lg transition-all duration-500 ${isImageChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
             />
           </AnimatePresence>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
@@ -110,7 +110,7 @@ export default function ProductPage() {
                 className={clsx(
                   "w-2 h-2 rounded-full transition-all duration-300",
                   currentImageIndex === index
-                    ? "bg-[#d1b16a] w-6"
+                    ? "bg-[#d1b16a] w-6 shadow-lg"
                     : "bg-white/50 hover:bg-white/80"
                 )}
               />

@@ -20,10 +20,10 @@ export default function EmptyCart() {
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 200 }}
+          transition={{ delay: 0.2, duration: 0.6, type: "spring", stiffness: 180 }}
           className="mb-8"
         >
-          <FiShoppingCart size={80} className="mx-auto text-[#d1b16a] drop-shadow-lg" />
+          <FiShoppingCart size={80} className="mx-auto text-[#d1b16a] drop-shadow-lg animate-liquid-float" />
         </motion.div>
         
         <motion.h1 

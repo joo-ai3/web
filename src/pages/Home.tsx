@@ -7,6 +7,7 @@ import { useFavorites } from '../contexts/FavoritesContext';
 import { useToast } from '../contexts/ToastContext';
 import { collections, products } from '../data/products';
 import SectionTitle from '../components/SectionTitle';
+import Logo from '../components/Logo';
 
 export default function Home() {
   const { lang } = useLang();
@@ -29,8 +30,11 @@ export default function Home() {
         transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
         className="text-center mb-16"
       >
+        <div className="mb-8">
+          <Logo size="large" showText={true} showSlogan={true} className="justify-center" />
+        </div>
         <h1 className="mobile-title text-2xl sm:text-4xl md:text-6xl font-bold mb-4 text-[#111] tracking-wide leading-snug">
-          {t("madeToMove")}
+          {lang === 'ar' ? 'خطوتك تفرق' : 'Made to Move'}
         </h1>
         <p className="text-base sm:text-lg text-gray-600 mb-6 max-w-2xl mx-auto px-4">
           {lang === "ar"

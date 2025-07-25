@@ -77,7 +77,7 @@ export default function MobileMenu() {
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
-                <Logo size="small" />
+                <Logo size="small" showText={true} className="flex-shrink-0" />
                 <button
                   onClick={() => setIsOpen(false)}
                   className="glass p-2 rounded-lg border border-[#d1b16a]/40 hover:bg-[#d1b16a]/20 transition"

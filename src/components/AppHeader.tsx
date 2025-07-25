@@ -23,7 +23,7 @@ export default function AppHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-[#d1b16a]/40 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 shadow-lg min-h-[64px]">
       {/* Logo */}
-      <Logo size="medium" className="flex-shrink-0" />
+      <Logo size="medium" showText={true} className="flex-shrink-0" />
 
       {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center gap-1 lg:gap-3">

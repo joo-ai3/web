@@ -70,15 +70,16 @@ body {
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-radius: 1.5rem;
+  border-radius: 1.25rem;
   border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px var(--shadow-light);
+  box-shadow: 0 8px 32px var(--shadow-light), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass:hover {
-  box-shadow: 0 12px 40px var(--shadow-medium);
-  transform: translateY(-2px);
+  box-shadow: 0 16px 48px var(--shadow-medium), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(209, 177, 106, 0.3);
 }
 
 .font-arabic {
@@ -266,33 +267,51 @@ a:hover {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 @keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.9) rotate(-1deg);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
   }
 }
 
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(50px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes liquidFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes glassShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
@@ -324,6 +343,14 @@ a:hover {
 
 .animate-slide-in-right {
   animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-liquid-float {
+  animation: liquidFloat 3s ease-in-out infinite;
+}
+
+.animate-glass-shimmer {
+  animation: glassShimmer 2s linear infinite;
 }
 
 /* Mobile Product Grid - Optimized for 2 columns */
@@ -435,11 +462,28 @@ a:hover {
 .product-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px var(--shadow-medium);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 25px 50px var(--shadow-medium), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.product-card:hover::before {
+  left: 100%;
 }
 
 /* Color Selector Animation */
@@ -450,11 +494,13 @@ a:hover {
 .color-selector:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(209, 177, 106, 0.5);
 }
 
 .color-selector.selected {
-  transform: scale(1.1);
-  box-shadow: 0 0 0 3px var(--primary-gold);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 3px var(--primary-gold), 0 8px 16px rgba(209, 177, 106, 0.3);
+  border: 2px solid var(--primary-gold);
 }
 
 /* Loading States */
@@ -472,6 +518,7 @@ a:hover {
 *:focus-visible {
   outline: 2px solid var(--primary-gold);
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(209, 177, 106, 0.2);
 }
 
 /* Performance Optimizations */
@@ -682,12 +729,22 @@ a:hover {
 /* Enhanced mobile animations */
 @media (max-width: 768px) {
   .mobile-fade-in {
-    animation: fadeInUp 0.4s ease-out;
+    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .mobile-slide-in {
-    animation: slideInRight 0.3s ease-out;
+    animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
+}
+
+/* Logo animations */
+.logo-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-container:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(209, 177, 106, 0.3));
 }
 
 /* Logo responsive behavior */
@@ -714,5 +771,10 @@ a:hover {
   .mobile-title {
     font-size: 1.5rem;
     margin-bottom: 1rem;
+  }
+  
+  .glass {
+    border-radius: 1rem;
+    backdrop-filter: blur(12px);
   }
 }

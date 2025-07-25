@@ -22,13 +22,14 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.1 }}
-      className="cart-item flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 glass rounded-xl border border-white/20 hover:shadow-lg transition-all"
+      transition={{ delay: index * 0.1, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+      whileHover={{ y: -2, scale: 1.01 }}
+      className="cart-item flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 glass rounded-xl border border-white/20 hover:shadow-lg transition-all duration-300"
     >
       <img 
         src={item.image} 
         alt={item.name[lang]} 
-        className="w-full sm:w-20 h-32 sm:h-20 object-cover rounded-lg flex-shrink-0" 
+        className="w-full sm:w-20 h-32 sm:h-20 object-cover rounded-lg flex-shrink-0 transition-transform duration-300 hover:scale-105" 
       />
 
       <div className="flex-1 min-w-0">
