@@ -14,14 +14,14 @@ export default function Logo({ className = '', size = 'medium', showText = true,
   
   const sizeClasses = {
     small: 'h-8',
-    medium: 'h-12', 
-    large: 'h-16'
+    medium: 'h-10', 
+    large: 'h-14'
   };
 
   const textSizeClasses = {
-    small: 'text-lg',
-    medium: 'text-2xl',
-    large: 'text-3xl'
+    small: 'text-base',
+    medium: 'text-xl',
+    large: 'text-2xl'
   };
 
   const sloganSizeClasses = {
@@ -31,17 +31,17 @@ export default function Logo({ className = '', size = 'medium', showText = true,
   };
 
   return (
-    <Link to="/" className={`flex items-center gap-3 ${className}`}>
+    <Link to="/" className={`flex items-center gap-2 ${className}`}>
       <div className="flex-shrink-0 logo-container">
         <img 
           src="/logo.png" 
           alt="Soleva" 
-          className={`${sizeClasses[size]} w-auto transition-all duration-300 hover:scale-105 drop-shadow-lg`}
+          className={`${sizeClasses[size]} w-auto transition-all duration-300 hover:scale-105 drop-shadow-md`}
         />
       </div>
       {showText && (
         <div className="flex flex-col">
-          <span className={`font-bold text-[#d1b16a] ${textSizeClasses[size]} tracking-wider`}>
+          <span className={`font-bold text-[#d1b16a] ${textSizeClasses[size]} tracking-wide`}>
             SOLEVA
           </span>
           {showSlogan && (

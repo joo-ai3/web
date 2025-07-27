@@ -21,9 +21,10 @@ export default function AppHeader() {
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-[#d1b16a]/40 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 shadow-lg min-h-[64px]">
+    <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-[#d1b16a]/40 flex items-center justify-between px-3 py-2.5 md:px-6 md:py-4 shadow-lg min-h-[60px] md:min-h-[64px]">
       {/* Logo */}
-      <Logo size="medium" showText={true} className="flex-shrink-0" />
+      <Logo size="small" showText={true} className="flex-shrink-0 md:hidden" />
+      <Logo size="medium" showText={true} className="flex-shrink-0 hidden md:flex" />
 
       {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center gap-1 lg:gap-3">
@@ -66,16 +67,16 @@ export default function AppHeader() {
           {/* Theme Switcher */}
           <button
             aria-label="Toggle Theme"
-            className="glass border rounded-lg px-2 lg:px-3 py-2 hover:bg-[#d1b16a]/20 transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
+            className="glass border rounded-lg px-2 lg:px-3 py-2 hover:bg-[#d1b16a]/20 transition-colors min-h-[36px] min-w-[36px] lg:min-h-[40px] lg:min-w-[40px] flex items-center justify-center"
             onClick={toggleTheme}
           >
-            {theme === "dark" ? <FiSun /> : <FiMoon />}
+            {theme === "dark" ? <FiSun size={16} /> : <FiMoon size={16} />}
           </button>
 
           {/* Language Switcher */}
           <button
             aria-label="Switch Language"
-            className="glass border rounded-lg px-2 lg:px-3 py-2 hover:bg-[#d1b16a]/20 transition-colors font-semibold text-xs lg:text-sm min-h-[40px]"
+            className="glass border rounded-lg px-2 lg:px-3 py-2 hover:bg-[#d1b16a]/20 transition-colors font-semibold text-xs lg:text-sm min-h-[36px] lg:min-h-[40px]"
             onClick={toggleLang}
           >
             {lang === "ar" ? "EN" : "AR"}
@@ -84,9 +85,9 @@ export default function AppHeader() {
           {/* Account/Login */}
           <Link
             to={user ? "/account" : "/login"}
-            className="glass border rounded-lg px-2 lg:px-3 py-2 hover:bg-[#d1b16a]/20 transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
+            className="glass border rounded-lg px-2 lg:px-3 py-2 hover:bg-[#d1b16a]/20 transition-colors min-h-[36px] min-w-[36px] lg:min-h-[40px] lg:min-w-[40px] flex items-center justify-center"
           >
-            <FiUser />
+            <FiUser size={16} />
           </Link>
         </div>
       </nav>

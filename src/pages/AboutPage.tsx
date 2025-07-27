@@ -118,8 +118,8 @@ export default function AboutPage() {
             </div>
             <div className="relative">
               <img
-                src="https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?auto=compress&cs=tinysrgb&w=800"
-                alt="Soleva Story"
+                src="/logo.png"
+                alt="Soleva Logo"
                 className="w-full rounded-2xl shadow-lg"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#d1b16a]/20 to-transparent rounded-2xl"></div>

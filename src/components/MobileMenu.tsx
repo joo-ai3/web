@@ -116,9 +116,9 @@ export default function MobileMenu() {
         whileTap={{ scale: 0.95 }}
         whileHover={{ scale: 1.05 }}
         onClick={() => setIsOpen(true)}
-        className="md:hidden glass p-3 rounded-xl border border-[#d1b16a]/40 hover:bg-[#d1b16a]/10 transition-all duration-200 shadow-lg min-h-[48px] min-w-[48px] flex items-center justify-center"
+        className="md:hidden glass p-2.5 rounded-lg border border-[#d1b16a]/40 hover:bg-[#d1b16a]/10 transition-all duration-200 shadow-md min-h-[40px] min-w-[40px] flex items-center justify-center"
       >
-        <FiMenu size={24} className="text-[#d1b16a]" />
+        <FiMenu size={20} className="text-[#d1b16a]" />
       </motion.button>
 
       <AnimatePresence mode="wait">
@@ -141,7 +141,7 @@ export default function MobileMenu() {
               animate="visible"
               exit="exit"
               className={clsx(
-                "fixed top-0 bottom-0 w-[90%] max-w-sm h-screen z-[110] md:hidden overflow-y-auto",
+                "fixed top-0 bottom-0 w-[85%] max-w-xs h-screen z-[110] md:hidden overflow-y-auto",
                 "glass bg-white/95 dark:bg-[#1a1a1a]/95 backdrop-blur-xl border shadow-2xl",
                 lang === 'ar' ? 'right-0 border-l border-[#d1b16a]/30' : 'left-0 border-r border-[#d1b16a]/30'
               )}
@@ -149,22 +149,22 @@ export default function MobileMenu() {
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(209, 177, 106, 0.1)'
               }}
             >
-              <div className="p-6 h-full flex flex-col">
+              <div className="p-4 h-full flex flex-col">
                 {/* Header */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
-                  className="flex items-center justify-between mb-8"
+                  className="flex items-center justify-between mb-6"
                 >
-                  <Logo size="medium" showText={true} className="flex-shrink-0" />
+                  <Logo size="small" showText={true} className="flex-shrink-0" />
                   <motion.button
                     whileTap={{ scale: 0.9, rotate: 90 }}
                     whileHover={{ scale: 1.1 }}
                     onClick={closeMenu}
-                    className="glass p-3 rounded-xl border border-[#d1b16a]/40 hover:bg-[#d1b16a]/20 transition-all duration-200 shadow-lg min-h-[48px] min-w-[48px] flex items-center justify-center"
+                    className="glass p-2 rounded-lg border border-[#d1b16a]/40 hover:bg-[#d1b16a]/20 transition-all duration-200 shadow-md min-h-[36px] min-w-[36px] flex items-center justify-center"
                   >
-                    <FiX size={22} className="text-[#d1b16a]" />
+                    <FiX size={18} className="text-[#d1b16a]" />
                   </motion.button>
                 </motion.div>
 
@@ -174,15 +174,15 @@ export default function MobileMenu() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25, duration: 0.4 }}
-                    className="glass p-5 rounded-2xl mb-8 border border-[#d1b16a]/20 bg-gradient-to-r from-[#d1b16a]/10 to-transparent"
+                    className="glass p-3 rounded-xl mb-6 border border-[#d1b16a]/20 bg-gradient-to-r from-[#d1b16a]/10 to-transparent"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 bg-[#d1b16a]/20 rounded-full flex items-center justify-center shadow-inner">
-                        <FiUser size={24} className="text-[#d1b16a]" />
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-[#d1b16a]/20 rounded-full flex items-center justify-center shadow-inner">
+                        <FiUser size={18} className="text-[#d1b16a]" />
                       </div>
                       <div>
-                        <div className="font-bold text-[#111] dark:text-white text-lg">{user.name}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">{user.email}</div>
+                        <div className="font-semibold text-[#111] dark:text-white text-sm">{user.name}</div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400">{user.email}</div>
                       </div>
                     </div>
                   </motion.div>
@@ -190,18 +190,18 @@ export default function MobileMenu() {
 
                 {/* Scrollable Content */}
                 <div className="flex-1 overflow-y-auto scrollbar-hide">
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     {/* Navigation */}
                     <div>
                       <motion.h3
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.3 }}
-                        className="text-xs text-gray-500 uppercase tracking-wider mb-4 font-semibold"
+                        className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-semibold px-1"
                       >
                         {t("menu")}
                       </motion.h3>
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         {menuItems.map((item, i) => (
                           <motion.div
                             key={item.to}
@@ -213,18 +213,18 @@ export default function MobileMenu() {
                             <Link
                               to={item.to}
                               onClick={closeMenu}
-                              className="mobile-nav-item flex items-center gap-4 p-4 rounded-xl hover:bg-[#d1b16a]/20 transition-all duration-300 relative group min-h-[56px] touch-manipulation"
+                              className="mobile-nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-[#d1b16a]/20 transition-all duration-300 relative group min-h-[44px] touch-manipulation"
                             >
                               <div className="text-[#d1b16a] group-hover:scale-110 transition-transform duration-200">
-                                {item.icon}
+                                {React.cloneElement(item.icon, { size: 18 })}
                               </div>
-                              <span className="font-semibold text-base flex-1">{item.label}</span>
+                              <span className="font-medium text-sm flex-1">{item.label}</span>
                               {item.badge && (
                                 <motion.span
                                   initial={{ scale: 0 }}
                                   animate={{ scale: 1 }}
                                   transition={{ delay: 0.4 + i * 0.05, type: "spring", stiffness: 500 }}
-                                  className="bg-[#d1b16a] text-black text-xs px-2.5 py-1 rounded-full font-bold shadow-lg"
+                                  className="bg-[#d1b16a] text-black text-xs px-2 py-0.5 rounded-full font-semibold shadow-md"
                                 >
                                   {item.badge}
                                 </motion.span>
@@ -241,11 +241,11 @@ export default function MobileMenu() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
-                        className="text-xs text-gray-500 uppercase tracking-wider mb-4 font-semibold"
+                        className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-semibold px-1"
                       >
                         {t("account")}
                       </motion.h3>
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         {accountItems.map((item, i) => (
                           <motion.div
                             key={item.to}
@@ -257,10 +257,10 @@ export default function MobileMenu() {
                             <Link
                               to={item.to}
                               onClick={closeMenu}
-                              className="mobile-nav-item flex items-center gap-4 p-4 rounded-xl hover:bg-[#d1b16a]/20 transition-all duration-300 min-h-[56px] touch-manipulation"
+                              className="mobile-nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-[#d1b16a]/20 transition-all duration-300 min-h-[44px] touch-manipulation"
                             >
-                              <div className="text-[#d1b16a]">{item.icon}</div>
-                              <span className="font-semibold text-base">{item.label}</span>
+                              <div className="text-[#d1b16a]">{React.cloneElement(item.icon, { size: 18 })}</div>
+                              <span className="font-medium text-sm">{item.label}</span>
                             </Link>
                           </motion.div>
                         ))}
@@ -276,10 +276,10 @@ export default function MobileMenu() {
                                 logout();
                                 closeMenu();
                               }}
-                              className="mobile-nav-item flex items-center gap-4 p-4 rounded-xl hover:bg-red-100 transition-all duration-300 text-red-600 w-full min-h-[56px] touch-manipulation"
+                              className="mobile-nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-red-100 transition-all duration-300 text-red-600 w-full min-h-[44px] touch-manipulation"
                             >
-                              <FiLogOut />
-                              <span className="font-semibold text-base">{t("logout")}</span>
+                              <FiLogOut size={18} />
+                              <span className="font-medium text-sm">{t("logout")}</span>
                             </button>
                           </motion.div>
                         )}
@@ -292,29 +292,29 @@ export default function MobileMenu() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        className="text-xs text-gray-500 uppercase tracking-wider mb-4 font-semibold"
+                        className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-semibold px-1"
                       >
                         {t("settings")}
                       </motion.h3>
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {/* Theme Toggle */}
                         <motion.div
                           custom={menuItems.length + accountItems.length + 1}
                           variants={itemVariants}
                           initial="hidden"
                           animate="visible"
-                          className="flex items-center justify-between p-4 glass rounded-xl border border-[#d1b16a]/20 min-h-[56px]"
+                          className="flex items-center justify-between p-3 glass rounded-lg border border-[#d1b16a]/20 min-h-[44px]"
                         >
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3">
                             <div className="text-[#d1b16a]">
-                              {theme === 'dark' ? <FiSun /> : <FiMoon />}
+                              {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
                             </div>
-                            <span className="font-semibold text-base">{t("appearance")}</span>
+                            <span className="font-medium text-sm">{t("appearance")}</span>
                           </div>
                           <motion.button
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                            className="px-4 py-2 text-sm bg-[#d1b16a]/20 rounded-lg hover:bg-[#d1b16a]/30 transition-all duration-200 font-semibold min-h-[40px] touch-manipulation"
+                            className="px-3 py-1.5 text-xs bg-[#d1b16a]/20 rounded-md hover:bg-[#d1b16a]/30 transition-all duration-200 font-medium min-h-[32px] touch-manipulation"
                           >
                             {theme === "dark" ? t("light") : t("dark")}
                           </motion.button>
@@ -326,18 +326,18 @@ export default function MobileMenu() {
                           variants={itemVariants}
                           initial="hidden"
                           animate="visible"
-                          className="flex items-center justify-between p-4 glass rounded-xl border border-[#d1b16a]/20 min-h-[56px]"
+                          className="flex items-center justify-between p-3 glass rounded-lg border border-[#d1b16a]/20 min-h-[44px]"
                         >
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3">
                             <div className="text-[#d1b16a]">
-                              <FiGlobe />
+                              <FiGlobe size={18} />
                             </div>
-                            <span className="font-semibold text-base">{t("language")}</span>
+                            <span className="font-medium text-sm">{t("language")}</span>
                           </div>
                           <motion.button
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-                            className="px-4 py-2 text-sm bg-[#d1b16a]/20 rounded-lg hover:bg-[#d1b16a]/30 transition-all duration-200 font-semibold min-h-[40px] touch-manipulation"
+                            className="px-3 py-1.5 text-xs bg-[#d1b16a]/20 rounded-md hover:bg-[#d1b16a]/30 transition-all duration-200 font-medium min-h-[32px] touch-manipulation"
                           >
                             {lang === "ar" ? "EN" : "AR"}
                           </motion.button>
