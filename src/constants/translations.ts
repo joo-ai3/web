@@ -125,7 +125,9 @@ export const translations = {
     bankInfo: "Bank Transfer Information",
     walletNumber: "Wallet Number",
     cardNumber: "Card Number",
-    sendAmountAndUpload: "Please send the amount to the number above and upload a screenshot for confirmation"
+    sendAmountAndUpload: "Please send the amount to the number above and upload a screenshot for confirmation",
+    browseProducts: "Browse Products",
+    viewDetails: "View Details"
   },
   ar: {
     home: "الرئيسية",
@@ -253,6 +255,8 @@ export const translations = {
     bankInfo: "معلومات التحويل البنكي",
     walletNumber: "رقم المحفظة",
     cardNumber: "رقم البطاقة",
-    sendAmountAndUpload: "يرجى إرسال المبلغ إلى الرقم أعلاه ثم رفع لقطة شاشة للتأكيد"
+    sendAmountAndUpload: "يرجى إرسال المبلغ إلى الرقم أعلاه ثم رفع لقطة شاشة للتأكيد",
+    browseProducts: "تصفح المنتجات",
+    viewDetails: "عرض التفاصيل"
   }
 };

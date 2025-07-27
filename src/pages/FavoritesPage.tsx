@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiHeart } from 'react-icons/fi';
 import { useLang } from '../contexts/LangContext';
-import { useTranslation } from '../contexts/LangContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useToast } from '../contexts/ToastContext';
 import { products } from '../data/products';
@@ -13,15 +12,37 @@ import SectionTitle from '../components/SectionTitle';
 
 const FavoritesPage: React.FC = () => {
   const { lang } = useLang();
-  const { t } = useTranslation();
-  const { favorites, removeFavorite } = useFavorites();
+  const { favorites, removeFromFavorites } = useFavorites();
   const { showToast } = useToast();
+
+  // Get translations from the translations object
+  const t = (key: string) => {
+    const translations = {
+      en: {
+        favorites: "Favorites",
+        noFavoritesYet: "No favorites yet",
+        startAddingFavorites: "Start adding products to your favorites to see them here",
+        browseProducts: "Browse Products",
+        viewDetails: "View Details",
+        removeFromFavorites: "Removed from favorites"
+      },
+      ar: {
+        favorites: "المفضلة",
+        noFavoritesYet: "لا توجد مفضلات بعد",
+        startAddingFavorites: "ابدأ بإضافة المنتجات إلى مفضلاتك لتراها هنا",
+        browseProducts: "تصفح المنتجات",
+        viewDetails: "عرض التفاصيل",
+        removeFromFavorites: "تم الحذف من المفضلة"
+      }
+    };
+    return translations[lang as keyof typeof translations][key as keyof typeof translations.en] || key;
+  };
 
   const favoriteProducts = products.filter(product => favorites.includes(product.id));
 
-  const handleRemoveFavorite = (productId: string) => {
-    removeFavorite(productId);
-    showToast(t('removedFromFavorites'), 'success');
+  const handleRemoveFavorite = (productId: number) => {
+    removeFromFavorites(productId);
+    showToast(t('removeFromFavorites'));
   };
 
   return (
@@ -32,10 +53,9 @@ const FavoritesPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <SectionTitle 
-            title={t('favorites')} 
-            subtitle={t('favoritesSubtitle')}
-          />
+          <SectionTitle>
+            {t('favorites')}
+          </SectionTitle>
         </motion.div>
 
         {favoriteProducts.length === 0 ? (
@@ -48,10 +68,10 @@ const FavoritesPage: React.FC = () => {
             <GlassCard className="max-w-md mx-auto p-8">
               <FiHeart className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
-                {t('noFavorites')}
+                {t('noFavoritesYet')}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                {t('noFavoritesDescription')}
+                {t('startAddingFavorites')}
               </p>
               <Link to="/products">
                 <GlassButton>
@@ -94,7 +114,7 @@ const FavoritesPage: React.FC = () => {
                       {product.name[lang]}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
-                      {product.description[lang]}
+                      {product.desc[lang]}
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-xl font-bold text-purple-600 dark:text-purple-400">
