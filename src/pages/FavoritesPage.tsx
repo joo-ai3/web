@@ -8,7 +8,7 @@ import SectionTitle from '../components/SectionTitle';
 
 const FavoritesPage: React.FC = () => {
   const { favorites, removeFromFavorites } = useFavorites();
-  const { t } = useTranslation();
+  const t = useTranslation();
   const { lang } = useLang();
 
   const favoriteProducts = products.filter(product => favorites.includes(product.id));
