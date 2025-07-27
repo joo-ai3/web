@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiHeart } from 'react-icons/fi';
-import { useLang } from '../contexts/LangContext';
+import { useLang, useTranslation } from '../contexts/LangContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useToast } from '../contexts/ToastContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { products } from '../data/products';
 import GlassButton from '../components/GlassButton';
 import GlassCard from '../components/GlassCard';
@@ -12,33 +13,15 @@ import SectionTitle from '../components/SectionTitle';
 
 const FavoritesPage: React.FC = () => {
   const { lang } = useLang();
+  const t = useTranslation();
+  const { theme } = useTheme();
   const { favorites, removeFromFavorites } = useFavorites();
   const { showToast } = useToast();
 
-  // Get translations from the translations object
-  const t = (key: string) => {
-    const translations = {
-      en: {
-        favorites: "Favorites",
-        noFavoritesYet: "No favorites yet",
-        startAddingFavorites: "Start adding products to your favorites to see them here",
-        browseProducts: "Browse Products",
-        viewDetails: "View Details",
-        removeFromFavorites: "Removed from favorites"
-      },
-      ar: {
-        favorites: "المفضلة",
-        noFavoritesYet: "لا توجد مفضلات بعد",
-        startAddingFavorites: "ابدأ بإضافة المنتجات إلى مفضلاتك لتراها هنا",
-        browseProducts: "تصفح المنتجات",
-        viewDetails: "عرض التفاصيل",
-        removeFromFavorites: "تم الحذف من المفضلة"
-      }
-    };
-    return translations[lang as keyof typeof translations][key as keyof typeof translations.en] || key;
-  };
-
-  const favoriteProducts = products.filter(product => favorites.includes(product.id));
+  const favoriteProducts = useMemo(() => 
+    products.filter(product => favorites.includes(product.id)), 
+    [favorites]
+  );
 
   const handleRemoveFavorite = (productId: number) => {
     removeFromFavorites(productId);
@@ -46,8 +29,8 @@ const FavoritesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-app">
+      <div className="container mx-auto px-4 py-6 sm:py-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -66,15 +49,15 @@ const FavoritesPage: React.FC = () => {
             className="text-center py-16"
           >
             <GlassCard className="max-w-md mx-auto p-8">
-              <FiHeart className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
+              <FiHeart className="w-16 h-16 mx-auto mb-4 text-[#d1b16a]" />
+              <h3 className="text-xl font-semibold mb-2 text-[#111]">
                 {t('noFavoritesYet')}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 {t('startAddingFavorites')}
               </p>
               <Link to="/products">
-                <GlassButton>
+                <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80">
                   {t('browseProducts')}
                 </GlassButton>
               </Link>
@@ -85,7 +68,7 @@ const FavoritesPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            className="mobile-card-grid md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6"
           >
             {favoriteProducts.map((product, index) => (
               <motion.div
@@ -93,8 +76,9 @@ const FavoritesPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -4 }}
               >
-                <GlassCard className="group hover:shadow-xl transition-all duration-300">
+                <div className="product-card glass rounded-xl shadow-lg border border-white/25 group transition-all duration-300">
                   <div className="relative overflow-hidden rounded-lg mb-4">
                     <img
                       src={product.image}
@@ -103,31 +87,31 @@ const FavoritesPage: React.FC = () => {
                     />
                     <button
                       onClick={() => handleRemoveFavorite(product.id)}
-                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+                      className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200 flex items-center justify-center"
                     >
                       <FiHeart className="w-4 h-4 fill-current" />
                     </button>
                   </div>
                   
                   <div className="p-4">
-                    <h3 className="font-semibold text-lg mb-2 text-gray-800 dark:text-white">
+                    <h3 className="mobile-product-title font-semibold mb-2 text-[#111]">
                       {product.name[lang]}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {product.desc[lang]}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400">
-                        ${product.price}
+                      <span className="mobile-product-price font-bold text-[#d1b16a]">
+                        {product.price} {t('egp')}
                       </span>
                       <Link to={`/product/${product.id}`}>
-                        <GlassButton size="sm">
+                        <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-sm py-2 px-4">
                           {t('viewDetails')}
                         </GlassButton>
                       </Link>
                     </div>
                   </div>
-                </GlassCard>
+                </div>
               </motion.div>
             ))}
           </motion.div>

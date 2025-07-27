@@ -221,7 +221,8 @@ a:hover {
     border-radius: 1rem;
     backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
-    margin: 0.5rem;
+    margin: 0;
+    width: 100%;
   }
   
   body {
@@ -232,7 +233,7 @@ a:hover {
   button, .glass-button {
     min-height: 44px;
     min-width: 44px;
-    font-size: 15px;
+    font-size: 15px !important;
     font-weight: 500;
     border-radius: 0.875rem;
     padding: 0.875rem 1.5rem;
@@ -264,15 +265,16 @@ a:hover {
   }
 
   .container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
   
   /* Mobile card adjustments */
   .product-card {
-    padding: 1rem;
+    padding: 16px;
     border-radius: 1rem;
-    margin: 0.5rem 0;
+    margin: 0;
+    width: 100%;
   }
   
   .product-card img {
@@ -281,13 +283,13 @@ a:hover {
   
   /* Mobile text adjustments */
   .mobile-product-title {
-    font-size: 16px;
+    font-size: 16px !important;
     line-height: 1.3;
     font-weight: 600;
   }
   
   .mobile-product-price {
-    font-size: 15px;
+    font-size: 15px !important;
     font-weight: 700;
   }
   
@@ -297,13 +299,13 @@ a:hover {
   }
   
   .mobile-spacing {
-    padding: 1rem;
+    padding: 16px;
   }
 
   /* Cart page mobile specific */
   .mobile-cart-item {
     width: 100%;
-    padding: 1rem;
+    padding: 16px;
     margin-bottom: 1rem;
     border-radius: 1rem;
   }
@@ -315,29 +317,47 @@ a:hover {
   }
 
   .mobile-cart-title {
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight: 600;
     line-height: 1.3;
   }
 
   .mobile-cart-price {
-    font-size: 15px;
+    font-size: 15px !important;
     font-weight: 700;
   }
 
   .mobile-quantity-btn {
     width: 36px;
     height: 36px;
-    font-size: 14px;
+    font-size: 14px !important;
     border-radius: 0.5rem;
   }
 
   .mobile-checkout-btn {
     width: 100%;
     height: 48px;
-    font-size: 18px;
+    font-size: 15px !important;
     font-weight: 600;
     border-radius: 0.875rem;
+  }
+
+  /* Quantity selector text */
+  .quantity-text {
+    font-size: 14px !important;
+  }
+
+  /* Mobile grid cards */
+  .mobile-card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  .mobile-card-grid .product-card {
+    width: 100%;
+    margin: 0;
   }
 }
 

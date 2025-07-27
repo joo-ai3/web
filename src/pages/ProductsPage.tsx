@@ -68,7 +68,7 @@ export default function ProductsPage() {
       )}
 
       {/* Products Grid/List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div className="mobile-card-grid md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
         {filtered.map((prod, index) => (
           <motion.div
             key={prod.id}
@@ -77,7 +77,7 @@ export default function ProductsPage() {
             transition={{ duration: 0.5, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
             whileHover={{ y: -4 }}
           >
-            <div className="product-card glass p-4 rounded-xl shadow-lg border border-white/25 group transition-all duration-300 flex gap-4 items-center md:flex-col md:gap-0 h-auto md:h-auto">
+            <div className="product-card glass rounded-xl shadow-lg border border-white/25 group transition-all duration-300 flex gap-4 items-center md:flex-col md:gap-0 h-auto md:h-auto" style={{ width: '100%', margin: '0', padding: '16px' }}>
               <div className="relative overflow-hidden rounded-lg flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-full md:h-48 md:mb-4">
                 <img 
                   src={prod.image} 
@@ -95,16 +95,16 @@ export default function ProductsPage() {
                 </button>
               </div>
               <div className="product-info flex-1 space-y-2">
-                <div className="mobile-cart-title font-bold text-[#111] line-clamp-2">
+                <div className="mobile-product-title font-bold text-[#111] line-clamp-2">
                   {prod.name[lang]}
                 </div>
-                <div className="mobile-cart-price text-[#d1b16a] font-bold mb-2">
+                <div className="mobile-product-price text-[#d1b16a] font-bold mb-2">
                   {prod.price} {t("egp")}
                 </div>
                 <p className="text-gray-600 text-sm line-clamp-2 hidden md:block">{prod.desc[lang]}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <Link to={`/product/${prod.id}`}>
-                    <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-sm py-2 px-4 transition-all duration-200 hover:shadow-lg">
+                    <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2 px-4 transition-all duration-200 hover:shadow-lg" style={{ fontSize: '15px' }}>
                       {lang === "ar" ? "تفاصيل" : "Details"}
                     </GlassButton>
                   </Link>

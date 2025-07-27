@@ -52,6 +52,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
             <FiMinus />
           </button>
           <span className="w-8 text-center font-bold text-sm">{item.qty}</span>
+          <span className="w-8 text-center font-bold quantity-text">{item.qty}</span>
           <button
             onClick={() => handleQty(1)}
             className="mobile-quantity-btn glass rounded-lg flex items-center justify-center hover:bg-[#d1b16a]/20 transition-colors"

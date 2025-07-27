@@ -86,7 +86,7 @@ export default function Home() {
           >
             <Link to={`/product/${prod.id}`}>
               <div className="product-card glass rounded-lg shadow-md border border-white/20 group transition-all duration-300 p-3 flex flex-row md:flex-col gap-3 md:gap-0 max-h-[150px] md:max-h-none">
-                <div className="relative overflow-hidden rounded-lg mb-0 md:mb-3 flex-shrink-0">
+            <div className="product-card glass rounded-lg shadow-md border border-white/20 group transition-all duration-300 p-4 flex flex-row md:flex-col gap-3 md:gap-0 max-h-[150px] md:max-h-none" style={{ width: '100%', margin: '0' }}>
                   <img
                     src={prod.image}
                     alt={prod.name[lang]}
@@ -107,18 +107,18 @@ export default function Home() {
                 </div>
                 <div className="product-info flex-1 flex flex-col justify-between">
                   <div className="font-bold text-sm md:text-base text-[#111] line-clamp-2 mb-1">
-                    {prod.name[lang]}
+                <div className="mobile-product-title font-bold text-[#111] line-clamp-2 mb-1">
                   </div>
                   <div className="font-bold text-base md:text-lg text-[#d1b16a] mb-2 md:mb-0">
-                    {prod.price} {t("egp")}
-                  </div>
+                <div className="mobile-product-price font-bold text-[#d1b16a] mb-2 md:mb-0">
+            <div className="product-card glass rounded-xl sm:rounded-2xl shadow-md overflow-hidden h-40 sm:h-48 md:h-64 flex flex-col justify-end relative group" style={{ width: '100%', margin: '0' }}>
                   <p className="text-gray-600 text-xs mt-1 line-clamp-2 hidden md:block">
                     {prod.desc[lang]}
                   </p>
                   <div className="md:hidden">
                     <button className="bg-[#d1b16a] text-black px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-[#d1b16a]/80 transition-colors">
-                      {t("addToCart")}
-                    </button>
+                  <button className="bg-[#d1b16a] text-black px-3 py-1.5 rounded-lg font-semibold hover:bg-[#d1b16a]/80 transition-colors" style={{ fontSize: '15px' }}>
+              <div className="relative z-10 p-4 sm:p-4 md:p-6">
                   </div>
                 </div>
               </div>
@@ -129,3 +129,5 @@ export default function Home() {
     </div>
   );
 }
+
+    <div className="mobile-card-grid md:grid md:grid-cols-3 md:gap-6">
