@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiCreditCard, FiUser, FiMapPin, FiPhone, FiDollarSign, FiSmartphone, FiZap } from 'react-icons/fi';
+import { FiCreditCard, FiUser, FiMapPin, FiPhone, FiDollarSign, FiSmartphone, FiZap, FiUpload } from 'react-icons/fi';
 import { useCart } from '../contexts/CartContext';
 import { useLang, useTranslation } from '../contexts/LangContext';
 import GlassCard from '../components/GlassCard';
@@ -20,10 +20,13 @@ export default function CheckoutPage() {
     address: "",
     primaryPhone: "",
     secondaryPhone: "",
-    paymentMethod: "cash"
+    paymentMethod: "cash",
+    senderNumber: "",
+    paymentScreenshot: null as File | null
   });
 
   const [error, setError] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const discount = applied?.discount ? Math.floor((subtotal * applied.discount) / 100) : 0;
@@ -64,10 +67,37 @@ export default function CheckoutPage() {
     if (formData.address.trim().length < 10) {
       return setError(lang === "ar" ? "العنوان يجب أن يكون مفصلاً أكثر" : "Address must be more detailed");
     }
+    
+    // Validate payment method specific fields
+    if (formData.paymentMethod !== "cash") {
+      if (!formData.senderNumber.trim()) {
+        return setError(lang === "ar" ? "يرجى إدخال رقم المرسل" : "Please enter sender number");
+      }
+      if (!formData.paymentScreenshot) {
+        return setError(lang === "ar" ? "يرجى رفع لقطة شاشة للدفع" : "Please upload payment screenshot");
+      }
+    }
 
     setError("");
+    
+    if (formData.paymentMethod !== "cash") {
+      // Show payment under review message
+      alert(lang === "ar" 
+        ? "دفعتك قيد المراجعة. سيتم إشعارك قريباً." 
+        : "Your payment is under review. You will be notified shortly."
+      );
+    }
+    
     clearCart();
-    setFormData({ name: "", address: "", primaryPhone: "", secondaryPhone: "", paymentMethod: "cash" });
+    setFormData({ 
+      name: "", 
+      address: "", 
+      primaryPhone: "", 
+      secondaryPhone: "", 
+      paymentMethod: "cash",
+      senderNumber: "",
+      paymentScreenshot: null
+    });
     navigate("/order-confirmation", { state: { ...formData, total } });
   };
 
@@ -196,13 +226,87 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
+              {/* Payment Details for E-wallet and Bank */}
+              {formData.paymentMethod !== "cash" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-4"
+                >
+                  {/* Payment Number Input */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      {formData.paymentMethod === "digital" 
+                        ? (lang === "ar" ? "رقم المحفظة الرقمية" : "Digital Wallet Number")
+                        : (lang === "ar" ? "رقم البطاقة البنكية" : "Bank Card Number")
+                      }
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] min-w-0"
+                      placeholder={formData.paymentMethod === "digital" 
+                        ? (lang === "ar" ? "أدخل رقم المحفظة" : "Enter wallet number")
+                        : (lang === "ar" ? "أدخل رقم البطاقة" : "Enter card number")
+                      }
+                    />
+                  </div>
+
+                  {/* Sender Number */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      {lang === "ar" ? "رقم المرسل المستخدم للتحويل" : "Sender Number Used for Transfer"}
+                    </label>
+                    <input
+                      required
+                      type="tel"
+                      className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] min-w-0"
+                      value={formData.senderNumber}
+                      onChange={e => setFormData({ ...formData, senderNumber: e.target.value })}
+                      placeholder={lang === "ar" ? "رقم الهاتف المستخدم للدفع" : "Phone number used for payment"}
+                    />
+                  </div>
+
+                  {/* Screenshot Upload */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <FiUpload className="inline mr-2" />
+                      {lang === "ar" ? "لقطة شاشة للدفع" : "Payment Screenshot"}
+                    </label>
+                    <input
+                      required
+                      type="file"
+                      accept="image/*"
+                      className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] min-w-0"
+                      onChange={e => {
+                        const file = e.target.files?.[0] || null;
+                        setFormData({ ...formData, paymentScreenshot: file });
+                      }}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {lang === "ar" 
+                        ? "يرجى رفع لقطة شاشة تؤكد عملية الدفع" 
+                        : "Please upload a screenshot confirming the payment"
+                      }
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+
               {/* Submit */}
               <GlassButton
                 type="submit"
                 className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-lg sm:text-xl py-4"
+                disabled={isUploading}
               >
-                <FiCreditCard size={24} />
-                {t("placeOrder")}
+                {isUploading ? (
+                  <div className="w-6 h-6 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <FiCreditCard size={24} />
+                    {t("placeOrder")}
+                  </>
+                )}
               </GlassButton>
             </form>
           </GlassCard>

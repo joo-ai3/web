@@ -14,15 +14,7 @@ export default function ProductsPage() {
   const { isFavorite, toggleFavorite } = useFavorites();
   const { showToast } = useToast();
   
-  // Default to list view on mobile, grid on desktop
-  const getDefaultView = () => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth < 768 ? "list" : "grid";
-    }
-    return "grid";
-  };
-  
-  const [view, setView] = useState(getDefaultView);
+  const [view, setView] = useState("list");
   const [search, setSearch] = useState("");
 
   const filtered = products.filter(p =>
@@ -76,11 +68,7 @@ export default function ProductsPage() {
       )}
 
       {/* Products Grid/List */}
-      <div className={
-        view === "grid" && window.innerWidth >= 768
-          ? "grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" 
-          : "flex flex-col gap-4 sm:gap-6"
-      }>
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
         {filtered.map((prod, index) => (
           <motion.div
             key={prod.id}
@@ -89,50 +77,34 @@ export default function ProductsPage() {
             transition={{ duration: 0.5, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
             whileHover={{ y: -4 }}
           >
-            <div className={`product-card glass p-3 sm:p-4 lg:p-6 rounded-xl sm:rounded-2xl shadow-lg border border-white/25 group transition-all duration-300 ${
-              view === "list" || window.innerWidth < 768 
-                ? "flex gap-3 sm:gap-4 items-center" 
-                : "flex flex-col"
-            }`}>
-              <div className={`relative overflow-hidden rounded-lg flex-shrink-0 ${
-                view === "list" || window.innerWidth < 768 
-                  ? "w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32" 
-                  : "w-full mb-4"
-              }`}>
+            <div className="product-card glass p-4 rounded-xl shadow-lg border border-white/25 group transition-all duration-300 flex gap-4 items-center md:flex-col md:gap-0 max-h-[160px] md:max-h-none">
+              <div className="relative overflow-hidden rounded-lg flex-shrink-0 w-28 h-28 md:w-full md:h-48 md:mb-4">
                 <img 
                   src={prod.image} 
-                  className={`object-cover rounded-lg transition-transform duration-500 will-change-transform ${
-                    view === "list" || window.innerWidth < 768 
-                      ? "w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32" 
-                      : "w-full h-40 sm:h-48"
-                  }`}
+                  className="w-28 h-28 md:w-full md:h-48 object-cover rounded-lg transition-transform duration-500 will-change-transform"
                   alt={prod.name[lang]}
                 />
                 <button
                   onClick={() => handleFavoriteClick(prod.id)}
-                  className="absolute top-1 right-1 sm:top-2 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-200"
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-200"
                 >
                   <FiHeart 
-                    size={14} 
+                    size={16} 
                     className={isFavorite(prod.id) ? "text-red-500 fill-current" : "text-gray-400"} 
                   />
                 </button>
               </div>
-              <div className={`product-info flex-1 space-y-1 sm:space-y-2 ${
-                view === "list" || window.innerWidth < 768 ? "pl-0" : ""
-              }`}>
-                <div className="font-bold text-sm sm:text-base lg:text-lg text-[#111] line-clamp-2">
+              <div className="product-info flex-1 space-y-2">
+                <div className="font-bold text-base md:text-lg text-[#111] line-clamp-2">
                   {prod.name[lang]}
                 </div>
-                <div className="text-[#d1b16a] font-bold text-base sm:text-lg mb-1 sm:mb-2">
+                <div className="text-[#d1b16a] font-bold text-lg mb-2">
                   {prod.price} {t("egp")}
                 </div>
-                {(view === "grid" && window.innerWidth >= 768) && (
-                  <p className="text-gray-600 text-xs sm:text-sm line-clamp-2">{prod.desc[lang]}</p>
-                )}
-                <div className="flex flex-wrap gap-2 mt-1 sm:mt-2">
+                <p className="text-gray-600 text-sm line-clamp-2 hidden md:block">{prod.desc[lang]}</p>
+                <div className="flex flex-wrap gap-2 mt-2">
                   <Link to={`/product/${prod.id}`}>
-                    <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-xs sm:text-sm py-1.5 sm:py-2 px-3 sm:px-4 transition-all duration-200 hover:shadow-lg">
+                    <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-sm py-2 px-4 transition-all duration-200 hover:shadow-lg">
                       {lang === "ar" ? "تفاصيل" : "Details"}
                     </GlassButton>
                   </Link>

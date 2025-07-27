@@ -38,7 +38,7 @@ export default function AccountPage() {
 
   return (
     <div className="container mx-auto py-10 px-4 max-w-4xl">
-      <div className="glass p-8 rounded-2xl shadow-xl">
+      <div className="glass p-4 md:p-8 rounded-2xl shadow-xl">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <aside className="account-sidebar lg:w-64 hidden lg:block">
@@ -67,20 +67,28 @@ export default function AccountPage() {
           </aside>
 
           {/* Mobile Navigation */}
-          <div className="account-mobile-nav lg:hidden">
+          <div className="lg:hidden mb-6">
+            <div className="flex flex-col gap-3">
             {tabs.map(item => (
               <button
                 key={item.key}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
                   tab === item.key 
                     ? "bg-[#d1b16a] text-black shadow-lg" 
-                    : "bg-gray-100 text-gray-700 hover:bg-[#d1b16a]/20"
+                    : "glass text-gray-700 hover:bg-[#d1b16a]/20"
                 }`}
                 onClick={() => setTab(item.key)}
               >
                 {item.icon} {item.label}
               </button>
             ))}
+            <button
+              onClick={logout}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl glass hover:bg-red-100 text-red-600 font-semibold transition-all"
+            >
+              <FiLogOut /> {t("logout")}
+            </button>
+            </div>
           </div>
 
           {/* Main Content */}

@@ -169,14 +169,14 @@ export default function MobileMenu() {
                   transition={{ delay: 0.15, duration: 0.35 }}
                   className="flex items-center justify-between mb-6"
                 >
-                  <Logo size="small" showText={true} className="flex-shrink-0" />
+                  <Logo size="small" className="flex-shrink-0" />
                   <motion.button
                     whileTap={{ scale: 0.9, rotate: 90 }}
                     whileHover={{ scale: 1.1 }}
                     onClick={closeMenu}
-                    className="glass p-2 rounded-lg border border-[#d1b16a]/40 hover:bg-[#d1b16a]/20 transition-all duration-200 shadow-md min-h-[36px] min-w-[36px] flex items-center justify-center"
+                    className="glass p-2 rounded-lg border border-[#d1b16a]/40 hover:bg-[#d1b16a]/20 transition-all duration-200 shadow-md min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
-                    <FiX size={18} className="text-[#d1b16a]" />
+                    <FiX size={20} className="text-[#d1b16a]" />
                   </motion.button>
                 </motion.div>
 
@@ -190,7 +190,7 @@ export default function MobileMenu() {
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-[#d1b16a]/20 rounded-full flex items-center justify-center shadow-inner">
-                        <FiUser size={18} className="text-[#d1b16a]" />
+                        <FiUser size={20} className="text-[#d1b16a]" />
                       </div>
                       <div>
                         <div className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-[#111]'}`}>
@@ -238,7 +238,7 @@ export default function MobileMenu() {
                               }`}
                             >
                               <div className="text-[#d1b16a] group-hover:scale-110 transition-transform duration-200">
-                                {React.cloneElement(item.icon, { size: 18 })}
+                                {React.cloneElement(item.icon, { size: 20 })}
                               </div>
                               <span className={`font-medium text-sm flex-1 ${
                                 theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
@@ -291,7 +291,7 @@ export default function MobileMenu() {
                                   : 'hover:bg-[#d1b16a]/20 text-gray-800'
                               }`}
                             >
-                              <div className="text-[#d1b16a]">{React.cloneElement(item.icon, { size: 18 })}</div>
+                              <div className="text-[#d1b16a]">{React.cloneElement(item.icon, { size: 20 })}</div>
                               <span className={`font-medium text-sm ${
                                 theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
                               }`}>
@@ -316,7 +316,7 @@ export default function MobileMenu() {
                                 theme === 'dark' ? 'hover:bg-red-900/20' : 'hover:bg-red-100'
                               }`}
                             >
-                              <FiLogOut size={18} />
+                              <FiLogOut size={20} />
                               <span className="font-medium text-sm">{t("logout")}</span>
                             </button>
                           </motion.div>
@@ -351,7 +351,7 @@ export default function MobileMenu() {
                         >
                           <div className="flex items-center gap-3">
                             <div className="text-[#d1b16a]">
-                              {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
+                              {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
                             </div>
                             <span className={`font-medium text-sm ${
                               theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
@@ -362,7 +362,7 @@ export default function MobileMenu() {
                           <motion.button
                             whileTap={{ scale: 0.95 }}
                             onClick={toggleTheme}
-                            className={`px-3 py-1.5 text-xs rounded-md transition-all duration-200 font-medium min-h-[32px] touch-manipulation ${
+                            className={`px-3 py-2 text-sm rounded-md transition-all duration-200 font-medium min-h-[44px] touch-manipulation ${
                               theme === 'dark'
                                 ? 'bg-[#d1b16a]/15 hover:bg-[#d1b16a]/25 text-[#d1b16a]'
                                 : 'bg-[#d1b16a]/20 hover:bg-[#d1b16a]/30 text-[#d1b16a]'
@@ -386,7 +386,7 @@ export default function MobileMenu() {
                         >
                           <div className="flex items-center gap-3">
                             <div className="text-[#d1b16a]">
-                              <FiGlobe size={18} />
+                              <FiGlobe size={20} />
                             </div>
                             <span className={`font-medium text-sm ${
                               theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
@@ -397,7 +397,7 @@ export default function MobileMenu() {
                           <motion.button
                             whileTap={{ scale: 0.95 }}
                             onClick={toggleLang}
-                            className={`px-3 py-1.5 text-xs rounded-md transition-all duration-200 font-medium min-h-[32px] touch-manipulation ${
+                            className={`px-3 py-2 text-sm rounded-md transition-all duration-200 font-medium min-h-[44px] touch-manipulation ${
                               theme === 'dark'
                                 ? 'bg-[#d1b16a]/15 hover:bg-[#d1b16a]/25 text-[#d1b16a]'
                                 : 'bg-[#d1b16a]/20 hover:bg-[#d1b16a]/30 text-[#d1b16a]'

@@ -69,7 +69,7 @@ export default function AboutPage() {
         className="text-center mb-16"
       >
         <div className="mb-8">
-          <Logo size="large" showText={true} showSlogan={true} className="justify-center" />
+          <Logo size="large" className="justify-center" />
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-[#111]">
           {t("aboutUs")}
