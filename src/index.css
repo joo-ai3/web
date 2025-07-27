@@ -777,4 +777,32 @@ a:hover {
     border-radius: 1rem;
     backdrop-filter: blur(12px);
   }
+  
+  /* Enhanced mobile menu animations */
+  .mobile-nav-item {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  
+  .mobile-nav-item:active {
+    transform: scale(0.98);
+    background-color: rgba(209, 177, 106, 0.3);
+  }
+}
+
+/* Enhanced mobile touch interactions */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+  
+  /* Smooth scrolling for mobile menu */
+  .mobile-menu-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
 }

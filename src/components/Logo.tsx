@@ -13,9 +13,9 @@ export default function Logo({ className = '', size = 'medium', showText = true,
   const { lang } = useLang();
   
   const sizeClasses = {
-    small: showText ? 'h-8' : 'h-6',
-    medium: showText ? 'h-12' : 'h-8', 
-    large: showText ? 'h-16' : 'h-12'
+    small: 'h-8',
+    medium: 'h-12', 
+    large: 'h-16'
   };
 
   const textSizeClasses = {
@@ -32,11 +32,11 @@ export default function Logo({ className = '', size = 'medium', showText = true,
 
   return (
     <Link to="/" className={`flex items-center gap-3 ${className}`}>
-      <div className="flex-shrink-0">
+      <div className="flex-shrink-0 logo-container">
         <img 
-          src="/logo.svg" 
+          src="/logo.png" 
           alt="Soleva" 
-          className={`${sizeClasses[size]} w-auto transition-all duration-300 hover:scale-105`}
+          className={`${sizeClasses[size]} w-auto transition-all duration-300 hover:scale-105 drop-shadow-lg`}
         />
       </div>
       {showText && (
