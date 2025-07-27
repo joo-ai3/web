@@ -70,7 +70,7 @@ export default function CheckoutPage() {
     
     // Validate payment method specific fields
     if (formData.paymentMethod !== "cash") {
-      if (!formData.senderNumber.trim()) {
+      if (formData.paymentMethod === "digital" && !formData.senderNumber.trim()) {
         return setError(lang === "ar" ? "يرجى إدخال رقم المرسل" : "Please enter sender number");
       }
       if (!formData.paymentScreenshot) {
@@ -234,38 +234,46 @@ export default function CheckoutPage() {
                   transition={{ duration: 0.3 }}
                   className="space-y-4"
                 >
-                  {/* Payment Number Input */}
+                  {/* Payment Information Display */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {formData.paymentMethod === "digital" 
-                        ? (lang === "ar" ? "رقم المحفظة الرقمية" : "Digital Wallet Number")
-                        : (lang === "ar" ? "رقم البطاقة البنكية" : "Bank Card Number")
-                      }
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] min-w-0"
-                      placeholder={formData.paymentMethod === "digital" 
-                        ? (lang === "ar" ? "أدخل رقم المحفظة" : "Enter wallet number")
-                        : (lang === "ar" ? "أدخل رقم البطاقة" : "Enter card number")
-                      }
-                    />
+                    <div className="glass p-4 rounded-xl bg-[#d1b16a]/10 border border-[#d1b16a]/30">
+                      <h4 className="font-semibold text-gray-700 mb-2">
+                        {formData.paymentMethod === "digital" 
+                          ? (lang === "ar" ? "معلومات المحفظة الرقمية" : "Digital Wallet Information")
+                          : (lang === "ar" ? "معلومات التحويل البنكي" : "Bank Transfer Information")
+                        }
+                      </h4>
+                      <div className="text-lg font-bold text-[#d1b16a] mb-2">
+                        {formData.paymentMethod === "digital" 
+                          ? (lang === "ar" ? "رقم المحفظة: " : "Wallet Number: ") + "01028354015"
+                          : (lang === "ar" ? "رقم البطاقة: " : "Card Number: ") + "5264 3999 9797 28173"
+                        }
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        {lang === "ar" 
+                          ? "يرجى إرسال المبلغ إلى الرقم أعلاه ثم رفع لقطة شاشة للتأكيد"
+                          : "Please send the amount to the number above and upload a screenshot for confirmation"
+                        }
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Sender Number */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {lang === "ar" ? "رقم المرسل المستخدم للتحويل" : "Sender Number Used for Transfer"}
-                    </label>
-                    <input
-                      required
-                      type="tel"
-                      className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] min-w-0"
-                      value={formData.senderNumber}
-                      onChange={e => setFormData({ ...formData, senderNumber: e.target.value })}
-                      placeholder={lang === "ar" ? "رقم الهاتف المستخدم للدفع" : "Phone number used for payment"}
-                    />
-                  </div>
+                  {/* Sender Number - Only for Digital Wallet */}
+                  {formData.paymentMethod === "digital" && (
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        {lang === "ar" ? "رقم المرسل المستخدم للتحويل" : "Sender Number Used for Transfer"}
+                      </label>
+                      <input
+                        required
+                        type="tel"
+                        className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] min-w-0"
+                        value={formData.senderNumber}
+                        onChange={e => setFormData({ ...formData, senderNumber: e.target.value })}
+                        placeholder={lang === "ar" ? "رقم الهاتف المستخدم للدفع" : "Phone number used for payment"}
+                      />
+                    </div>
+                  )}
 
                   {/* Screenshot Upload */}
                   <div>

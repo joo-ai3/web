@@ -68,7 +68,7 @@ export default function ProductsPage() {
       )}
 
       {/* Products Grid/List */}
-      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {filtered.map((prod, index) => (
           <motion.div
             key={prod.id}
@@ -77,11 +77,11 @@ export default function ProductsPage() {
             transition={{ duration: 0.5, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
             whileHover={{ y: -4 }}
           >
-            <div className="product-card glass p-4 rounded-xl shadow-lg border border-white/25 group transition-all duration-300 flex gap-4 items-center md:flex-col md:gap-0 max-h-[160px] md:max-h-none">
-              <div className="relative overflow-hidden rounded-lg flex-shrink-0 w-28 h-28 md:w-full md:h-48 md:mb-4">
+            <div className="product-card glass p-4 rounded-xl shadow-lg border border-white/25 group transition-all duration-300 flex gap-4 items-center md:flex-col md:gap-0 h-auto md:h-auto">
+              <div className="relative overflow-hidden rounded-lg flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-full md:h-48 md:mb-4">
                 <img 
                   src={prod.image} 
-                  className="w-28 h-28 md:w-full md:h-48 object-cover rounded-lg transition-transform duration-500 will-change-transform"
+                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-full md:h-48 object-cover rounded-lg transition-transform duration-500 will-change-transform"
                   alt={prod.name[lang]}
                 />
                 <button
@@ -95,10 +95,10 @@ export default function ProductsPage() {
                 </button>
               </div>
               <div className="product-info flex-1 space-y-2">
-                <div className="font-bold text-base md:text-lg text-[#111] line-clamp-2">
+                <div className="mobile-cart-title font-bold text-[#111] line-clamp-2">
                   {prod.name[lang]}
                 </div>
-                <div className="text-[#d1b16a] font-bold text-lg mb-2">
+                <div className="mobile-cart-price text-[#d1b16a] font-bold mb-2">
                   {prod.price} {t("egp")}
                 </div>
                 <p className="text-gray-600 text-sm line-clamp-2 hidden md:block">{prod.desc[lang]}</p>

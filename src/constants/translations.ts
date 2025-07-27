@@ -116,7 +116,16 @@ export const translations = {
     sendMessage: "Send Message",
     yourMessage: "Your Message",
     subject: "Subject",
-    proceedToCheckout: "Proceed to Checkout"
+    proceedToCheckout: "Proceed to Checkout",
+    addSuccess: "Added to cart successfully",
+    shopNow: "Shop Now",
+    noFavoritesYet: "No favorites yet",
+    startAddingFavorites: "Start adding products to your favorites to see them here",
+    walletInfo: "Digital Wallet Information",
+    bankInfo: "Bank Transfer Information",
+    walletNumber: "Wallet Number",
+    cardNumber: "Card Number",
+    sendAmountAndUpload: "Please send the amount to the number above and upload a screenshot for confirmation"
   },
   ar: {
     home: "الرئيسية",
@@ -235,6 +244,15 @@ export const translations = {
     sendMessage: "إرسال رسالة",
     yourMessage: "رسالتك",
     subject: "الموضوع",
-    proceedToCheckout: "الدفع"
+    proceedToCheckout: "الدفع",
+    addSuccess: "تمت الإضافة للسلة بنجاح",
+    shopNow: "تسوق الآن",
+    noFavoritesYet: "لا توجد مفضلات بعد",
+    startAddingFavorites: "ابدأ بإضافة المنتجات إلى مفضلاتك لتراها هنا",
+    walletInfo: "معلومات المحفظة الرقمية",
+    bankInfo: "معلومات التحويل البنكي",
+    walletNumber: "رقم المحفظة",
+    cardNumber: "رقم البطاقة",
+    sendAmountAndUpload: "يرجى إرسال المبلغ إلى الرقم أعلاه ثم رفع لقطة شاشة للتأكيد"
   }
 };

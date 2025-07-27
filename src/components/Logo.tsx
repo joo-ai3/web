@@ -8,14 +8,14 @@ interface LogoProps {
 
 export default function Logo({ className = '', size = 'medium' }: LogoProps) {
   const sizeClasses = {
-    small: 'h-7 sm:h-8',
-    medium: 'h-9 sm:h-10', 
-    large: 'h-12 sm:h-14'
+    small: 'h-8 sm:h-10',
+    medium: 'h-11 sm:h-12', 
+    large: 'h-14 sm:h-16'
   };
 
   return (
     <Link to="/" className={`flex items-center ${className}`}>
-      <div className="logo-container">
+      <div className="logo-container flex items-center">
         <img 
           src="/logo.png" 
           alt="Soleva" 

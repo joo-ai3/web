@@ -33,7 +33,7 @@ export default function Home() {
         <div className="mb-8">
           <Logo size="large" className="justify-center" />
         </div>
-        <h1 className="mobile-title text-2xl sm:text-4xl md:text-6xl font-bold mb-4 text-[#111] tracking-wide leading-snug">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 text-[#111] tracking-wide leading-snug">
           {lang === 'ar' ? 'خطوتك تفرق' : 'Made to Move'}
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-gray-600 mb-6 max-w-2xl mx-auto px-4">

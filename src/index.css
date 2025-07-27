@@ -218,8 +218,10 @@ a:hover {
 /* Mobile Optimizations */
 @media (max-width: 768px) {
   .glass {
-    border-radius: 0.75rem;
-    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    margin: 0.5rem;
   }
   
   body {
@@ -230,71 +232,112 @@ a:hover {
   button, .glass-button {
     min-height: 44px;
     min-width: 44px;
-    font-size: clamp(14px, 3.5vw, 16px);
+    font-size: 15px;
     font-weight: 500;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.25rem;
+    border-radius: 0.875rem;
+    padding: 0.875rem 1.5rem;
   }
   
   input, textarea, select {
     min-height: 44px;
     font-size: 16px;
-    padding: 0.875rem 1rem;
-    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.875rem;
   }
 
   h1 {
-    font-size: clamp(1.5rem, 6vw, 2.25rem);
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
     line-height: 1.1;
     font-weight: 700;
   }
 
   h2 {
-    font-size: clamp(1.25rem, 5vw, 1.875rem);
+    font-size: clamp(1.5rem, 5vw, 2rem);
     line-height: 1.2;
     font-weight: 600;
   }
 
   h3 {
-    font-size: clamp(1.125rem, 4.5vw, 1.5rem);
+    font-size: clamp(1.25rem, 4.5vw, 1.75rem);
     line-height: 1.3;
     font-weight: 600;
   }
 
   .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
   
   /* Mobile card adjustments */
   .product-card {
-    padding: 0.75rem;
-    border-radius: 0.875rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin: 0.5rem 0;
   }
   
   .product-card img {
-    border-radius: 0.625rem;
+    border-radius: 0.75rem;
   }
   
   /* Mobile text adjustments */
   .mobile-product-title {
-    font-size: clamp(0.875rem, 3.5vw, 1rem);
+    font-size: 16px;
     line-height: 1.3;
     font-weight: 600;
   }
   
   .mobile-product-price {
-    font-size: clamp(1rem, 4vw, 1.25rem);
+    font-size: 15px;
     font-weight: 700;
   }
   
   /* Mobile spacing */
   .mobile-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
   
   .mobile-spacing {
-    padding: 0.75rem;
+    padding: 1rem;
+  }
+
+  /* Cart page mobile specific */
+  .mobile-cart-item {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+  }
+
+  .mobile-cart-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 0.75rem;
+  }
+
+  .mobile-cart-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .mobile-cart-price {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .mobile-quantity-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    border-radius: 0.5rem;
+  }
+
+  .mobile-checkout-btn {
+    width: 100%;
+    height: 48px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 0.875rem;
   }
 }
 

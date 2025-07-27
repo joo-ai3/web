@@ -89,7 +89,7 @@ export default function CartSummary() {
       <GlassButton className="w-full mt-6">
         <GlassButton 
           onClick={() => navigate("/checkout", { state: { appliedCoupon: applied } })}
-          className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80"
+          className="mobile-checkout-btn w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80"
         >
           <FiCreditCard />
           {t("proceedToCheckout")}
