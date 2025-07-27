@@ -81,6 +81,7 @@ export default function FavoritesPage() {
       <SectionTitle>{t("favorites")}</SectionTitle>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
         {favoriteProducts.map((product, index) => (
           <motion.div
             key={product.id}
@@ -88,39 +89,39 @@ export default function FavoritesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1, ease: [0.4, 0, 0.2, 1] }}
             whileHover={{ y: -4 }}
-            className="product-card glass p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-md border border-white/20 group transition-all duration-300 flex sm:flex-col gap-3 sm:gap-0"
+            className="product-card glass p-4 rounded-xl shadow-md border border-white/20 group transition-all duration-300 flex gap-4 md:flex-col md:gap-0 max-h-[160px] md:max-h-none"
           >
-            <div className="relative overflow-hidden rounded-lg sm:rounded-xl mb-0 sm:mb-3 flex-shrink-0">
+            <div className="relative overflow-hidden rounded-lg mb-0 md:mb-3 flex-shrink-0">
               <img
                 src={product.image}
                 alt={product.name[lang]}
-                className="w-20 h-20 sm:w-full sm:h-32 md:h-40 object-cover transition-transform duration-500"
+                className="w-28 h-28 md:w-full md:h-40 object-cover transition-transform duration-500"
               />
               <button
                 onClick={() => toggleFavorite(product.id)}
-                className="absolute top-1 right-1 sm:top-2 sm:right-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md hover:scale-110 transition-all duration-200"
+                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md hover:scale-110 transition-all duration-200"
               >
                 <FiHeart
-                  size={12}
+                  size={16}
                   className="text-red-500 fill-current"
                 />
               </button>
             </div>
 
-            <div className="product-info space-y-1 sm:space-y-2 flex-1">
-              <h3 className="font-bold text-sm sm:text-base text-[#111] line-clamp-2 leading-tight">
+            <div className="product-info space-y-2 flex-1">
+              <h3 className="font-bold text-base text-[#111] line-clamp-2 leading-tight">
                 {product.name[lang]}
               </h3>
-              <p className="text-[#d1b16a] font-bold text-sm sm:text-base md:text-lg">
+              <p className="text-[#d1b16a] font-bold text-lg">
                 {product.price} {t("egp")}
               </p>
-              <p className="text-gray-600 text-xs line-clamp-2 hidden sm:block">
+              <p className="text-gray-600 text-sm line-clamp-2 hidden md:block">
                 {product.desc[lang]}
               </p>
 
-              <div className="flex gap-2 pt-1 sm:pt-2">
+              <div className="flex gap-2 pt-2">
                 <Link to={`/product/${product.id}`} className="flex-1">
-                  <GlassButton className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-xs sm:text-sm py-1.5 sm:py-2 transition-all duration-200 hover:shadow-lg">
+                  <GlassButton className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-sm py-2 transition-all duration-200 hover:shadow-lg">
                     {lang === "ar" ? "عرض التفاصيل" : "View Details"}
                   </GlassButton>
                 </Link>
