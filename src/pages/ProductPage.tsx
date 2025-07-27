@@ -82,21 +82,21 @@ export default function ProductPage() {
 
   return (
     <div className="container mx-auto px-4 py-6 sm:py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-start mb-16">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 items-start mb-12 sm:mb-16">
         <div className="relative">
           <AnimatePresence mode="wait">
             <motion.img
               key={currentImageIndex}
               src={currentImage}
               alt={product.name[lang]}
-              className={`w-full rounded-2xl shadow-lg transition-all duration-500 ${isImageChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+              className={`w-full rounded-xl sm:rounded-2xl shadow-lg transition-all duration-500 ${isImageChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.05 }}
               transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
             />
           </AnimatePresence>
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2">
             {product.colors.map((_, index) => (
               <button
                 key={index}
@@ -108,9 +108,9 @@ export default function ProductPage() {
                   }, 200);
                 }}
                 className={clsx(
-                  "w-2 h-2 rounded-full transition-all duration-300",
+                  "w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300",
                   currentImageIndex === index
-                    ? "bg-[#d1b16a] w-6 shadow-lg"
+                    ? "bg-[#d1b16a] w-4 sm:w-6 shadow-lg"
                     : "bg-white/50 hover:bg-white/80"
                 )}
               />
@@ -122,21 +122,25 @@ export default function ProductPage() {
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-          className="space-y-4 sm:space-y-6"
+          className="space-y-3 sm:space-y-4 lg:space-y-6"
         >
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#111]">{product.name[lang]}</h1>
-              <p className="text-sm text-gray-600 mt-2">{product.desc[lang]}</p>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#111] leading-tight">
+                {product.name[lang]}
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2 leading-relaxed">
+                {product.desc[lang]}
+              </p>
             </div>
             <motion.button
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.1 }}
               onClick={handleFavoriteClick}
-              className="glass w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-200"
+              className="glass w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-200"
             >
               <FiHeart
-                size={24}
+                size={20}
                 className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"}
               />
             </motion.button>
@@ -146,7 +150,7 @@ export default function ProductPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-2xl sm:text-3xl font-bold text-[#d1b16a]"
+            className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#d1b16a]"
           >
             {product.price} {t("egp")}
           </motion.p>
@@ -156,8 +160,10 @@ export default function ProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <p className="font-semibold mb-3 text-[#111]">{t("color")}:</p>
-            <div className="flex gap-3">
+            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base">
+              {t("color")}:
+            </p>
+            <div className="flex gap-2 sm:gap-3">
               {product.colors.map((color, index) => (
                 <motion.div
                   key={index}
@@ -165,7 +171,7 @@ export default function ProductPage() {
                   whileTap={{ scale: 0.95 }}
                   whileHover={{ scale: 1.1 }}
                   className={clsx(
-                    "color-selector w-10 h-10 rounded-full border-2 cursor-pointer transition-all duration-200",
+                    "color-selector w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 cursor-pointer transition-all duration-200",
                     selectedColor === color.name[lang]
                       ? "selected ring-2 ring-[#d1b16a] border-[#d1b16a]"
                       : "border-gray-300 hover:border-[#d1b16a]"
@@ -182,8 +188,10 @@ export default function ProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            <p className="font-semibold mb-3 text-[#111]">{t("size")}:</p>
-            <div className="flex gap-3">
+            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base">
+              {t("size")}:
+            </p>
+            <div className="flex gap-2 sm:gap-3 flex-wrap">
               {product.sizes.map((size) => (
                 <motion.button
                   key={size}
@@ -191,7 +199,7 @@ export default function ProductPage() {
                   whileHover={{ scale: 1.05 }}
                   onClick={() => setSelectedSize(size)}
                   className={clsx(
-                    "px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200",
+                    "px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-sm font-medium transition-all duration-200 min-w-[44px]",
                     selectedSize === size
                       ? "bg-[#d1b16a] text-black border-[#d1b16a] shadow-lg"
                       : "text-gray-600 border-gray-300 hover:border-[#d1b16a] hover:text-[#d1b16a]"
@@ -207,10 +215,12 @@ export default function ProductPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="glass p-4 rounded-xl"
+            className="glass p-3 sm:p-4 rounded-lg sm:rounded-xl"
           >
-            <h3 className="font-bold text-lg mb-3 text-[#111]">{t("specs")}</h3>
-            <div className="space-y-2">
+            <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3 text-[#111]">
+              {t("specs")}
+            </h3>
+            <div className="space-y-1.5 sm:space-y-2">
               {product.specs[lang].map(([key, value], index) => (
                 <motion.div
                   key={index}
@@ -233,7 +243,7 @@ export default function ProductPage() {
           >
             <GlassButton
               onClick={handleAddToCart}
-              className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-lg py-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-base sm:text-lg py-3 sm:py-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               <FiShoppingCart size={20} />
               {t("addToCart")}
@@ -251,7 +261,7 @@ export default function ProductPage() {
           <SectionTitle>
             {lang === "ar" ? "منتجات مشابهة" : "Related Products"}
           </SectionTitle>
-          <div className="mobile-product-grid sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {relatedProducts.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -259,17 +269,23 @@ export default function ProductPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9 + index * 0.1, duration: 0.5 }}
                 whileHover={{ y: -4 }}
-                className="product-card mobile-product-card glass p-3 sm:p-4 rounded-2xl shadow-lg transition-all duration-300"
+                className="product-card glass p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300 flex sm:flex-col gap-3 sm:gap-0"
               >
                 <Link to={`/product/${item.id}`}>
-                  <img
-                    src={item.image}
-                    alt={item.name[lang]}
-                    className="w-full h-32 sm:h-40 object-cover rounded-lg mb-3 transition-transform duration-300 will-change-transform"
-                  />
-                  <div className="product-info">
-                    <h3 className="mobile-product-title text-sm font-medium text-[#111] line-clamp-2">{item.name[lang]}</h3>
-                    <p className="mobile-product-price text-[#d1b16a] font-bold mt-1">{item.price} {t("egp")}</p>
+                  <div className="flex sm:flex-col gap-3 sm:gap-0">
+                    <img
+                      src={item.image}
+                      alt={item.name[lang]}
+                      className="w-20 h-20 sm:w-full sm:h-32 lg:h-40 object-cover rounded-lg mb-0 sm:mb-3 transition-transform duration-300 will-change-transform flex-shrink-0"
+                    />
+                    <div className="product-info flex-1">
+                      <h3 className="text-sm sm:text-base font-medium text-[#111] line-clamp-2 leading-tight">
+                        {item.name[lang]}
+                      </h3>
+                      <p className="text-[#d1b16a] font-bold mt-1 text-sm sm:text-base">
+                        {item.price} {t("egp")}
+                      </p>
+                    </div>
                   </div>
                 </Link>
               </motion.div>

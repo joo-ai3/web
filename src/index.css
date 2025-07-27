@@ -218,9 +218,9 @@ a:hover {
 /* Mobile Optimizations */
 @media (max-width: 768px) {
   .glass {
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     backdrop-filter: blur(12px);
-    padding: 1rem;
+    padding: 0.75rem;
   }
   
   body {
@@ -231,66 +231,71 @@ a:hover {
   button, .glass-button {
     min-height: 44px;
     min-width: 44px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
-    border-radius: 0.5rem;
-    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
   }
   
   input, textarea, select {
     min-height: 44px;
     font-size: 16px;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
+    padding: 0.875rem 1rem;
+    border-radius: 0.75rem;
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.875rem;
     line-height: 1.1;
+    font-weight: 700;
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.625rem;
     line-height: 1.2;
+    font-weight: 600;
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
     line-height: 1.3;
+    font-weight: 600;
   }
 
   .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
   
   /* Mobile card adjustments */
   .product-card {
-    padding: 0.75rem;
-    border-radius: 1rem;
+    padding: 0.875rem;
+    border-radius: 0.875rem;
   }
   
   .product-card img {
-    border-radius: 0.75rem;
+    border-radius: 0.625rem;
   }
   
   /* Mobile text adjustments */
   .mobile-product-title {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     line-height: 1.3;
+    font-weight: 600;
   }
   
   .mobile-product-price {
-    font-size: 1rem;
+    font-size: 1.125rem;
+    font-weight: 700;
   }
   
   /* Mobile spacing */
   .mobile-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
   
   .mobile-spacing {
-    padding: 0.75rem;
+    padding: 1rem;
   }
 }
 
@@ -737,14 +742,16 @@ a:hover {
   }
   
   .mobile-nav-item {
-    padding: 0.75rem;
-    font-size: 0.875rem;
-    border-radius: 0.5rem;
+    padding: 0.875rem;
+    font-size: 0.9rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
   }
   
   .mobile-product-action {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
   }
 }
 
@@ -763,17 +770,17 @@ a:hover {
 /* Enhanced mobile animations */
 @media (max-width: 768px) {
   .mobile-fade-in {
-    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .mobile-slide-in {
-    animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideInRight 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
 /* Logo animations */
 .logo-container {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .logo-container:hover {
@@ -783,7 +790,7 @@ a:hover {
 
 /* Logo responsive behavior */
 .logo-container img {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (max-width: 640px) {
@@ -795,20 +802,21 @@ a:hover {
 /* Mobile-optimized spacing */
 @media (max-width: 640px) {
   .mobile-spacing {
-    padding: 1rem 0.5rem;
+    padding: 1.25rem 0.75rem;
   }
   
   .mobile-section {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
   
   .mobile-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
   }
   
   .glass {
-    border-radius: 1rem;
+    border-radius: 0.875rem;
     backdrop-filter: blur(12px);
   }
   
@@ -816,6 +824,7 @@ a:hover {
   .mobile-nav-item {
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .mobile-nav-item:active {
@@ -842,29 +851,87 @@ a:hover {
   
   /* Mobile header adjustments */
   header {
-    min-height: 60px;
-    padding: 0.75rem 1rem;
+    min-height: 64px;
+    padding: 0.875rem 1.25rem;
   }
   
   /* Mobile footer adjustments */
   footer {
-    padding: 1rem;
-    font-size: 0.875rem;
+    padding: 1.25rem;
+    font-size: 0.9rem;
   }
   
   /* Mobile section titles */
   h2.section-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.625rem;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
   }
   
   /* Mobile button groups */
   .button-group {
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
   
   .button-group button {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
   }
+}
+
+/* Enhanced animation consistency */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) rotate(-0.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Consistent animation timing for both themes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme-consistent transitions */
+* {
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

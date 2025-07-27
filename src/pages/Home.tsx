@@ -75,7 +75,7 @@ export default function Home() {
 
       {/* Featured Products */}
       <SectionTitle>{t("products")}</SectionTitle>
-      <div className="mobile-product-grid">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 md:gap-6">
         {products.slice(0, 3).map((prod, index) => (
           <motion.div
             key={prod.id}
@@ -85,30 +85,36 @@ export default function Home() {
             transition={{ duration: 0.6, delay: index * 0.1, ease: [0.4, 0, 0.2, 1] }}
           >
             <Link to={`/product/${prod.id}`}>
-              <div className="mobile-product-card product-card glass rounded-xl shadow-md border border-white/20 group transition-all duration-300">
-                <div className="relative overflow-hidden rounded-lg mb-2">
+              <div className="product-card glass rounded-lg sm:rounded-xl shadow-md border border-white/20 group transition-all duration-300 p-2 sm:p-3 md:p-4 flex flex-col">
+                <div className="relative overflow-hidden rounded-lg mb-2 sm:mb-3">
                   <img
                     src={prod.image}
                     alt={prod.name[lang]}
-                    className="w-full object-cover transition-transform duration-500"
+                    className="w-full h-24 sm:h-32 md:h-40 object-cover transition-transform duration-500"
                   />
                   <button
                     onClick={(e) => {
                       e.preventDefault();
                       handleFavoriteClick(prod.id);
                     }}
-                    className="absolute top-1.5 right-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md hover:scale-110 transition-all duration-200"
+                    className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md hover:scale-110 transition-all duration-200"
                   >
                     <FiHeart
-                      size={14}
+                      size={12}
                       className={isFavorite(prod.id) ? "text-red-500 fill-current" : "text-gray-400"}
                     />
                   </button>
                 </div>
-                <div className="product-info">
-                  <div className="mobile-product-title text-[#111]">{prod.name[lang]}</div>
-                  <div className="mobile-product-price">{prod.price} {t("egp")}</div>
-                  <p className="text-gray-600 text-xs mt-1 line-clamp-2 hidden sm:block">{prod.desc[lang]}</p>
+                <div className="product-info flex-1 flex flex-col justify-between">
+                  <div className="font-bold text-xs sm:text-sm md:text-base text-[#111] line-clamp-2 mb-1">
+                    {prod.name[lang]}
+                  </div>
+                  <div className="font-bold text-sm sm:text-base md:text-lg text-[#d1b16a]">
+                    {prod.price} {t("egp")}
+                  </div>
+                  <p className="text-gray-600 text-xs mt-1 line-clamp-2 hidden md:block">
+                    {prod.desc[lang]}
+                  </p>
                 </div>
               </div>
             </Link>

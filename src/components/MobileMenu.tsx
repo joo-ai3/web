@@ -56,15 +56,22 @@ export default function MobileMenu() {
 
   const closeMenu = () => setIsOpen(false);
 
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const toggleLang = () => {
+    setLang(lang === "ar" ? "en" : "ar");
+  };
   const backdropVariants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
-      transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+      transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] }
     },
     exit: { 
       opacity: 0,
-      transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] }
+      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
     }
   };
 
@@ -78,10 +85,10 @@ export default function MobileMenu() {
       opacity: 1,
       transition: { 
         type: 'spring', 
-        damping: 28, 
-        stiffness: 400,
-        mass: 0.8,
-        duration: 0.4
+        damping: 30, 
+        stiffness: 450,
+        mass: 0.7,
+        duration: 0.35
       }
     },
     exit: { 
@@ -91,20 +98,20 @@ export default function MobileMenu() {
         type: 'spring', 
         damping: 30, 
         stiffness: 500,
-        mass: 0.6,
-        duration: 0.3
+        mass: 0.5,
+        duration: 0.25
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: lang === 'ar' ? 30 : -30 },
+    hidden: { opacity: 0, x: lang === 'ar' ? 25 : -25 },
     visible: (i: number) => ({
       opacity: 1,
       x: 0,
       transition: {
-        delay: 0.1 + i * 0.05,
-        duration: 0.4,
+        delay: 0.08 + i * 0.04,
+        duration: 0.35,
         ease: [0.4, 0, 0.2, 1]
       }
     })
@@ -142,11 +149,16 @@ export default function MobileMenu() {
               exit="exit"
               className={clsx(
                 "fixed top-0 bottom-0 w-[85%] max-w-xs h-screen z-[110] md:hidden overflow-y-auto",
-                "glass bg-white/95 dark:bg-[#1a1a1a]/95 backdrop-blur-xl border shadow-2xl",
+                "glass backdrop-blur-xl border shadow-2xl",
+                theme === 'dark' 
+                  ? "bg-[#1a1a1a]/95 border-[#d1b16a]/20" 
+                  : "bg-white/95 border-[#d1b16a]/30",
                 lang === 'ar' ? 'right-0 border-l border-[#d1b16a]/30' : 'left-0 border-r border-[#d1b16a]/30'
               )}
               style={{
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(209, 177, 106, 0.1)'
+                boxShadow: theme === 'dark' 
+                  ? '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(209, 177, 106, 0.15)'
+                  : '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(209, 177, 106, 0.1)'
               }}
             >
               <div className="p-4 h-full flex flex-col">
@@ -154,7 +166,7 @@ export default function MobileMenu() {
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
+                  transition={{ delay: 0.15, duration: 0.35 }}
                   className="flex items-center justify-between mb-6"
                 >
                   <Logo size="small" showText={true} className="flex-shrink-0" />
@@ -173,7 +185,7 @@ export default function MobileMenu() {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25, duration: 0.4 }}
+                    transition={{ delay: 0.2, duration: 0.35 }}
                     className="glass p-3 rounded-xl mb-6 border border-[#d1b16a]/20 bg-gradient-to-r from-[#d1b16a]/10 to-transparent"
                   >
                     <div className="flex items-center gap-3">
@@ -181,8 +193,12 @@ export default function MobileMenu() {
                         <FiUser size={18} className="text-[#d1b16a]" />
                       </div>
                       <div>
-                        <div className="font-semibold text-[#111] dark:text-white text-sm">{user.name}</div>
-                        <div className="text-xs text-gray-600 dark:text-gray-400">{user.email}</div>
+                        <div className={`font-semibold text-sm ${theme === 'dark' ? 'text-white' : 'text-[#111]'}`}>
+                          {user.name}
+                        </div>
+                        <div className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {user.email}
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -196,8 +212,10 @@ export default function MobileMenu() {
                       <motion.h3
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-semibold px-1"
+                        transition={{ delay: 0.25 }}
+                        className={`text-xs uppercase tracking-wider mb-3 font-semibold px-1 ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}
                       >
                         {t("menu")}
                       </motion.h3>
@@ -213,17 +231,25 @@ export default function MobileMenu() {
                             <Link
                               to={item.to}
                               onClick={closeMenu}
-                              className="mobile-nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-[#d1b16a]/20 transition-all duration-300 relative group min-h-[44px] touch-manipulation"
+                              className={`mobile-nav-item flex items-center gap-3 p-3 rounded-lg transition-all duration-300 relative group min-h-[44px] touch-manipulation ${
+                                theme === 'dark' 
+                                  ? 'hover:bg-[#d1b16a]/15 text-gray-200' 
+                                  : 'hover:bg-[#d1b16a]/20 text-gray-800'
+                              }`}
                             >
                               <div className="text-[#d1b16a] group-hover:scale-110 transition-transform duration-200">
                                 {React.cloneElement(item.icon, { size: 18 })}
                               </div>
-                              <span className="font-medium text-sm flex-1">{item.label}</span>
+                              <span className={`font-medium text-sm flex-1 ${
+                                theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                              }`}>
+                                {item.label}
+                              </span>
                               {item.badge && (
                                 <motion.span
                                   initial={{ scale: 0 }}
                                   animate={{ scale: 1 }}
-                                  transition={{ delay: 0.4 + i * 0.05, type: "spring", stiffness: 500 }}
+                                  transition={{ delay: 0.3 + i * 0.04, type: "spring", stiffness: 500 }}
                                   className="bg-[#d1b16a] text-black text-xs px-2 py-0.5 rounded-full font-semibold shadow-md"
                                 >
                                   {item.badge}
@@ -240,8 +266,10 @@ export default function MobileMenu() {
                       <motion.h3
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-semibold px-1"
+                        transition={{ delay: 0.35 }}
+                        className={`text-xs uppercase tracking-wider mb-3 font-semibold px-1 ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}
                       >
                         {t("account")}
                       </motion.h3>
@@ -257,10 +285,18 @@ export default function MobileMenu() {
                             <Link
                               to={item.to}
                               onClick={closeMenu}
-                              className="mobile-nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-[#d1b16a]/20 transition-all duration-300 min-h-[44px] touch-manipulation"
+                              className={`mobile-nav-item flex items-center gap-3 p-3 rounded-lg transition-all duration-300 min-h-[44px] touch-manipulation ${
+                                theme === 'dark' 
+                                  ? 'hover:bg-[#d1b16a]/15 text-gray-200' 
+                                  : 'hover:bg-[#d1b16a]/20 text-gray-800'
+                              }`}
                             >
                               <div className="text-[#d1b16a]">{React.cloneElement(item.icon, { size: 18 })}</div>
-                              <span className="font-medium text-sm">{item.label}</span>
+                              <span className={`font-medium text-sm ${
+                                theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                              }`}>
+                                {item.label}
+                              </span>
                             </Link>
                           </motion.div>
                         ))}
@@ -276,7 +312,9 @@ export default function MobileMenu() {
                                 logout();
                                 closeMenu();
                               }}
-                              className="mobile-nav-item flex items-center gap-3 p-3 rounded-lg hover:bg-red-100 transition-all duration-300 text-red-600 w-full min-h-[44px] touch-manipulation"
+                              className={`mobile-nav-item flex items-center gap-3 p-3 rounded-lg transition-all duration-300 text-red-600 w-full min-h-[44px] touch-manipulation ${
+                                theme === 'dark' ? 'hover:bg-red-900/20' : 'hover:bg-red-100'
+                              }`}
                             >
                               <FiLogOut size={18} />
                               <span className="font-medium text-sm">{t("logout")}</span>
@@ -291,8 +329,10 @@ export default function MobileMenu() {
                       <motion.h3
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className="text-xs text-gray-500 uppercase tracking-wider mb-3 font-semibold px-1"
+                        transition={{ delay: 0.4 }}
+                        className={`text-xs uppercase tracking-wider mb-3 font-semibold px-1 ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}
                       >
                         {t("settings")}
                       </motion.h3>
@@ -303,18 +343,30 @@ export default function MobileMenu() {
                           variants={itemVariants}
                           initial="hidden"
                           animate="visible"
-                          className="flex items-center justify-between p-3 glass rounded-lg border border-[#d1b16a]/20 min-h-[44px]"
+                          className={`flex items-center justify-between p-3 glass rounded-lg border min-h-[44px] ${
+                            theme === 'dark' 
+                              ? 'border-[#d1b16a]/15 bg-gray-800/30' 
+                              : 'border-[#d1b16a]/20 bg-gray-50/30'
+                          }`}
                         >
                           <div className="flex items-center gap-3">
                             <div className="text-[#d1b16a]">
                               {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
                             </div>
-                            <span className="font-medium text-sm">{t("appearance")}</span>
+                            <span className={`font-medium text-sm ${
+                              theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                            }`}>
+                              {t("appearance")}
+                            </span>
                           </div>
                           <motion.button
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                            className="px-3 py-1.5 text-xs bg-[#d1b16a]/20 rounded-md hover:bg-[#d1b16a]/30 transition-all duration-200 font-medium min-h-[32px] touch-manipulation"
+                            onClick={toggleTheme}
+                            className={`px-3 py-1.5 text-xs rounded-md transition-all duration-200 font-medium min-h-[32px] touch-manipulation ${
+                              theme === 'dark'
+                                ? 'bg-[#d1b16a]/15 hover:bg-[#d1b16a]/25 text-[#d1b16a]'
+                                : 'bg-[#d1b16a]/20 hover:bg-[#d1b16a]/30 text-[#d1b16a]'
+                            }`}
                           >
                             {theme === "dark" ? t("light") : t("dark")}
                           </motion.button>
@@ -326,18 +378,30 @@ export default function MobileMenu() {
                           variants={itemVariants}
                           initial="hidden"
                           animate="visible"
-                          className="flex items-center justify-between p-3 glass rounded-lg border border-[#d1b16a]/20 min-h-[44px]"
+                          className={`flex items-center justify-between p-3 glass rounded-lg border min-h-[44px] ${
+                            theme === 'dark' 
+                              ? 'border-[#d1b16a]/15 bg-gray-800/30' 
+                              : 'border-[#d1b16a]/20 bg-gray-50/30'
+                          }`}
                         >
                           <div className="flex items-center gap-3">
                             <div className="text-[#d1b16a]">
                               <FiGlobe size={18} />
                             </div>
-                            <span className="font-medium text-sm">{t("language")}</span>
+                            <span className={`font-medium text-sm ${
+                              theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                            }`}>
+                              {t("language")}
+                            </span>
                           </div>
                           <motion.button
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-                            className="px-3 py-1.5 text-xs bg-[#d1b16a]/20 rounded-md hover:bg-[#d1b16a]/30 transition-all duration-200 font-medium min-h-[32px] touch-manipulation"
+                            onClick={toggleLang}
+                            className={`px-3 py-1.5 text-xs rounded-md transition-all duration-200 font-medium min-h-[32px] touch-manipulation ${
+                              theme === 'dark'
+                                ? 'bg-[#d1b16a]/15 hover:bg-[#d1b16a]/25 text-[#d1b16a]'
+                                : 'bg-[#d1b16a]/20 hover:bg-[#d1b16a]/30 text-[#d1b16a]'
+                            }`}
                           >
                             {lang === "ar" ? "EN" : "AR"}
                           </motion.button>
