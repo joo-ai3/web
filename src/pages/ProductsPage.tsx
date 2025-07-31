@@ -21,7 +21,7 @@ interface Product {
 const ProductsPage: React.FC = () => {
   const { addToCart } = useCart();
   const { favorites, toggleFavorite } = useFavorites();
-  const { t } = useTranslation();
+  const t = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
