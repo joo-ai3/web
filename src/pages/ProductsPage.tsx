@@ -44,7 +44,7 @@ const ProductsPage: React.FC = () => {
         case 'price-high':
           return b.price - a.price;
         default:
-          return product.name.en.localeCompare(b.name.en);
+          return a.name.en.localeCompare(b.name.en);
       }
     });
 
