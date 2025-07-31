@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-app">
       {/* Hero Section */}
-      <section className="relative py-20 sm:py-32 px-4 text-center">
+      <section className="relative py-20 sm:py-32 px-4 text-center" role="banner" aria-labelledby="hero-title">
         <div className="absolute inset-0 bg-gradient-to-br from-[#d1b16a]/10 via-transparent to-[#d1b16a]/5"></div>
         <div className="relative z-10 max-w-4xl mx-auto">
           <motion.div
@@ -60,6 +60,7 @@ export default function Home() {
           </motion.div>
           
           <motion.h1
+            id="hero-title"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -87,13 +88,19 @@ export default function Home() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link to="/products">
-              <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 px-8 py-4 text-lg">
+              <GlassButton 
+                className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 px-8 py-4 text-lg"
+                aria-label="Shop now - Browse our products"
+              >
                 <FiShoppingBag className="w-5 h-5 mr-2" />
                 {t("shopNow")}
               </GlassButton>
             </Link>
             <Link to="/about">
-              <GlassButton className="px-8 py-4 text-lg">
+              <GlassButton 
+                className="px-8 py-4 text-lg"
+                aria-label="Learn more about our collection"
+              >
                 {t("discoverCollection")}
               </GlassButton>
             </Link>
@@ -102,14 +109,14 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 sm:py-20 px-4">
+      <section className="py-16 sm:py-20 px-4" aria-labelledby="features-title">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <SectionTitle className="text-center mb-12">
+            <SectionTitle id="features-title" className="text-center mb-12">
               {lang === 'ar' ? 'لماذا تختار سوليفا؟' : 'Why Choose Soleva?'}
             </SectionTitle>
           </motion.div>
@@ -123,11 +130,11 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -4 }}
               >
-                <GlassCard className="text-center p-8 h-full">
+                <GlassCard className="text-center p-8 h-full" role="article">
                   <div className="text-[#d1b16a] mb-6 flex justify-center">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-4 text-[#111]">
+                  <h3 className="text-xl font-semibold mb-4 text-[#111]" role="heading" aria-level="3">
                     {feature.title}
                   </h3>
                   <p className="text-gray-600 leading-relaxed">
@@ -141,7 +148,7 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-16 sm:py-20 px-4">
+      <section className="py-16 sm:py-20 px-4" aria-labelledby="featured-title">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -149,7 +156,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <SectionTitle>
+            <SectionTitle id="featured-title">
               {t("featuredProducts")}
             </SectionTitle>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -169,45 +176,52 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -4 }}
               >
-                <div className="product-card-pro group cursor-pointer">
+                <article className="product-card-pro group cursor-pointer" role="article">
                   <div className="relative overflow-hidden">
                     <img 
                       src={product.image} 
                       alt={product.name[lang]}
                       className="product-image"
+                      loading={index < 3 ? "eager" : "lazy"}
+                      decoding="async"
                     />
                     <button
                       onClick={() => handleFavoriteClick(product.id)}
                       className={`mobile-favorite-btn ${isFavorite(product.id) ? 'favorited' : ''}`}
+                      aria-label={isFavorite(product.id) ? t("removeFromFavorites") : t("addToFavorites")}
                     >
                       <FiHeart 
                         size={20} 
                         className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"} 
+                        aria-hidden="true"
                       />
                     </button>
                   </div>
                   
                   <div className="product-info">
-                    <h3 className="mobile-product-title font-semibold mb-2 text-[#111] line-clamp-2">
+                    <h3 className="mobile-product-title font-semibold mb-2 text-[#111] line-clamp-2" role="heading" aria-level="3">
                       {product.name[lang]}
                     </h3>
                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {product.desc[lang]}
                     </p>
                     <div className="flex items-center justify-between mb-4">
-                      <span className="mobile-product-price font-bold text-[#d1b16a]">
+                      <span className="mobile-product-price font-bold text-[#d1b16a]" role="text" aria-label={`Price: ${product.price} ${t("egp")}`}>
                         {product.price} {t("egp")}
                       </span>
                     </div>
                     <div className="flex gap-2">
                       <Link to={`/product/${product.id}`} className="flex-1">
-                        <GlassButton className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2 text-sm">
+                        <GlassButton 
+                          className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2 text-sm"
+                          aria-label={`View details for ${product.name[lang]}`}
+                        >
                           {t("viewDetails")}
                         </GlassButton>
                       </Link>
                     </div>
                   </div>
-                </div>
+                </article>
               </motion.div>
             ))}
           </div>
@@ -219,7 +233,10 @@ export default function Home() {
             className="text-center mt-12"
           >
             <Link to="/products">
-              <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 px-8 py-3 text-lg">
+              <GlassButton 
+                className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 px-8 py-3 text-lg"
+                aria-label="View all products in our collection"
+              >
                 {lang === 'ar' ? 'عرض جميع المنتجات' : 'View All Products'}
               </GlassButton>
             </Link>
@@ -228,7 +245,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 sm:py-20 px-4">
+      <section className="py-16 sm:py-20 px-4" aria-labelledby="cta-title">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -236,7 +253,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             <GlassCard className="p-8 sm:p-12">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-[#111]">
+              <h2 id="cta-title" className="text-3xl sm:text-4xl font-bold mb-6 text-[#111]">
                 {lang === 'ar' 
                   ? 'مستعد لتجربة الجودة الفائقة؟'
                   : 'Ready to Experience Premium Quality?'
@@ -249,7 +266,10 @@ export default function Home() {
                 }
               </p>
               <Link to="/products">
-                <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 px-12 py-4 text-lg">
+                <GlassButton 
+                  className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 px-12 py-4 text-lg"
+                  aria-label="Start shopping now"
+                >
                   {t("shopNow")}
                 </GlassButton>
               </Link>

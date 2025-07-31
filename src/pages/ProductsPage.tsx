@@ -194,51 +194,59 @@ export default function ProductsPage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -4 }}
                 >
-                  <div className="product-card-pro group cursor-pointer">
+                  <article className="product-card-pro group cursor-pointer" role="article">
                     <div className="relative overflow-hidden">
                       <img
                         src={product.image}
                         alt={product.name[lang]}
                         className="product-image"
+                        loading={index < 6 ? "eager" : "lazy"}
+                        decoding="async"
                       />
                       <button
                         onClick={() => handleFavoriteClick(product.id)}
                         className={`mobile-favorite-btn ${isFavorite(product.id) ? 'favorited' : ''}`}
+                        aria-label={isFavorite(product.id) ? t("removeFromFavorites") : t("addToFavorites")}
                       >
                         <FiHeart 
                           size={20} 
                           className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"} 
+                          aria-hidden="true"
                         />
                       </button>
                     </div>
                     
                     <div className="product-info">
-                      <h3 className="mobile-product-title font-semibold mb-2 text-[#111] line-clamp-2">
+                      <h3 className="mobile-product-title font-semibold mb-2 text-[#111] line-clamp-2" role="heading" aria-level="3">
                         {product.name[lang]}
                       </h3>
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                         {product.desc[lang]}
                       </p>
                       <div className="flex items-center justify-between mb-4">
-                        <span className="mobile-product-price font-bold text-[#d1b16a]">
+                        <span className="mobile-product-price font-bold text-[#d1b16a]" role="text" aria-label={`Price: ${product.price} ${t("egp")}`}>
                           {product.price} {t("egp")}
                         </span>
                       </div>
                       <div className="flex gap-2">
                         <Link to={`/product/${product.id}`} className="flex-1">
-                          <GlassButton className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2 text-sm">
+                          <GlassButton 
+                            className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2 text-sm"
+                            aria-label={`View details for ${product.name[lang]}`}
+                          >
                             {t("viewDetails")}
                           </GlassButton>
                         </Link>
                         <GlassButton
                           onClick={() => handleAddToCart(product)}
                           className="px-3 py-2 text-sm"
+                          aria-label={`Add ${product.name[lang]} to cart`}
                         >
-                          <FiShoppingCart size={16} />
+                          <FiShoppingCart size={16} aria-hidden="true" />
                         </GlassButton>
                       </div>
                     </div>
-                  </div>
+                  </article>
                 </motion.div>
               ))}
             </div>
@@ -252,21 +260,25 @@ export default function ProductsPage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ x: 4 }}
                 >
-                  <GlassCard className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
+                  <GlassCard className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6" role="article">
                     <div className="w-full sm:w-48 flex-shrink-0">
                       <div className="relative">
                         <img
                           src={product.image}
                           alt={product.name[lang]}
                           className="w-full h-48 sm:h-32 object-cover rounded-lg"
+                          loading={index < 6 ? "eager" : "lazy"}
+                          decoding="async"
                         />
                         <button
                           onClick={() => handleFavoriteClick(product.id)}
                           className="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-200"
+                          aria-label={isFavorite(product.id) ? t("removeFromFavorites") : t("addToFavorites")}
                         >
                           <FiHeart 
                             size={14} 
                             className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"} 
+                            aria-hidden="true"
                           />
                         </button>
                       </div>
@@ -275,10 +287,10 @@ export default function ProductsPage() {
                     <div className="flex-1 flex flex-col justify-between">
                       <div>
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
-                          <h3 className="text-lg sm:text-xl font-semibold text-[#111] mb-2 sm:mb-0">
+                          <h3 className="text-lg sm:text-xl font-semibold text-[#111] mb-2 sm:mb-0" role="heading" aria-level="3">
                             {product.name[lang]}
                           </h3>
-                          <span className="text-xl sm:text-2xl font-bold text-[#d1b16a]">
+                          <span className="text-xl sm:text-2xl font-bold text-[#d1b16a]" role="text" aria-label={`Price: ${product.price} ${t("egp")}`}>
                             {product.price} {t("egp")}
                           </span>
                         </div>
@@ -290,15 +302,19 @@ export default function ProductsPage() {
                       
                       <div className="flex gap-3">
                         <Link to={`/product/${product.id}`} className="flex-1">
-                          <GlassButton className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2">
+                          <GlassButton 
+                            className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2"
+                            aria-label={`View details for ${product.name[lang]}`}
+                          >
                             {t("viewDetails")}
                           </GlassButton>
                         </Link>
                         <GlassButton
                           onClick={() => handleAddToCart(product)}
                           className="px-4 py-2"
+                          aria-label={`Add ${product.name[lang]} to cart`}
                         >
-                          <FiShoppingCart size={18} />
+                          <FiShoppingCart size={18} aria-hidden="true" />
                           <span className="hidden sm:inline ml-2">{t("addToCart")}</span>
                         </GlassButton>
                       </div>

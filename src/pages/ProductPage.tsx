@@ -94,6 +94,8 @@ export default function ProductPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.05 }}
               transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+              loading="eager"
+              decoding="async"
             />
           </AnimatePresence>
           <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2">
@@ -107,6 +109,7 @@ export default function ProductPage() {
                     setIsImageChanging(false);
                   }, 200);
                 }}
+                aria-label={`View image ${index + 1} of ${product.colors.length}`}
                 className={clsx(
                   "w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300",
                   currentImageIndex === index
@@ -126,7 +129,7 @@ export default function ProductPage() {
         >
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#111] leading-tight">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#111] leading-tight" role="heading" aria-level="1">
                 {product.name[lang]}
               </h1>
               <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2 leading-relaxed">
@@ -138,10 +141,12 @@ export default function ProductPage() {
               whileHover={{ scale: 1.1 }}
               onClick={handleFavoriteClick}
               className={`mobile-favorite-btn ${isFavorite(product.id) ? 'favorited' : ''} relative`}
+              aria-label={isFavorite(product.id) ? t("removeFromFavorites") : t("addToFavorites")}
             >
               <FiHeart
                 size={22}
                 className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"}
+                aria-hidden="true"
               />
             </motion.button>
           </div>
@@ -151,6 +156,8 @@ export default function ProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#d1b16a]"
+            role="text"
+            aria-label={`Price: ${product.price} ${t("egp")}`}
           >
             {product.price} {t("egp")}
           </motion.p>
@@ -160,16 +167,20 @@ export default function ProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base">
+            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base" role="text">
               {t("color")}:
             </p>
-            <div className="flex gap-2 sm:gap-3">
+            <div className="flex gap-2 sm:gap-3" role="radiogroup" aria-label="Select color">
               {product.colors.map((color, index) => (
                 <motion.div
                   key={index}
                   onClick={() => handleColorSelect(color)}
                   whileTap={{ scale: 0.95 }}
                   whileHover={{ scale: 1.1 }}
+                  role="radio"
+                  aria-checked={selectedColor === color.name[lang]}
+                  aria-label={color.name[lang]}
+                  tabIndex={0}
                   className={clsx(
                     "color-selector w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 cursor-pointer transition-all duration-200",
                     selectedColor === color.name[lang]
@@ -177,7 +188,6 @@ export default function ProductPage() {
                       : "border-gray-300 hover:border-[#d1b16a]"
                   )}
                   style={{ backgroundColor: color.code }}
-                  title={color.name[lang]}
                 />
               ))}
             </div>
@@ -188,16 +198,19 @@ export default function ProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base">
+            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base" role="text">
               {t("size")}:
             </p>
-            <div className="flex gap-2 sm:gap-3 flex-wrap">
+            <div className="flex gap-2 sm:gap-3 flex-wrap" role="radiogroup" aria-label="Select size">
               {product.sizes.map((size) => (
                 <motion.button
                   key={size}
                   whileTap={{ scale: 0.95 }}
                   whileHover={{ scale: 1.05 }}
                   onClick={() => setSelectedSize(size)}
+                  role="radio"
+                  aria-checked={selectedSize === size}
+                  aria-label={`Size ${size}`}
                   className={clsx(
                     "px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-sm font-medium transition-all duration-200 min-w-[44px]",
                     selectedSize === size
@@ -217,7 +230,7 @@ export default function ProductPage() {
             transition={{ delay: 0.5, duration: 0.5 }}
             className="glass p-3 sm:p-4 rounded-lg sm:rounded-xl"
           >
-            <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3 text-[#111]">
+            <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3 text-[#111]" role="heading" aria-level="3">
               {t("specs")}
             </h3>
             <div className="space-y-1.5 sm:space-y-2">
@@ -244,8 +257,9 @@ export default function ProductPage() {
             <GlassButton
               onClick={handleAddToCart}
               className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-base sm:text-lg py-3 sm:py-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              aria-label={`Add ${product.name[lang]} to cart`}
             >
-              <FiShoppingCart size={20} />
+              <FiShoppingCart size={20} aria-hidden="true" />
               {t("addToCart")}
             </GlassButton>
           </motion.div>
@@ -258,7 +272,7 @@ export default function ProductPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
         >
-          <SectionTitle>
+          <SectionTitle role="heading" aria-level="2">
             {lang === "ar" ? "منتجات مشابهة" : "Related Products"}
           </SectionTitle>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -277,12 +291,14 @@ export default function ProductPage() {
                       src={item.image}
                       alt={item.name[lang]}
                       className="w-20 h-20 sm:w-full sm:h-32 lg:h-40 object-cover rounded-lg mb-0 sm:mb-3 transition-transform duration-300 will-change-transform flex-shrink-0"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="product-info flex-1">
-                      <h3 className="text-sm sm:text-base font-medium text-[#111] line-clamp-2 leading-tight">
+                      <h3 className="text-sm sm:text-base font-medium text-[#111] line-clamp-2 leading-tight" role="heading" aria-level="4">
                         {item.name[lang]}
                       </h3>
-                      <p className="text-[#d1b16a] font-bold mt-1 text-sm sm:text-base">
+                      <p className="text-[#d1b16a] font-bold mt-1 text-sm sm:text-base" role="text" aria-label={`Price: ${item.price} ${t("egp")}`}>
                         {item.price} {t("egp")}
                       </p>
                     </div>

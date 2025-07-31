@@ -29,10 +29,20 @@ export default function RoutesWrapper() {
   const safeLang = ["ar", "en"].includes(lang) ? lang : "en";
 
   return (
-    <div dir={safeLang === "ar" ? "rtl" : "ltr"} className={`${safeLang === "ar" ? "font-arabic" : "font-montserrat"} min-h-screen`}>
+    <div 
+      dir={safeLang === "ar" ? "rtl" : "ltr"} 
+      className={`${safeLang === "ar" ? "font-arabic" : "font-montserrat"} min-h-screen optimize-text`}
+      lang={safeLang}
+    >
       <Router>
-        <AppHeader />
-        <main className="pt-20 sm:pt-24 lg:pt-28 min-h-[calc(100vh-60px)] bg-app">
+        <header role="banner">
+          <AppHeader />
+        </header>
+        <main 
+          role="main" 
+          className="pt-20 sm:pt-24 lg:pt-28 min-h-[calc(100vh-60px)] bg-app"
+          id="main-content"
+        >
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -61,7 +71,9 @@ export default function RoutesWrapper() {
             </Routes>
           </AnimatePresence>
         </main>
-        <AppFooter />
+        <footer role="contentinfo">
+          <AppFooter />
+        </footer>
       </Router>
     </div>
   );
