@@ -29,7 +29,7 @@ const FavoritesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-app">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-6 sm:py-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -50,10 +50,10 @@ const FavoritesPage: React.FC = () => {
           >
             <GlassCard className="max-w-md mx-auto p-8">
               <FiHeart className="w-16 h-16 mx-auto mb-4 text-[#d1b16a]" />
-              <h3 className="text-xl font-semibold mb-2 text-[#111]">
+              <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
                 {t('noFavoritesYet')}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="mb-6" style={{ color: 'var(--text-secondary)' }}>
                 {t('startAddingFavorites')}
               </p>
               <Link to="/products">
@@ -68,7 +68,7 @@ const FavoritesPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mobile-card-grid md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-6"
+            className="ecommerce-grid"
           >
             {favoriteProducts.map((product, index) => (
               <motion.div
@@ -78,26 +78,26 @@ const FavoritesPage: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -4 }}
               >
-                <div className="product-card glass rounded-xl shadow-lg border border-white/25 group transition-all duration-300">
-                  <div className="relative overflow-hidden rounded-lg mb-4">
+                <div className="product-card-pro group cursor-pointer">
+                  <div className="relative overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name[lang]}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="product-image"
                     />
                     <button
                       onClick={() => handleRemoveFavorite(product.id)}
-                      className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200 flex items-center justify-center"
+                      className="absolute top-3 right-3 w-10 h-10 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200 flex items-center justify-center shadow-lg"
                     >
-                      <FiHeart className="w-4 h-4 fill-current" />
+                      <FiHeart className="w-5 h-5 fill-current" />
                     </button>
                   </div>
                   
-                  <div className="p-4">
-                    <h3 className="mobile-product-title font-semibold mb-2 text-[#111]">
+                  <div className="product-info">
+                    <h3 className="mobile-product-title font-semibold mb-2 line-clamp-2" style={{ color: 'var(--text-primary)' }}>
                       {product.name[lang]}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                    <p className="text-sm mb-3 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
                       {product.desc[lang]}
                     </p>
                     <div className="flex items-center justify-between">

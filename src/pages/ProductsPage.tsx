@@ -68,7 +68,7 @@ export default function ProductsPage() {
       )}
 
       {/* Products Grid/List */}
-      <div className="mobile-card-grid md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+      <div className="ecommerce-grid">
         {filtered.map((prod, index) => (
           <motion.div
             key={prod.id}
@@ -77,28 +77,49 @@ export default function ProductsPage() {
             transition={{ duration: 0.5, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
             whileHover={{ y: -4 }}
           >
-            <div className="product-card glass rounded-xl shadow-lg border border-white/25 group transition-all duration-300 flex gap-4 items-center md:flex-col md:gap-0 h-auto md:h-auto" style={{ width: '100%', margin: '0', padding: '16px' }}>
-              <div className="relative overflow-hidden rounded-lg flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-full md:h-48 md:mb-4">
+            <div className="product-card-pro group cursor-pointer">
+              <div className="relative overflow-hidden">
                 <img 
                   src={prod.image} 
-                  className="w-20 h-20 sm:w-24 sm:h-24 md:w-full md:h-48 object-cover rounded-lg transition-transform duration-500 will-change-transform"
+                  className="product-image"
                   alt={prod.name[lang]}
                 />
                 <button
                   onClick={() => handleFavoriteClick(prod.id)}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-200"
+                  className="absolute top-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-200"
                 >
                   <FiHeart 
-                    size={16} 
+                    size={18} 
                     className={isFavorite(prod.id) ? "text-red-500 fill-current" : "text-gray-400"} 
                   />
                 </button>
               </div>
-              <div className="product-info flex-1 space-y-2">
-                <div className="mobile-product-title font-bold text-[#111] line-clamp-2">
+              
+              <div className="product-info">
+                <h3 className="mobile-product-title font-semibold mb-2 text-[#111] line-clamp-2">
                   {prod.name[lang]}
+                </h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{prod.desc[lang]}</p>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="mobile-product-price font-bold text-[#d1b16a]">
+                    {prod.price} {t("egp")}
+                  </span>
                 </div>
-                <div className="mobile-product-price text-[#d1b16a] font-bold mb-2">
+                <div className="flex gap-2">
+                  <Link to={`/product/${prod.id}`} className="flex-1">
+                    <GlassButton className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2 text-sm">
+                      {t("viewDetails")}
+                    </GlassButton>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
                   {prod.price} {t("egp")}
                 </div>
                 <p className="text-gray-600 text-sm line-clamp-2 hidden md:block">{prod.desc[lang]}</p>

@@ -24,7 +24,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
       whileHover={{ y: -2, scale: 1.01 }}
-      className="mobile-cart-item cart-item flex flex-row items-center gap-4 glass rounded-xl border border-white/20 hover:shadow-lg transition-all duration-300"
+      className="mobile-cart-item cart-item flex flex-row items-center gap-4 glass rounded-xl border border-white/20 hover:shadow-lg transition-all duration-300 p-4"
     >
       <img 
         src={item.image} 
@@ -44,18 +44,18 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <div className="flex items-center gap-2">
+        <div className="quantity-control">
           <button
             onClick={() => handleQty(-1)}
-            className="mobile-quantity-btn glass rounded-lg flex items-center justify-center hover:bg-[#d1b16a]/20 transition-colors"
+            className="quantity-btn"
+            disabled={item.qty <= 1}
           >
             <FiMinus />
           </button>
-          <span className="w-8 text-center font-bold text-sm">{item.qty}</span>
-          <span className="w-8 text-center font-bold quantity-text">{item.qty}</span>
+          <span className="quantity-display">{item.qty}</span>
           <button
             onClick={() => handleQty(1)}
-            className="mobile-quantity-btn glass rounded-lg flex items-center justify-center hover:bg-[#d1b16a]/20 transition-colors"
+            className="quantity-btn"
           >
             <FiPlus />
           </button>
@@ -63,9 +63,9 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
 
         <button
           onClick={() => onRemove(item)}
-          className="mobile-quantity-btn glass rounded-lg flex items-center justify-center hover:bg-red-100 hover:text-red-600 transition-colors"
+          className="remove-btn w-10 h-10 flex items-center justify-center"
         >
-          <FiTrash2 />
+          <FiTrash2 size={16} />
         </button>
       </div>
     </motion.div>

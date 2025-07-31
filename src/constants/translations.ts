@@ -127,7 +127,15 @@ export const translations = {
     cardNumber: "Card Number",
     sendAmountAndUpload: "Please send the amount to the number above and upload a screenshot for confirmation",
     browseProducts: "Browse Products",
-    viewDetails: "View Details"
+    viewDetails: "View Details",
+    orderSummary: "Order Summary",
+    subtotal: "Subtotal",
+    featuredProducts: "Featured Products",
+    discoverCollection: "Discover Our Collection",
+    premiumQuality: "Premium Quality",
+    freeShipping: "Free Shipping",
+    securePayment: "Secure Payment",
+    customerSupport: "24/7 Customer Support"
   },
   ar: {
     home: "الرئيسية",
@@ -257,6 +265,14 @@ export const translations = {
     cardNumber: "رقم البطاقة",
     sendAmountAndUpload: "يرجى إرسال المبلغ إلى الرقم أعلاه ثم رفع لقطة شاشة للتأكيد",
     browseProducts: "تصفح المنتجات",
-    viewDetails: "عرض التفاصيل"
+    viewDetails: "عرض التفاصيل",
+    orderSummary: "ملخص الطلب",
+    subtotal: "المجموع الفرعي",
+    featuredProducts: "المنتجات المميزة",
+    discoverCollection: "اكتشف مجموعتنا",
+    premiumQuality: "جودة فائقة",
+    freeShipping: "شحن مجاني",
+    securePayment: "دفع آمن",
+    customerSupport: "دعم العملاء على مدار الساعة"
   }
 };

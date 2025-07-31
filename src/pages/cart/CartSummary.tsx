@@ -42,7 +42,7 @@ export default function CartSummary() {
             <span>${(item.price * item.qty).toFixed(2)}</span>
           </div>
         ))}
-      </div>
+      <h3 className="text-xl font-bold mb-6">{t("orderSummary")}</h3>
 
       {/* Coupon */}
       <div className="mb-6">
@@ -72,7 +72,7 @@ export default function CartSummary() {
       <div className="border-t border-[#d1b16a]/20 pt-4 space-y-2">
         <div className="flex justify-between">
           <span>{t("subtotal")}</span>
-          <span>${total.toFixed(2)}</span>
+          <span>{t("subtotal")}:</span>
         </div>
         {discount > 0 && (
           <div className="flex justify-between text-green-400">
