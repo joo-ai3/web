@@ -9,13 +9,11 @@ import { products } from '../data/products';
 
 interface Product {
   id: string;
-  name: string;
+  name: { ar: string; en: string };
   price: number;
   image: string;
-  category: string;
-  description: string;
-  rating: number;
-  reviews: number;
+  collection: string;
+  desc: { ar: string; en: string };
 }
 
 const ProductsPage: React.FC = () => {
@@ -28,13 +26,13 @@ const ProductsPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 
-  const categories = ['all', ...Array.from(new Set(products.map(p => p.category)))];
+  const categories = ['all', ...Array.from(new Set(products.map(p => p.collection)))];
 
   useEffect(() => {
     let filtered = products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+      const matchesSearch = product.name.en.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          product.desc.en.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === 'all' || product.collection === selectedCategory;
       return matchesSearch && matchesCategory;
     });
 
@@ -45,10 +43,8 @@ const ProductsPage: React.FC = () => {
           return a.price - b.price;
         case 'price-high':
           return b.price - a.price;
-        case 'rating':
-          return b.rating - a.rating;
         default:
-          return a.name.localeCompare(b.name);
+          return product.name.en.localeCompare(b.name.en);
       }
     });
 
@@ -58,7 +54,7 @@ const ProductsPage: React.FC = () => {
   const handleAddToCart = (product: Product) => {
     addToCart({
       id: product.id,
-      name: product.name,
+      name: product.name.en,
       price: product.price,
       image: product.image,
       quantity: 1
@@ -115,7 +111,6 @@ const ProductsPage: React.FC = () => {
               <option value="name">{t('products.sortName', 'Name')}</option>
               <option value="price-low">{t('products.sortPriceLow', 'Price: Low to High')}</option>
               <option value="price-high">{t('products.sortPriceHigh', 'Price: High to Low')}</option>
-              <option value="rating">{t('products.sortRating', 'Rating')}</option>
             </select>
 
             {/* View Mode */}
@@ -154,7 +149,7 @@ const ProductsPage: React.FC = () => {
               <div className="flex-1">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {product.name}
+                    {product.name.en}
                   </h3>
                   <button
                     onClick={() => toggleFavorite(product.id)}
@@ -169,18 +164,8 @@ const ProductsPage: React.FC = () => {
                 </div>
                 
                 <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">
-                  {product.description}
+                  {product.desc.en}
                 </p>
-                
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="flex text-yellow-400">
-                    {'★'.repeat(Math.floor(product.rating))}
-                    {'☆'.repeat(5 - Math.floor(product.rating))}
-                  </div>
-                  <span className="text-sm text-gray-500">
-                    ({product.reviews} {t('products.reviews', 'reviews')})
-                  </span>
-                </div>
                 
                 <div className="flex justify-between items-center">
                   <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
