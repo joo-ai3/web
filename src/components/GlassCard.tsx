@@ -8,8 +8,8 @@ interface GlassCardProps {
 
 export default function GlassCard({ children, className = "" }: GlassCardProps) {
   return (
-    <div className={clsx("glass p-6 rounded-2xl shadow-xl border border-white/25 relative overflow-hidden", className)}>
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+    <div className={clsx("glass p-6 sm:p-8 rounded-2xl shadow-xl border border-white/25 relative overflow-hidden backdrop-filter-enhanced", className)}>
+      <div className="absolute inset-0 bg-gradient-to-br from-white/8 to-transparent pointer-events-none" />
       <div className="relative z-10">
       {children}
       </div>

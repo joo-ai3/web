@@ -178,10 +178,10 @@ export default function Home() {
                     />
                     <button
                       onClick={() => handleFavoriteClick(product.id)}
-                      className="absolute top-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-200"
+                      className={`mobile-favorite-btn ${isFavorite(product.id) ? 'favorited' : ''}`}
                     >
                       <FiHeart 
-                        size={18} 
+                        size={20} 
                         className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"} 
                       />
                     </button>

@@ -32,7 +32,7 @@ export default function RoutesWrapper() {
     <div dir={safeLang === "ar" ? "rtl" : "ltr"} className={`${safeLang === "ar" ? "font-arabic" : "font-montserrat"} min-h-screen`}>
       <Router>
         <AppHeader />
-        <main className="pt-16 sm:pt-20 lg:pt-24 min-h-[calc(100vh-56px)] bg-app">
+        <main className="pt-20 sm:pt-24 lg:pt-28 min-h-[calc(100vh-60px)] bg-app">
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Home />} />

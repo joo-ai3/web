@@ -87,9 +87,9 @@ const FavoritesPage: React.FC = () => {
                     />
                     <button
                       onClick={() => handleRemoveFavorite(product.id)}
-                      className="absolute top-3 right-3 w-10 h-10 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200 flex items-center justify-center shadow-lg"
+                      className="mobile-favorite-btn favorited"
                     >
-                      <FiHeart className="w-5 h-5 fill-current" />
+                      <FiHeart size={20} className="fill-current" />
                     </button>
                   </div>
                   

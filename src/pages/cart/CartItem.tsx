@@ -23,16 +23,16 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-      whileHover={{ y: -2, scale: 1.01 }}
-      className="mobile-cart-item cart-item flex flex-row items-center gap-4 glass rounded-xl border border-white/20 hover:shadow-lg transition-all duration-300 p-4"
+      whileHover={{ y: -3, scale: 1.02 }}
+      className="mobile-cart-item cart-item flex flex-col sm:flex-row items-start sm:items-center gap-4 glass rounded-xl border border-white/20 hover:shadow-lg transition-all duration-300 p-5"
     >
       <img 
         src={item.image} 
         alt={item.name[lang]} 
-        className="mobile-cart-image w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-lg flex-shrink-0 transition-transform duration-300 hover:scale-105" 
+        className="mobile-cart-image w-full sm:w-24 h-48 sm:h-24 object-cover rounded-lg flex-shrink-0 transition-transform duration-300 hover:scale-105" 
       />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 w-full">
         <h3 className="mobile-cart-title font-bold line-clamp-2">{item.name[lang]}</h3>
         <div className="text-sm text-gray-600 space-y-1">
           <div>{t("color")}: {item.color}</div>
@@ -43,7 +43,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-4 sm:gap-2 w-full sm:w-auto">
         <div className="quantity-control">
           <button
             onClick={() => handleQty(-1)}
@@ -63,9 +63,9 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
 
         <button
           onClick={() => onRemove(item)}
-          className="remove-btn w-10 h-10 flex items-center justify-center"
+          className="remove-btn w-12 h-12 flex items-center justify-center"
         >
-          <FiTrash2 size={16} />
+          <FiTrash2 size={18} />
         </button>
       </div>
     </motion.div>

@@ -21,7 +21,7 @@ export default function AppHeader() {
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-[#d1b16a]/40 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 shadow-lg min-h-[56px] md:min-h-[64px]">
+    <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-[#d1b16a]/40 flex items-center justify-between px-4 py-3 md:px-6 md:py-4 shadow-lg min-h-[60px] md:min-h-[68px] backdrop-filter-enhanced">
       {/* Logo */}
       <Logo size="small" className="flex-shrink-0 md:hidden" />
       <Logo size="medium" className="flex-shrink-0 hidden md:flex" />

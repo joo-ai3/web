@@ -137,10 +137,10 @@ export default function ProductPage() {
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.1 }}
               onClick={handleFavoriteClick}
-              className="glass w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-200"
+              className={`mobile-favorite-btn ${isFavorite(product.id) ? 'favorited' : ''} relative`}
             >
               <FiHeart
-                size={20}
+                size={22}
                 className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"}
               />
             </motion.button>
