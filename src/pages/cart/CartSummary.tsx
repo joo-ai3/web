@@ -5,8 +5,8 @@ import { useCart } from '../../contexts/CartContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useLang, useTranslation } from '../../contexts/LangContext';
 import { COUPONS } from '../../constants/brand';
-import GlassCard from '../GlassCard';
-import GlassButton from '../GlassButton';
+import GlassCard from '../../components/GlassCard';
+import GlassButton from '../../components/GlassButton';
 
 export default function CartSummary() {
   const { cart, clearCart } = useCart();
