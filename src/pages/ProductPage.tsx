@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
 import clsx from "clsx";
 import { useLang, useTranslation } from "../contexts/LangContext";
-import { useFavorites } from "../contexts/FavoritesContext";
 import { useCart } from "../contexts/CartContext";
 import { useToast } from "../contexts/ToastContext";
 import { products } from "../data/products";
 import GlassButton from "../components/GlassButton";
 import SectionTitle from "../components/SectionTitle";
+import FavoriteButton from "../components/FavoriteButton";
 
 export default function ProductPage() {
   const { id } = useParams();
   const { lang } = useLang();
   const t = useTranslation();
-  const { isFavorite, toggleFavorite } = useFavorites();
   const { addToCart } = useCart();
   const { showToast } = useToast();
 
@@ -68,11 +67,6 @@ export default function ProductPage() {
     showToast(t("addSuccess"));
   };
 
-  const handleFavoriteClick = () => {
-    toggleFavorite(product.id);
-    const isNowFavorite = !isFavorite(product.id);
-    showToast(isNowFavorite ? t("addToFavorites") : t("removeFromFavorites"));
-  };
 
   const handleColorSelect = (color) => {
     setSelectedColor(color.name[lang]);
@@ -81,7 +75,7 @@ export default function ProductPage() {
   const currentImage = product.colors[currentImageIndex]?.code ? product.image : product.image;
 
   return (
-    <div className="container mx-auto px-4 py-6 sm:py-10">
+    <div className="container mx-auto px-4 py-6 sm:py-10 visual-hierarchy">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 items-start mb-12 sm:mb-16">
         <div className="relative">
           <AnimatePresence mode="wait">
@@ -98,7 +92,7 @@ export default function ProductPage() {
               decoding="async"
             />
           </AnimatePresence>
-          <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2">
+          <div className="absolute bottom-3 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2">
             {product.colors.map((_, index) => (
               <button
                 key={index}
@@ -129,33 +123,23 @@ export default function ProductPage() {
         >
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#111] leading-tight" role="heading" aria-level="1">
+              <h1 className="font-bold text-[#111] leading-tight mb-2 sm:mb-3" role="heading" aria-level="1">
                 {product.name[lang]}
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                 {product.desc[lang]}
               </p>
             </div>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.1 }}
-              onClick={handleFavoriteClick}
-              className={`mobile-favorite-btn ${isFavorite(product.id) ? 'favorited' : ''} relative`}
-              aria-label={isFavorite(product.id) ? t("removeFromFavorites") : t("addToFavorites")}
-            >
-              <FiHeart
-                size={22}
-                className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"}
-                aria-hidden="true"
-              />
-            </motion.button>
+            <div className="flex-shrink-0">
+              <FavoriteButton productId={product.id} size={22} />
+            </div>
           </div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#d1b16a]"
+            className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-[#d1b16a]"
             role="text"
             aria-label={`Price: ${product.price} ${t("egp")}`}
           >
@@ -167,10 +151,10 @@ export default function ProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base" role="text">
+            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base lg:text-lg" role="text">
               {t("color")}:
             </p>
-            <div className="flex gap-2 sm:gap-3" role="radiogroup" aria-label="Select color">
+            <div className="flex gap-2 sm:gap-3 flex-wrap" role="radiogroup" aria-label="Select color">
               {product.colors.map((color, index) => (
                 <motion.div
                   key={index}
@@ -182,7 +166,7 @@ export default function ProductPage() {
                   aria-label={color.name[lang]}
                   tabIndex={0}
                   className={clsx(
-                    "color-selector w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 cursor-pointer transition-all duration-200",
+                    "color-selector w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border-2 cursor-pointer transition-all duration-200",
                     selectedColor === color.name[lang]
                       ? "selected ring-2 ring-[#d1b16a] border-[#d1b16a]"
                       : "border-gray-300 hover:border-[#d1b16a]"
@@ -198,7 +182,7 @@ export default function ProductPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base" role="text">
+            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base lg:text-lg" role="text">
               {t("size")}:
             </p>
             <div className="flex gap-2 sm:gap-3 flex-wrap" role="radiogroup" aria-label="Select size">
@@ -212,7 +196,7 @@ export default function ProductPage() {
                   aria-checked={selectedSize === size}
                   aria-label={`Size ${size}`}
                   className={clsx(
-                    "px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-sm font-medium transition-all duration-200 min-w-[44px]",
+                    "px-3 py-1.5 sm:px-4 sm:py-2 lg:px-5 lg:py-2.5 rounded-full border text-sm sm:text-base font-medium transition-all duration-200 min-w-[44px] sm:min-w-[48px]",
                     selectedSize === size
                       ? "bg-[#d1b16a] text-black border-[#d1b16a] shadow-lg"
                       : "text-gray-600 border-gray-300 hover:border-[#d1b16a] hover:text-[#d1b16a]"
@@ -230,7 +214,7 @@ export default function ProductPage() {
             transition={{ delay: 0.5, duration: 0.5 }}
             className="glass p-3 sm:p-4 rounded-lg sm:rounded-xl"
           >
-            <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3 text-[#111]" role="heading" aria-level="3">
+            <h3 className="font-bold text-base sm:text-lg lg:text-xl mb-2 sm:mb-3 text-[#111]" role="heading" aria-level="3">
               {t("specs")}
             </h3>
             <div className="space-y-1.5 sm:space-y-2">
@@ -240,7 +224,7 @@ export default function ProductPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + index * 0.1, duration: 0.3 }}
-                  className="flex justify-between text-sm"
+                  className="flex justify-between text-sm sm:text-base"
                 >
                   <span className="text-gray-600">{key}:</span>
                   <span className="font-medium text-[#111]">{value}</span>
@@ -256,10 +240,10 @@ export default function ProductPage() {
           >
             <GlassButton
               onClick={handleAddToCart}
-              className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-base sm:text-lg py-3 sm:py-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-base sm:text-lg lg:text-xl py-3 sm:py-4 lg:py-5 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               aria-label={`Add ${product.name[lang]} to cart`}
             >
-              <FiShoppingCart size={20} aria-hidden="true" />
+              <FiShoppingCart size={20} className="sm:w-6 sm:h-6" aria-hidden="true" />
               {t("addToCart")}
             </GlassButton>
           </motion.div>
@@ -275,7 +259,7 @@ export default function ProductPage() {
           <SectionTitle role="heading" aria-level="2">
             {lang === "ar" ? "منتجات مشابهة" : "Related Products"}
           </SectionTitle>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {relatedProducts.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -283,22 +267,22 @@ export default function ProductPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9 + index * 0.1, duration: 0.5 }}
                 whileHover={{ y: -4 }}
-                className="product-card glass p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300 flex sm:flex-col gap-3 sm:gap-0"
+                className="product-card glass p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300"
               >
                 <Link to={`/product/${item.id}`}>
-                  <div className="flex sm:flex-col gap-3 sm:gap-0">
+                  <div className="flex flex-col">
                     <img
                       src={item.image}
                       alt={item.name[lang]}
-                      className="w-20 h-20 sm:w-full sm:h-32 lg:h-40 object-cover rounded-lg mb-0 sm:mb-3 transition-transform duration-300 will-change-transform flex-shrink-0"
+                      className="w-full h-24 sm:h-32 lg:h-40 object-cover rounded-lg mb-2 sm:mb-3 transition-transform duration-300 will-change-transform"
                       loading="lazy"
                       decoding="async"
                     />
-                    <div className="product-info flex-1">
-                      <h3 className="text-sm sm:text-base font-medium text-[#111] line-clamp-2 leading-tight" role="heading" aria-level="4">
+                    <div className="product-info">
+                      <h3 className="text-xs sm:text-sm lg:text-base font-medium text-[#111] line-clamp-2 leading-tight mb-1" role="heading" aria-level="4">
                         {item.name[lang]}
                       </h3>
-                      <p className="text-[#d1b16a] font-bold mt-1 text-sm sm:text-base" role="text" aria-label={`Price: ${item.price} ${t("egp")}`}>
+                      <p className="text-[#d1b16a] font-bold text-xs sm:text-sm lg:text-base" role="text" aria-label={`Price: ${item.price} ${t("egp")}`}>
                         {item.price} {t("egp")}
                       </p>
                     </div>

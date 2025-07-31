@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiFilter, FiGrid, FiList, FiHeart, FiShoppingCart } from 'react-icons/fi';
 import { useCart } from '../contexts/CartContext';
-import { useFavorites } from '../contexts/FavoritesContext';
 import { useToast } from '../contexts/ToastContext';
 import { useLang, useTranslation } from '../contexts/LangContext';
 import { useTheme } from '../contexts/ThemeContext';
 import GlassCard from '../components/GlassCard';
 import GlassButton from '../components/GlassButton';
 import SectionTitle from '../components/SectionTitle';
+import FavoriteButton from '../components/FavoriteButton';
 import { products, collections } from '../data/products';
 
 interface Product {
@@ -25,7 +25,6 @@ interface Product {
 
 export default function ProductsPage() {
   const { addToCart } = useCart();
-  const { isFavorite, toggleFavorite } = useFavorites();
   const { showToast } = useToast();
   const { lang } = useLang();
   const { theme } = useTheme();
@@ -71,11 +70,6 @@ export default function ProductsPage() {
     showToast(t("addSuccess"));
   };
 
-  const handleFavoriteClick = (productId: number) => {
-    toggleFavorite(productId);
-    const isNowFavorite = !isFavorite(productId);
-    showToast(isNowFavorite ? t("addToFavorites") : t("removeFromFavorites"));
-  };
 
   const getCollectionName = (collectionId: string) => {
     if (collectionId === 'all') return t("products");
@@ -84,19 +78,19 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-app">
+    <div className="min-h-screen bg-app visual-hierarchy">
       <div className="container mx-auto px-4 py-6 sm:py-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 sm:mb-12"
+          className="text-center mb-6 sm:mb-8 lg:mb-12"
         >
-          <SectionTitle className="mb-4">
+          <SectionTitle className="mb-3 sm:mb-4">
             {t("products")}
           </SectionTitle>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
             {lang === 'ar' 
               ? 'اكتشف مجموعتنا المتنوعة من الأحذية عالية الجودة'
               : 'Discover our diverse collection of high-quality footwear'
@@ -109,10 +103,10 @@ export default function ProductsPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
+          className="mb-6 sm:mb-8"
         >
           <GlassCard>
-            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 items-center justify-between">
               {/* Search */}
               <div className="relative flex-1 max-w-md w-full">
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -121,16 +115,16 @@ export default function ProductsPage() {
                   placeholder={lang === 'ar' ? 'البحث في المنتجات...' : 'Search products...'}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 glass border border-[#d1b16a]/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 glass border border-[#d1b16a]/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all text-sm sm:text-base"
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
                 {/* Collection Filter */}
                 <select
                   value={selectedCollection}
                   onChange={(e) => setSelectedCollection(e.target.value)}
-                  className="px-4 py-3 glass border border-[#d1b16a]/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all min-w-[150px]"
+                  className="px-3 sm:px-4 py-2.5 sm:py-3 glass border border-[#d1b16a]/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all min-w-[140px] sm:min-w-[150px] text-sm sm:text-base"
                 >
                   {allCollections.map(collectionId => (
                     <option key={collectionId} value={collectionId}>
@@ -143,7 +137,7 @@ export default function ProductsPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-3 glass border border-[#d1b16a]/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all min-w-[150px]"
+                  className="px-3 sm:px-4 py-2.5 sm:py-3 glass border border-[#d1b16a]/40 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all min-w-[140px] sm:min-w-[150px] text-sm sm:text-base"
                 >
                   <option value="name">{lang === 'ar' ? 'الاسم' : 'Name'}</option>
                   <option value="price-low">{lang === 'ar' ? 'السعر: من الأقل للأعلى' : 'Price: Low to High'}</option>
@@ -151,7 +145,7 @@ export default function ProductsPage() {
                 </select>
 
                 {/* View Mode */}
-                <div className="flex gap-2">
+                <div className="flex gap-1 sm:gap-2">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-3 rounded-xl transition-all ${
@@ -160,7 +154,7 @@ export default function ProductsPage() {
                         : 'glass border border-[#d1b16a]/40 hover:bg-[#d1b16a]/20'
                     }`}
                   >
-                    <FiGrid className="w-5 h-5" />
+                    <FiGrid className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
@@ -170,7 +164,7 @@ export default function ProductsPage() {
                         : 'glass border border-[#d1b16a]/40 hover:bg-[#d1b16a]/20'
                     }`}
                   >
-                    <FiList className="w-5 h-5" />
+                    <FiList className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>
@@ -193,24 +187,14 @@ export default function ProductsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -4 }}
-                >
-                  <article className="product-card-pro group cursor-pointer" role="article">
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={product.image}
-                        alt={product.name[lang]}
-                        className="product-image"
-                        loading={index < 6 ? "eager" : "lazy"}
-                        decoding="async"
-                      />
-                      <button
+                    <FavoriteButton productId={product.id} size={20} />
                         onClick={() => handleFavoriteClick(product.id)}
                         className={`mobile-favorite-btn ${isFavorite(product.id) ? 'favorited' : ''}`}
                         aria-label={isFavorite(product.id) ? t("removeFromFavorites") : t("addToFavorites")}
                       >
                         <FiHeart 
                           size={20} 
-                          className={isFavorite(product.id) ? "text-red-500 fill-current" : "text-gray-400"} 
+                    <p className="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">
                           aria-hidden="true"
                         />
                       </button>
@@ -295,64 +279,60 @@ export default function ProductsPage() {
                           </span>
                         </div>
                         
-                        <p className="text-gray-600 text-sm sm:text-base mb-4 line-clamp-2">
+                  <div className="w-full sm:w-40 lg:w-48 flex-shrink-0">
                           {product.desc[lang]}
                         </p>
                       </div>
                       
-                      <div className="flex gap-3">
+                        className="w-full h-40 sm:h-28 lg:h-32 object-cover rounded-lg"
                         <Link to={`/product/${product.id}`} className="flex-1">
                           <GlassButton 
                             className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 py-2"
-                            aria-label={`View details for ${product.name[lang]}`}
-                          >
-                            {t("viewDetails")}
-                          </GlassButton>
-                        </Link>
-                        <GlassButton
-                          onClick={() => handleAddToCart(product)}
-                          className="px-4 py-2"
-                          aria-label={`Add ${product.name[lang]} to cart`}
-                        >
-                          <FiShoppingCart size={18} aria-hidden="true" />
+                      <div className="absolute top-2 right-2">
+                        <FavoriteButton 
+                          productId={product.id} 
+                          size={14} 
+                          className="w-8 h-8 bg-white/90 backdrop-blur-sm border border-white/40"
+                        />
+                      </div>
                           <span className="hidden sm:inline ml-2">{t("addToCart")}</span>
                         </GlassButton>
                       </div>
                     </div>
                   </GlassCard>
                 </motion.div>
-              ))}
+                        <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-[#111] mb-2 sm:mb-0" role="heading" aria-level="3">
             </div>
           )}
-        </motion.div>
+                        <span className="text-lg sm:text-xl lg:text-2xl font-bold text-[#d1b16a]" role="text" aria-label={`Price: ${product.price} ${t("egp")}`}>
 
         {/* No Results */}
         {filteredProducts.length === 0 && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+                      <p className="text-gray-600 text-xs sm:text-sm lg:text-base mb-3 sm:mb-4 line-clamp-2">
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="text-center py-16"
-          >
-            <GlassCard className="max-w-md mx-auto p-8">
-              <FiSearch className="w-16 h-16 mx-auto mb-4 text-[#d1b16a]" />
+                        className="px-2.5 sm:px-3 py-2 text-xs sm:text-sm"
+          className="text-center py-12 sm:py-16"
+                    <div className="flex gap-2 sm:gap-3">
+          <GlassCard className="max-w-md mx-auto p-6 sm:p-8">
               <h3 className="text-xl font-semibold mb-2 text-[#111]">
-                {lang === 'ar' ? 'لا توجد نتائج' : 'No Results Found'}
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 text-[#111]">
               </h3>
               <p className="text-gray-600 mb-6">
-                {lang === 'ar' 
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                   ? 'لم نجد أي منتجات تطابق معايير البحث الخاصة بك'
                   : 'We couldn\'t find any products matching your search criteria'
                 }
-              </p>
-              <GlassButton
+          <div className="space-y-3 sm:space-y-4">
+                        className="px-3 sm:px-4 py-2 text-xs sm:text-sm"
                 onClick={() => {
                   setSearchTerm('');
-                  setSelectedCollection('all');
+                        <FiShoppingCart size={16} className="sm:w-[18px] sm:h-[18px]" aria-hidden="true" />
                   setSortBy('name');
                 }}
                 className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80"
-              >
+              className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-sm sm:text-base"
                 {lang === 'ar' ? 'مسح الفلاتر' : 'Clear Filters'}
               </GlassButton>
             </GlassCard>
