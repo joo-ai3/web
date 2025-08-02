@@ -7,7 +7,7 @@ import AppHeader from './AppHeader';
 import AppFooter from './AppFooter';
 
 import Home from '../pages/Home';
-import ProductsPage from '../pages/ProductsPage';
+import { ProductsPage } from '../pages/ProductsPage';
 import ProductPage from '../pages/ProductPage';
 import CollectionPage from '../pages/CollectionPage';
 import CartPage from '../pages/CartPage';
