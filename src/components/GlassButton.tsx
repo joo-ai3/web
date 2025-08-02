@@ -26,7 +26,7 @@ export default function GlassButton({
   };
 
   const variantClasses = {
-    primary: 'btn-primary',
+    primary: 'btn-primary text-[#000000]',
     secondary: 'btn-secondary', 
     ghost: 'btn-ghost'
   };

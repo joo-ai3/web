@@ -195,7 +195,7 @@ export default function Home() {
                     <Link to={`/product/${product.id}`} className="flex-1">
                       <GlassButton 
                         variant="primary"
-                        className="w-full"
+                        className="w-full text-[#000000]"
                       >
                         {t("viewDetails")}
                       </GlassButton>
