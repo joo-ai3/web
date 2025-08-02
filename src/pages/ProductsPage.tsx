@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useLang, useTranslation } from '../contexts/LangContext';
-import { SectionTitle } from '../components/SectionTitle';
-import { GlassButton } from '../components/GlassButton';
-import { FavoriteButton } from '../components/FavoriteButton';
+import SectionTitle from '../components/SectionTitle';
+import GlassButton from '../components/GlassButton';
+import FavoriteButton from '../components/FavoriteButton';
 import { products } from '../data/products';
 
 export const ProductsPage: React.FC = () => {
