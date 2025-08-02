@@ -295,34 +295,36 @@ export default function ProductPage() {
             <h2 className="text-2xl font-bold mb-8 text-center">
               {lang === "ar" ? "منتجات مشابهة" : "Related Products"}
             </h2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="mobile-products-grid sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((item, index) => (
-                <motion.article
+                <motion.div
                   key={item.id}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9 + index * 0.1 }}
-                  className="product-card"
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  className="mobile-product-card sm:product-card interactive-hover"
                 >
                   <Link to={`/product/${item.id}`}>
-                    <div className="product-card-image">
+                    <div className="mobile-product-image sm:product-card-image">
                       <img
                         src={item.image}
                         alt={item.name[lang]}
                         loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                       />
                       <FavoriteButton productId={item.id} />
                     </div>
-                    <div className="product-card-content">
-                      <h3 className="product-card-title line-clamp-2">
+                    <div className="mobile-product-info sm:product-card-content">
+                      <h3 className="mobile-product-title sm:product-card-title line-clamp-2">
                         {item.name[lang]}
                       </h3>
-                      <p className="product-card-price">
+                      <p className="mobile-product-price sm:product-card-price">
                         {item.price} {t("egp")}
                       </p>
                     </div>
                   </Link>
-                </motion.article>
+                </motion.div>
               ))}
             </div>
           </motion.section>
