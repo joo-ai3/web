@@ -12,11 +12,11 @@ export const ProductsPage: React.FC = () => {
   const t = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  const categories = ['all', 'electronics', 'clothing', 'home', 'books'];
+  const categories = ['all', 'mens', 'womens', 'basics'];
 
   const filteredProducts = selectedCategory === 'all' 
     ? products 
-    : products.filter(product => product.category === selectedCategory);
+    : products.filter(product => product.collection === selectedCategory);
 
   return (
     <div className="min-h-screen pt-20 pb-16">
@@ -27,10 +27,10 @@ export const ProductsPage: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <SectionTitle 
-            title={t('products.title')} 
-            subtitle={t('products.subtitle')}
-          />
+          <SectionTitle>{t('products.title')}</SectionTitle>
+          <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg max-w-2xl mx-auto mt-4">
+            {t('products.subtitle')}
+          </p>
         </motion.div>
 
         {/* Category Filter */}
@@ -86,20 +86,14 @@ export const ProductsPage: React.FC = () => {
                     {product.name[lang]}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 flex-1">
-                    {product.description[lang]}
+                    {product.desc[lang]}
                   </p>
                   
-                  {/* Price and Rating */}
+                  {/* Price */}
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
                       ${product.price}
                     </span>
-                    <div className="flex items-center">
-                      <span className="text-yellow-500">★</span>
-                      <span className="text-sm text-gray-600 dark:text-gray-300 ml-1">
-                        {product.rating}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Action Button */}
