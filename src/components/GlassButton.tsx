@@ -4,29 +4,59 @@ import clsx from 'clsx';
 
 interface GlassButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
+  loading?: boolean;
 }
 
-export default function GlassButton({ children, className = "", ...props }: GlassButtonProps) {
+export default function GlassButton({ 
+  children, 
+  variant = 'secondary',
+  size = 'md',
+  className = '', 
+  loading = false,
+  disabled,
+  ...props 
+}: GlassButtonProps) {
+  const sizeClasses = {
+    sm: 'px-4 py-2 text-sm min-h-[40px]',
+    md: 'px-6 py-3 text-base min-h-[44px]',
+    lg: 'px-8 py-4 text-lg min-h-[48px]'
+  };
+
+  const variantClasses = {
+    primary: 'btn-primary',
+    secondary: 'btn-secondary', 
+    ghost: 'btn-ghost'
+  };
+
   return (
     <motion.button
-      whileHover={{ 
-        scale: 1.05, 
-        boxShadow: "0 16px 40px rgba(209, 177, 106, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.3)",
-        y: -4
-      }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+      whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
+      whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
+      transition={{ duration: 0.15 }}
       className={clsx(
-        "glass px-5 sm:px-7 py-3 text-base sm:text-lg font-semibold uppercase border border-[#d1b16a] rounded-xl shadow-lg flex items-center justify-center gap-2 min-h-[48px] will-change-transform relative overflow-hidden",
-        "hover:bg-[#d1b16a]/80 hover:text-[#111] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300",
-        "before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/15 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-600",
-        "backdrop-filter-enhanced",
+        'btn',
+        variantClasses[variant],
+        sizeClasses[size],
+        {
+          'opacity-50 cursor-not-allowed': disabled || loading,
+          'cursor-wait': loading
+        },
         className
       )}
+      disabled={disabled || loading}
       {...props}
     >
-      {children}
+      {loading ? (
+        <>
+          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          <span>Loading...</span>
+        </>
+      ) : (
+        children
+      )}
     </motion.button>
   );
 }

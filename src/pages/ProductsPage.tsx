@@ -1,110 +1,230 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { FiGrid, FiList, FiFilter } from 'react-icons/fi';
 import { useLang, useTranslation } from '../contexts/LangContext';
-import SectionTitle from '../components/SectionTitle';
+import { products } from '../data/products';
+import GlassCard from '../components/GlassCard';
 import GlassButton from '../components/GlassButton';
 import FavoriteButton from '../components/FavoriteButton';
-import { products } from '../data/products';
+import clsx from 'clsx';
 
 export const ProductsPage: React.FC = () => {
   const { lang } = useLang();
   const t = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState<'name' | 'price-low' | 'price-high'>('name');
 
-  const categories = ['all', 'mens', 'womens', 'basics'];
+  const categories = [
+    { id: 'all', label: lang === 'ar' ? 'الكل' : 'All' },
+    { id: 'mens', label: lang === 'ar' ? 'رجالي' : 'Men\'s' },
+    { id: 'womens', label: lang === 'ar' ? 'نسائي' : 'Women\'s' },
+    { id: 'basics', label: lang === 'ar' ? 'أساسي' : 'Basics' }
+  ];
 
-  const filteredProducts = selectedCategory === 'all' 
+  const sortOptions = [
+    { id: 'name', label: lang === 'ar' ? 'الاسم' : 'Name' },
+    { id: 'price-low', label: lang === 'ar' ? 'السعر: من الأقل للأعلى' : 'Price: Low to High' },
+    { id: 'price-high', label: lang === 'ar' ? 'السعر: من الأعلى للأقل' : 'Price: High to Low' }
+  ];
+
+  let filteredProducts = selectedCategory === 'all' 
     ? products 
     : products.filter(product => product.collection === selectedCategory);
 
+  // Sort products
+  filteredProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'name':
+      default:
+        return a.name[lang].localeCompare(b.name[lang]);
+    }
+  });
+
   return (
-    <div className="min-h-screen pt-20 pb-16">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen">
+      <div className="container py-8">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <SectionTitle>{t('products.title')}</SectionTitle>
-          <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg max-w-2xl mx-auto mt-4">
-            {t('products.subtitle')}
+          <h1 className="mb-4">
+            {t('products')}
+          </h1>
+          <p className="text-xl max-w-2xl mx-auto">
+            {lang === 'ar' 
+              ? 'اكتشف مجموعتنا الكاملة من الأحذية الفاخرة'
+              : 'Discover our complete collection of premium footwear'
+            }
           </p>
         </motion.div>
 
-        {/* Category Filter */}
+        {/* Filters and Controls */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
+          className="mb-8"
         >
-          {categories.map((category) => (
-            <GlassButton
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              variant={selectedCategory === category ? 'primary' : 'secondary'}
-              className="capitalize"
-            >
-              {t(`categories.${category}`)}
-            </GlassButton>
-          ))}
+          <GlassCard className="p-6">
+            <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+              {/* Category Filter */}
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <GlassButton
+                    key={category.id}
+                    variant={selectedCategory === category.id ? 'primary' : 'secondary'}
+                    size="sm"
+                    onClick={() => setSelectedCategory(category.id)}
+                  >
+                    {category.label}
+                  </GlassButton>
+                ))}
+              </div>
+
+              {/* Controls */}
+              <div className="flex items-center gap-4">
+                {/* Sort */}
+                <div className="flex items-center gap-2">
+                  <FiFilter size={16} />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="form-input py-2 px-3 text-sm min-h-[40px]"
+                  >
+                    {sortOptions.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* View Mode */}
+                <div className="flex items-center gap-1 bg-bg-secondary rounded-lg p-1">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={clsx(
+                      'p-2 rounded-md transition-colors',
+                      viewMode === 'grid' 
+                        ? 'bg-primary text-black' 
+                        : 'text-text-secondary hover:text-text-primary'
+                    )}
+                    aria-label="Grid view"
+                  >
+                    <FiGrid size={16} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={clsx(
+                      'p-2 rounded-md transition-colors',
+                      viewMode === 'list' 
+                        ? 'bg-primary text-black' 
+                        : 'text-text-secondary hover:text-text-primary'
+                    )}
+                    aria-label="List view"
+                  >
+                    <FiList size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
         </motion.div>
 
-        {/* Products Grid */}
+        {/* Products Grid/List */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          className={clsx(
+            'grid gap-6',
+            viewMode === 'grid' 
+              ? 'sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+              : 'grid-cols-1'
+          )}
         >
           {filteredProducts.map((product, index) => (
-            <motion.div
+            <motion.article
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group relative"
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+              className={clsx(
+                'product-card group',
+                viewMode === 'list' && 'flex flex-row items-center'
+              )}
             >
-              <div className="glass-card p-6 h-full flex flex-col transition-all duration-300 hover:scale-105">
-                {/* Product Image */}
-                <div className="relative mb-4 overflow-hidden rounded-lg">
-                  <img
-                    src={product.image}
-                    alt={product.name[lang]}
-                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute top-2 right-2">
-                    <FavoriteButton productId={product.id} />
+              <div className={clsx(
+                'product-card-image',
+                viewMode === 'list' && 'w-48 h-48 flex-shrink-0'
+              )}>
+                <img
+                  src={product.image}
+                  alt={product.name[lang]}
+                  loading={index < 8 ? "eager" : "lazy"}
+                />
+                <FavoriteButton productId={product.id} />
+              </div>
+              
+              <div className={clsx(
+                'product-card-content',
+                viewMode === 'list' && 'flex-1'
+              )}>
+                <h3 className="product-card-title">
+                  {product.name[lang]}
+                </h3>
+                <p className="product-card-description">
+                  {product.desc[lang]}
+                </p>
+                
+                <div className={clsx(
+                  'flex items-center gap-4 mb-4',
+                  viewMode === 'list' ? 'justify-start' : 'justify-between'
+                )}>
+                  <span className="product-card-price">
+                    {product.price} {t('egp')}
+                  </span>
+                  
+                  {/* Colors Preview */}
+                  <div className="flex gap-1">
+                    {product.colors.slice(0, 3).map((color, colorIndex) => (
+                      <div
+                        key={colorIndex}
+                        className="w-4 h-4 rounded-full border border-border-primary"
+                        style={{ backgroundColor: color.code }}
+                        title={color.name[lang]}
+                      />
+                    ))}
+                    {product.colors.length > 3 && (
+                      <div className="w-4 h-4 rounded-full bg-bg-tertiary border border-border-primary flex items-center justify-center text-xs font-medium">
+                        +{product.colors.length - 3}
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Product Info */}
-                <div className="flex-1 flex flex-col">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-                    {product.name[lang]}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 flex-1">
-                    {product.desc[lang]}
-                  </p>
-                  
-                  {/* Price */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                      ${product.price}
-                    </span>
-                  </div>
-
-                  {/* Action Button */}
-                  <Link to={`/product/${product.id}`} className="w-full">
-                    <GlassButton variant="primary" className="w-full">
-                      {t('common.viewDetails')}
+                <div className="product-card-actions">
+                  <Link to={`/product/${product.id}`} className="flex-1">
+                    <GlassButton 
+                      variant="primary" 
+                      className="w-full"
+                      size={viewMode === 'list' ? 'lg' : 'md'}
+                    >
+                      {t('viewDetails')}
                     </GlassButton>
                   </Link>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </motion.div>
 
@@ -116,20 +236,40 @@ export const ProductsPage: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="text-center py-16"
           >
-            <div className="glass-card p-8 max-w-md mx-auto">
-              <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                {t('products.noProducts')}
+            <GlassCard className="max-w-md mx-auto">
+              <h3 className="text-xl font-semibold mb-4">
+                {lang === 'ar' ? 'لا توجد منتجات' : 'No Products Found'}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
-                {t('products.noProductsDescription')}
+              <p className="text-text-secondary mb-6">
+                {lang === 'ar' 
+                  ? 'لم نجد أي منتجات في هذه الفئة'
+                  : 'We couldn\'t find any products in this category'
+                }
               </p>
               <GlassButton
-                onClick={() => setSelectedCategory('all')}
                 variant="primary"
+                onClick={() => setSelectedCategory('all')}
               >
-                {t('products.showAll')}
+                {lang === 'ar' ? 'عرض جميع المنتجات' : 'Show All Products'}
               </GlassButton>
-            </div>
+            </GlassCard>
+          </motion.div>
+        )}
+
+        {/* Results Count */}
+        {filteredProducts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-center mt-8"
+          >
+            <p className="text-text-secondary">
+              {lang === 'ar' 
+                ? `عرض ${filteredProducts.length} منتج`
+                : `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`
+              }
+            </p>
           </motion.div>
         )}
       </div>

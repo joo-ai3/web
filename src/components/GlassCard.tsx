@@ -4,15 +4,33 @@ import clsx from 'clsx';
 interface GlassCardProps {
   children: React.ReactNode;
   className?: string;
+  variant?: 'default' | 'compact' | 'spacious';
+  hover?: boolean;
 }
 
-export default function GlassCard({ children, className = "" }: GlassCardProps) {
+export default function GlassCard({ 
+  children, 
+  className = '',
+  variant = 'default',
+  hover = true
+}: GlassCardProps) {
+  const variantClasses = {
+    default: 'card',
+    compact: 'card card-compact',
+    spacious: 'card card-spacious'
+  };
+
   return (
-    <div className={clsx("glass p-6 sm:p-8 rounded-2xl shadow-xl border border-white/25 relative overflow-hidden backdrop-filter-enhanced", className)}>
-      <div className="absolute inset-0 bg-gradient-to-br from-white/8 to-transparent pointer-events-none" />
-      <div className="relative z-10">
+    <div 
+      className={clsx(
+        variantClasses[variant],
+        {
+          'hover:transform hover:scale-[1.02]': hover
+        },
+        className
+      )}
+    >
       {children}
-      </div>
     </div>
   );
 }

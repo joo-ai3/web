@@ -8,9 +8,9 @@ interface LogoProps {
 
 export default function Logo({ className = '', size = 'medium' }: LogoProps) {
   const sizeClasses = {
-    small: 'h-10 sm:h-12',
-    medium: 'h-12 sm:h-14', 
-    large: 'h-16 sm:h-18'
+    small: 'h-8 sm:h-10',
+    medium: 'h-10 sm:h-12', 
+    large: 'h-12 sm:h-16'
   };
 
   return (
@@ -19,7 +19,9 @@ export default function Logo({ className = '', size = 'medium' }: LogoProps) {
         <img 
           src="/logo.png" 
           alt="Soleva" 
-          className={`${sizeClasses[size]} w-auto transition-all duration-300 hover:scale-105 drop-shadow-sm`}
+          className={`${sizeClasses[size]} w-auto transition-all duration-300 hover:scale-105 drop-shadow-sm object-contain`}
+          loading="eager"
+          decoding="async"
         />
       </div>
     </Link>

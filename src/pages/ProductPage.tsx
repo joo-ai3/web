@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiShoppingCart } from "react-icons/fi";
+import { FiShoppingCart, FiArrowLeft, FiCheck } from "react-icons/fi";
 import clsx from "clsx";
 import { useLang, useTranslation } from "../contexts/LangContext";
 import { useCart } from "../contexts/CartContext";
 import { useToast } from "../contexts/ToastContext";
 import { products } from "../data/products";
 import GlassButton from "../components/GlassButton";
-import SectionTitle from "../components/SectionTitle";
+import GlassCard from "../components/GlassCard";
 import FavoriteButton from "../components/FavoriteButton";
 
 export default function ProductPage() {
@@ -19,12 +19,13 @@ export default function ProductPage() {
   const { showToast } = useToast();
 
   const product = products.find(p => p.id === parseInt(id || "0"));
-  const relatedProducts = products.filter(p => p.id !== product?.id).slice(0, 4);
+  const relatedProducts = products.filter(p => p.id !== product?.id && p.collection === product?.collection).slice(0, 4);
 
   const [selectedColor, setSelectedColor] = useState(product?.colors[0]?.name[lang] || "");
   const [selectedSize, setSelectedSize] = useState(product?.sizes[0] || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageChanging, setIsImageChanging] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   useEffect(() => {
     if (!product) return;
@@ -34,7 +35,7 @@ export default function ProductPage() {
         setCurrentImageIndex((prev) => (prev + 1) % product.colors.length);
         setIsImageChanging(false);
       }, 250);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [product]);
 
@@ -52,247 +53,281 @@ export default function ProductPage() {
 
   if (!product) {
     return (
-      <div className="container mx-auto py-20 text-center text-2xl text-red-500">
-        {t("productNotFound")}
+      <div className="container py-20 text-center">
+        <GlassCard className="max-w-md mx-auto">
+          <h1 className="text-2xl font-bold mb-4 text-red-500">
+            {t("productNotFound")}
+          </h1>
+          <Link to="/products">
+            <GlassButton variant="primary">
+              <FiArrowLeft />
+              {lang === 'ar' ? 'العودة للمنتجات' : 'Back to Products'}
+            </GlassButton>
+          </Link>
+        </GlassCard>
       </div>
     );
   }
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedColor || !selectedSize) {
       showToast(lang === "ar" ? "يرجى اختيار اللون والمقاس" : "Please select color and size");
       return;
     }
+    
+    setIsAddingToCart(true);
+    
+    // Simulate loading for better UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     addToCart(product, selectedColor, selectedSize);
     showToast(t("addSuccess"));
+    setIsAddingToCart(false);
   };
 
-
-  const handleColorSelect = (color) => {
+  const handleColorSelect = (color: any) => {
     setSelectedColor(color.name[lang]);
   };
 
-  const currentImage = product.colors[currentImageIndex]?.code ? product.image : product.image;
+  const currentImage = product.image;
 
   return (
-    <div className="container mx-auto px-4 py-6 sm:py-10 visual-hierarchy">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 items-start mb-12 sm:mb-16">
-        <div className="relative">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={currentImageIndex}
-              src={currentImage}
-              alt={product.name[lang]}
-              className={`w-full rounded-xl sm:rounded-2xl shadow-lg transition-all duration-500 ${isImageChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-              loading="eager"
-              decoding="async"
-            />
-          </AnimatePresence>
-          <div className="absolute bottom-3 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2">
-            {product.colors.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setIsImageChanging(true);
-                  setTimeout(() => {
-                    setCurrentImageIndex(index);
-                    setIsImageChanging(false);
-                  }, 200);
-                }}
-                aria-label={`View image ${index + 1} of ${product.colors.length}`}
-                className={clsx(
-                  "w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300",
-                  currentImageIndex === index
-                    ? "bg-[#d1b16a] w-4 sm:w-6 shadow-lg"
-                    : "bg-white/50 hover:bg-white/80"
-                )}
-              />
-            ))}
+    <div className="min-h-screen">
+      <div className="container py-8">
+        {/* Breadcrumb */}
+        <motion.nav
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-2 text-sm text-text-secondary">
+            <Link to="/" className="hover:text-primary transition-colors">
+              {t('home')}
+            </Link>
+            <span>/</span>
+            <Link to="/products" className="hover:text-primary transition-colors">
+              {t('products')}
+            </Link>
+            <span>/</span>
+            <span className="text-text-primary">{product.name[lang]}</span>
           </div>
+        </motion.nav>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
+          {/* Product Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative"
+          >
+            <div className="relative overflow-hidden rounded-2xl bg-bg-secondary">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentImageIndex}
+                  src={currentImage}
+                  alt={product.name[lang]}
+                  className={clsx(
+                    'w-full aspect-square object-cover transition-all duration-500',
+                    isImageChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                  )}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.6 }}
+                  loading="eager"
+                />
+              </AnimatePresence>
+              
+              {/* Image Indicators */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {product.colors.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setIsImageChanging(true);
+                      setTimeout(() => {
+                        setCurrentImageIndex(index);
+                        setIsImageChanging(false);
+                      }, 200);
+                    }}
+                    className={clsx(
+                      "w-2 h-2 rounded-full transition-all duration-300",
+                      currentImageIndex === index
+                        ? "bg-primary w-6 shadow-lg"
+                        : "bg-white/50 hover:bg-white/80"
+                    )}
+                    aria-label={`View image ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Product Details */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-6"
+          >
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <h1 className="text-3xl lg:text-4xl font-bold mb-3">
+                  {product.name[lang]}
+                </h1>
+                <p className="text-lg text-text-secondary leading-relaxed">
+                  {product.desc[lang]}
+                </p>
+              </div>
+              <FavoriteButton productId={product.id} size={24} />
+            </div>
+
+            <div className="text-3xl font-bold text-primary">
+              {product.price} {t("egp")}
+            </div>
+
+            {/* Color Selection */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">
+                {t("color")}: <span className="text-primary">{selectedColor}</span>
+              </h3>
+              <div className="flex gap-3 flex-wrap">
+                {product.colors.map((color, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => handleColorSelect(color)}
+                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.1 }}
+                    className={clsx(
+                      "w-12 h-12 rounded-full border-2 cursor-pointer transition-all duration-200 relative",
+                      selectedColor === color.name[lang]
+                        ? "border-primary ring-2 ring-primary ring-offset-2"
+                        : "border-border-primary hover:border-primary"
+                    )}
+                    style={{ backgroundColor: color.code }}
+                    aria-label={color.name[lang]}
+                  >
+                    {selectedColor === color.name[lang] && (
+                      <FiCheck className="absolute inset-0 m-auto text-white drop-shadow-lg" size={20} />
+                    )}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
+            {/* Size Selection */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">
+                {t("size")}: <span className="text-primary">{selectedSize}</span>
+              </h3>
+              <div className="flex gap-3 flex-wrap">
+                {product.sizes.map((size) => (
+                  <motion.button
+                    key={size}
+                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setSelectedSize(size)}
+                    className={clsx(
+                      "px-4 py-3 rounded-lg border font-medium transition-all duration-200 min-w-[60px]",
+                      selectedSize === size
+                        ? "bg-primary text-black border-primary shadow-lg"
+                        : "bg-bg-secondary text-text-primary border-border-primary hover:border-primary hover:bg-primary hover:bg-opacity-10"
+                    )}
+                  >
+                    {size}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
+            {/* Specifications */}
+            <GlassCard variant="compact">
+              <h3 className="text-lg font-semibold mb-4">
+                {t("specs")}
+              </h3>
+              <div className="space-y-3">
+                {product.specs[lang].map(([key, value], index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + index * 0.1 }}
+                    className="flex justify-between items-center py-2 border-b border-border-secondary last:border-b-0"
+                  >
+                    <span className="text-text-secondary font-medium">{key}:</span>
+                    <span className="text-text-primary font-semibold">{value}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </GlassCard>
+
+            {/* Add to Cart */}
+            <div className="space-y-4">
+              <GlassButton
+                onClick={handleAddToCart}
+                variant="primary"
+                size="lg"
+                className="w-full"
+                loading={isAddingToCart}
+                disabled={!selectedColor || !selectedSize}
+              >
+                <FiShoppingCart size={20} />
+                {isAddingToCart ? 'Adding...' : t("addToCart")}
+              </GlassButton>
+              
+              {(!selectedColor || !selectedSize) && (
+                <p className="text-sm text-text-secondary text-center">
+                  {lang === "ar" ? "يرجى اختيار اللون والمقاس" : "Please select color and size"}
+                </p>
+              )}
+            </div>
+          </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-          className="space-y-3 sm:space-y-4 lg:space-y-6"
-        >
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="font-bold text-[#111] leading-tight mb-2 sm:mb-3" role="heading" aria-level="1">
-                {product.name[lang]}
-              </h1>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                {product.desc[lang]}
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <FavoriteButton productId={product.id} size={22} />
-            </div>
-          </div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-[#d1b16a]"
-            role="text"
-            aria-label={`Price: ${product.price} ${t("egp")}`}
+            transition={{ delay: 0.8, duration: 0.6 }}
           >
-            {product.price} {t("egp")}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
-            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base lg:text-lg" role="text">
-              {t("color")}:
-            </p>
-            <div className="flex gap-2 sm:gap-3 flex-wrap" role="radiogroup" aria-label="Select color">
-              {product.colors.map((color, index) => (
-                <motion.div
-                  key={index}
-                  onClick={() => handleColorSelect(color)}
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.1 }}
-                  role="radio"
-                  aria-checked={selectedColor === color.name[lang]}
-                  aria-label={color.name[lang]}
-                  tabIndex={0}
-                  className={clsx(
-                    "color-selector w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full border-2 cursor-pointer transition-all duration-200",
-                    selectedColor === color.name[lang]
-                      ? "selected ring-2 ring-[#d1b16a] border-[#d1b16a]"
-                      : "border-gray-300 hover:border-[#d1b16a]"
-                  )}
-                  style={{ backgroundColor: color.code }}
-                />
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            <p className="font-semibold mb-2 sm:mb-3 text-[#111] text-sm sm:text-base lg:text-lg" role="text">
-              {t("size")}:
-            </p>
-            <div className="flex gap-2 sm:gap-3 flex-wrap" role="radiogroup" aria-label="Select size">
-              {product.sizes.map((size) => (
-                <motion.button
-                  key={size}
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  onClick={() => setSelectedSize(size)}
-                  role="radio"
-                  aria-checked={selectedSize === size}
-                  aria-label={`Size ${size}`}
-                  className={clsx(
-                    "px-3 py-1.5 sm:px-4 sm:py-2 lg:px-5 lg:py-2.5 rounded-full border text-sm sm:text-base font-medium transition-all duration-200 min-w-[44px] sm:min-w-[48px]",
-                    selectedSize === size
-                      ? "bg-[#d1b16a] text-black border-[#d1b16a] shadow-lg"
-                      : "text-gray-600 border-gray-300 hover:border-[#d1b16a] hover:text-[#d1b16a]"
-                  )}
+            <h2 className="text-2xl font-bold mb-8 text-center">
+              {lang === "ar" ? "منتجات مشابهة" : "Related Products"}
+            </h2>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((item, index) => (
+                <motion.article
+                  key={item.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 + index * 0.1 }}
+                  className="product-card"
                 >
-                  {size}
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="glass p-3 sm:p-4 rounded-lg sm:rounded-xl"
-          >
-            <h3 className="font-bold text-base sm:text-lg lg:text-xl mb-2 sm:mb-3 text-[#111]" role="heading" aria-level="3">
-              {t("specs")}
-            </h3>
-            <div className="space-y-1.5 sm:space-y-2">
-              {product.specs[lang].map(([key, value], index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1, duration: 0.3 }}
-                  className="flex justify-between text-sm sm:text-base"
-                >
-                  <span className="text-gray-600">{key}:</span>
-                  <span className="font-medium text-[#111]">{value}</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
-          >
-            <GlassButton
-              onClick={handleAddToCart}
-              className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-base sm:text-lg lg:text-xl py-3 sm:py-4 lg:py-5 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              aria-label={`Add ${product.name[lang]} to cart`}
-            >
-              <FiShoppingCart size={20} className="sm:w-6 sm:h-6" aria-hidden="true" />
-              {t("addToCart")}
-            </GlassButton>
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {relatedProducts.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-        >
-          <SectionTitle role="heading" aria-level="2">
-            {lang === "ar" ? "منتجات مشابهة" : "Related Products"}
-          </SectionTitle>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-            {relatedProducts.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 + index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -4 }}
-                className="product-card glass p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300"
-              >
-                <Link to={`/product/${item.id}`}>
-                  <div className="flex flex-col">
-                    <img
-                      src={item.image}
-                      alt={item.name[lang]}
-                      className="w-full h-24 sm:h-32 lg:h-40 object-cover rounded-lg mb-2 sm:mb-3 transition-transform duration-300 will-change-transform"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="product-info">
-                      <h3 className="text-xs sm:text-sm lg:text-base font-medium text-[#111] line-clamp-2 leading-tight mb-1" role="heading" aria-level="4">
+                  <Link to={`/product/${item.id}`}>
+                    <div className="product-card-image">
+                      <img
+                        src={item.image}
+                        alt={item.name[lang]}
+                        loading="lazy"
+                      />
+                      <FavoriteButton productId={item.id} />
+                    </div>
+                    <div className="product-card-content">
+                      <h3 className="product-card-title line-clamp-2">
                         {item.name[lang]}
                       </h3>
-                      <p className="text-[#d1b16a] font-bold text-xs sm:text-sm lg:text-base" role="text" aria-label={`Price: ${item.price} ${t("egp")}`}>
+                      <p className="product-card-price">
                         {item.price} {t("egp")}
                       </p>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
+                  </Link>
+                </motion.article>
+              ))}
+            </div>
+          </motion.section>
+        )}
+      </div>
     </div>
   );
 }
