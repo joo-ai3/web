@@ -163,12 +163,12 @@ p {
 /* Professional Glass Effect System */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--glass-shadow);
-  transition: all var(--transition-normal);
+  transition: all var(--transition-normal), backdrop-filter 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -185,9 +185,11 @@ p {
 }
 
 .glass:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
   border-color: var(--primary-200);
+  backdrop-filter: blur(30px) saturate(220%);
+  -webkit-backdrop-filter: blur(30px) saturate(220%);
 }
 
 /* Professional Button System */
@@ -203,12 +205,14 @@ p {
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   white-space: nowrap;
   min-height: 44px;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .btn:disabled {
@@ -224,21 +228,24 @@ p {
 }
 
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px var(--primary-500);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px var(--primary-500);
 }
 
 .btn-secondary {
   background: var(--glass-bg);
   color: var(--text-primary);
   border-color: var(--border-primary);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px) saturate(150%);
+  -webkit-backdrop-filter: blur(15px) saturate(150%);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background: var(--primary-50);
   border-color: var(--primary-200);
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.01);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 .btn-ghost {
@@ -249,6 +256,8 @@ p {
 .btn-ghost:hover:not(:disabled) {
   background: var(--primary-50);
   color: var(--text-primary);
+  transform: translateY(-1px);
+  backdrop-filter: blur(10px);
 }
 
 /* Professional Form Elements */
@@ -259,16 +268,21 @@ p {
   line-height: 1.5;
   color: var(--text-primary);
   background: var(--glass-bg);
+  backdrop-filter: blur(15px) saturate(150%);
+  -webkit-backdrop-filter: blur(15px) saturate(150%);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-lg);
-  transition: all var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 48px;
 }
 
 .form-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-100);
+  box-shadow: 0 0 0 3px var(--primary-100), 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 .form-input::placeholder {
@@ -278,17 +292,21 @@ p {
 /* Professional Card System */
 .card {
   background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--border-secondary);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-normal);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   border-color: var(--primary-200);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
 }
 
 .card-compact {
@@ -302,10 +320,12 @@ p {
 /* Professional Product Card */
 .product-card {
   background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--border-secondary);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  transition: all var(--transition-normal);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: var(--shadow-sm);
   height: 100%;
   display: flex;
@@ -313,9 +333,11 @@ p {
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--primary-200);
   border-color: var(--primary-200);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
 }
 
 .product-card-image {
@@ -332,7 +354,7 @@ p {
 }
 
 .product-card:hover .product-card-image img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .product-card-content {
@@ -414,10 +436,11 @@ p {
   right: 0;
   z-index: 50;
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
   border-bottom: 1px solid var(--border-primary);
   padding: var(--space-4) 0;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-normal), backdrop-filter 0.3s ease;
 }
 
 .nav-container {
@@ -446,7 +469,9 @@ p {
 
 .nav-link:hover {
   color: var(--primary);
-  background: var(--primary-50);
+  background: var(--primary-100);
+  transform: translateY(-1px);
+  backdrop-filter: blur(10px);
 }
 
 .nav-actions {
@@ -521,22 +546,22 @@ p {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 @keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.9) rotate(-2deg);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -544,11 +569,17 @@ p {
   0%, 100% {
     transform: scale(1);
   }
+  15% {
+    transform: scale(1.15) rotate(-5deg);
+  }
   25% {
-    transform: scale(1.2);
+    transform: scale(1.25) rotate(5deg);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(-2deg);
+  }
+  75% {
+    transform: scale(1.05) rotate(1deg);
   }
 }
 
@@ -562,15 +593,15 @@ p {
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .animate-fade-in-scale {
-  animation: fadeInScale 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInScale 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .animate-heart-beat {
-  animation: heartBeat 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: heartBeat 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Professional Loading States */
@@ -626,11 +657,15 @@ p {
   .btn {
     min-height: 48px;
     padding: var(--space-4) var(--space-5);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
   }
   
   .form-input {
     min-height: 48px;
     font-size: 16px; /* Prevents zoom on iOS */
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
   }
   
   .favorite-btn {
@@ -648,10 +683,12 @@ p {
   
   .mobile-product-card {
     background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--border-secondary);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    transition: all var(--transition-normal);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow-sm);
     height: 100%;
     display: flex;
@@ -659,9 +696,11 @@ p {
   }
   
   .mobile-product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     border-color: var(--primary-200);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
   }
   
   .mobile-product-image {
@@ -675,11 +714,11 @@ p {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--transition-slow);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .mobile-product-card:hover .mobile-product-image img {
-    transform: scale(1.05);
+    transform: scale(1.08);
   }
   
   .mobile-product-info {
@@ -712,6 +751,8 @@ p {
   .mobile-cart-item {
     padding: 1rem;
     margin-bottom: 1rem;
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
   }
   
   .mobile-cart-image {
@@ -742,6 +783,8 @@ p {
     align-items: center;
     gap: 0.5rem;
     background: var(--bg-secondary);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
     border-radius: var(--radius-lg);
     padding: 0.25rem;
   }
@@ -752,12 +795,14 @@ p {
     border-radius: var(--radius-md);
     border: 1px solid var(--border-primary);
     background: var(--bg-primary);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
   }
   
@@ -765,7 +810,8 @@ p {
     background: var(--primary);
     color: #000000;
     border-color: var(--primary);
-    transform: scale(1.05);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px var(--primary-300);
   }
   
   .quantity-btn:disabled {
@@ -784,18 +830,21 @@ p {
   
   .remove-btn {
     background: rgba(239, 68, 68, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(239, 68, 68, 0.2);
     border-radius: var(--radius-lg);
     color: #ef4444;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .remove-btn:hover {
     background: #ef4444;
     color: white;
     border-color: #ef4444;
-    transform: scale(1.05);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
   }
 }
 
@@ -842,18 +891,24 @@ p {
 
 /* Professional Dark Mode Enhancements */
 [data-theme="dark"] .glass {
-  background: rgba(23, 23, 23, 0.95);
+  background: rgba(10, 10, 10, 0.95);
   border-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
 }
 
 [data-theme="dark"] .product-card {
-  background: rgba(23, 23, 23, 0.95);
+  background: rgba(10, 10, 10, 0.95);
   border-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 [data-theme="dark"] .btn-secondary {
-  background: rgba(23, 23, 23, 0.95);
+  background: rgba(10, 10, 10, 0.95);
   border-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px) saturate(150%);
+  -webkit-backdrop-filter: blur(15px) saturate(150%);
 }
 
 [data-theme="dark"] .btn-primary {

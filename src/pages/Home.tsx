@@ -165,44 +165,46 @@ export default function Home() {
           
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProducts.map((product, index) => (
-              <motion.article
+              <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="product-card group"
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="product-card group interactive-hover"
               >
-                <div className="product-card-image">
-                  <img 
-                    src={product.image} 
-                    alt={product.name[lang]}
-                    loading={index < 3 ? "eager" : "lazy"}
-                  />
-                  <FavoriteButton productId={product.id} />
-                </div>
-                
-                <div className="product-card-content">
-                  <h3 className="product-card-title">
-                    {product.name[lang]}
-                  </h3>
-                  <p className="product-card-description">
-                    {product.desc[lang]}
-                  </p>
-                  <div className="product-card-price">
-                    {product.price} {t("egp")}
+                <Link to={`/product/${product.id}`} className="block h-full">
+                  <div className="product-card-image">
+                    <img 
+                      src={product.image} 
+                      alt={product.name[lang]}
+                      loading={index < 3 ? "eager" : "lazy"}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <FavoriteButton productId={product.id} />
                   </div>
-                  <div className="product-card-actions">
-                    <Link to={`/product/${product.id}`} className="flex-1">
+                  
+                  <div className="product-card-content">
+                    <h3 className="product-card-title">
+                      {product.name[lang]}
+                    </h3>
+                    <p className="product-card-description">
+                      {product.desc[lang]}
+                    </p>
+                    <div className="product-card-price">
+                      {product.price} {t("egp")}
+                    </div>
+                    <div className="product-card-actions">
                       <GlassButton 
                         variant="primary"
                         className="w-full text-[#000000]"
                       >
                         {t("viewDetails")}
                       </GlassButton>
-                    </Link>
+                    </div>
                   </div>
-                </div>
-              </motion.article>
+                </Link>
+              </motion.div>
             ))}
           </div>
           

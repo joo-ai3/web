@@ -71,7 +71,7 @@ const FavoritesPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+            className="mobile-products-grid sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           >
             {favoriteProducts.map((product, index) => (
               <motion.div
@@ -79,43 +79,43 @@ const FavoritesPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -4 }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="mobile-product-card sm:product-card group interactive-hover h-full"
               >
-                <div className="product-card group cursor-pointer h-full">
-                  <div className="relative overflow-hidden">
+                <Link to={`/product/${product.id}`} className="block h-full">
+                  <div className="mobile-product-image sm:product-card-image relative overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name[lang]}
-                      className="w-full aspect-square object-cover"
+                      className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-110"
                       loading={index < 6 ? "eager" : "lazy"}
                       decoding="async"
                     />
                     <FavoriteButton productId={product.id} size={20} />
                   </div>
                   
-                  <div className="product-card-content flex-1 flex flex-col">
-                    <h3 className="font-semibold text-sm sm:text-base mb-2 line-clamp-2 text-[var(--text-primary)]">
+                  <div className="mobile-product-info sm:product-card-content flex-1 flex flex-col">
+                    <h3 className="mobile-product-title sm:product-card-title">
                       {product.name[lang]}
                     </h3>
-                    <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1">
+                    <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 hidden sm:block">
                       {product.desc[lang]}
                     </p>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm sm:text-base text-[var(--primary)]">
+                    <div className="flex items-center justify-between sm:flex-col sm:items-start sm:gap-3">
+                      <span className="mobile-product-price sm:product-card-price">
                         {product.price} {t('egp')}
                       </span>
-                      <Link to={`/product/${product.id}`}>
+                      <div className="hidden sm:block sm:w-full">
                         <GlassButton 
                           variant="primary"
-                          size="sm"
-                          className="text-[#000000] text-xs sm:text-sm py-2 px-3 sm:px-4"
+                          className="w-full text-[#000000]"
                         >
                           {t('viewDetails')}
                         </GlassButton>
-                      </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </motion.div>
