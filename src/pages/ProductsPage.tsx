@@ -146,9 +146,9 @@ export const ProductsPage: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className={clsx(
-            'grid gap-6',
+            'grid gap-4 sm:gap-6',
             viewMode === 'grid' 
-              ? 'sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+              ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
               : 'grid-cols-1'
           )}
         >
@@ -159,47 +159,60 @@ export const ProductsPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
               className={clsx(
-                'product-card group',
+                'product-card group h-full',
                 viewMode === 'list' && 'flex flex-row items-center'
               )}
             >
               <div className={clsx(
-                'product-card-image',
+                'product-card-image relative',
                 viewMode === 'list' && 'w-48 h-48 flex-shrink-0'
               )}>
                 <img
                   src={product.image}
                   alt={product.name[lang]}
+                  className="w-full h-full object-cover"
                   loading={index < 8 ? "eager" : "lazy"}
                 />
                 <FavoriteButton productId={product.id} />
               </div>
               
               <div className={clsx(
-                'product-card-content',
+                'product-card-content flex-1 flex flex-col',
                 viewMode === 'list' && 'flex-1'
               )}>
-                <h3 className="product-card-title">
+                <h3 className={clsx(
+                  'font-semibold mb-2 line-clamp-2 text-[var(--text-primary)]',
+                  viewMode === 'grid' ? 'text-sm sm:text-base' : 'text-base'
+                )}>
                   {product.name[lang]}
                 </h3>
-                <p className="product-card-description">
+                <p className={clsx(
+                  'text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1',
+                  viewMode === 'grid' ? 'text-xs sm:text-sm' : 'text-sm'
+                )}>
                   {product.desc[lang]}
                 </p>
                 
                 <div className={clsx(
-                  'flex items-center gap-4 mb-4',
+                  'flex items-center gap-2 sm:gap-4 mb-3 sm:mb-4',
                   viewMode === 'list' ? 'justify-start' : 'justify-between'
                 )}>
-                  <span className="product-card-price">
+                  <span className={clsx(
+                    'font-bold text-[var(--primary)]',
+                    viewMode === 'grid' ? 'text-sm sm:text-base' : 'text-base'
+                  )}>
                     {product.price} {t('egp')}
                   </span>
                   
                   {/* Colors Preview */}
-                  <div className="flex gap-1">
+                  <div className={clsx(
+                    'flex gap-1',
+                    viewMode === 'grid' && 'hidden sm:flex'
+                  )}>
                     {product.colors.slice(0, 3).map((color, colorIndex) => (
                       <div
                         key={colorIndex}
-                        className="w-4 h-4 rounded-full border border-border-primary"
+                        className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border border-[var(--border-primary)]"
                         style={{ backgroundColor: color.code }}
                         title={color.name[lang]}
                       />
@@ -212,12 +225,12 @@ export const ProductsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="product-card-actions">
+                <div className="mt-auto">
                   <Link to={`/product/${product.id}`} className="flex-1">
                     <GlassButton 
                       variant="primary" 
-                      className="w-full"
-                      size={viewMode === 'list' ? 'lg' : 'md'}
+                      className="w-full text-[#000000]"
+                      size={viewMode === 'list' ? 'lg' : 'sm'}
                     >
                       {t('viewDetails')}
                     </GlassButton>

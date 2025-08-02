@@ -181,7 +181,7 @@ export default function AppHeader() {
                 <Link
                   to={user ? "/account" : "/login"}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="nav-link flex items-center gap-2"
+                  className="nav-link flex items-center gap-2 text-[var(--text-primary)]"
                 >
                   <FiUser size={18} />
                   {user ? t("account") : t("login")}

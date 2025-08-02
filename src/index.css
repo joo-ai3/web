@@ -37,9 +37,9 @@
   --bg-primary: #ffffff;
   --bg-secondary: #fafafa;
   --bg-tertiary: #f5f5f5;
-  --text-primary: #171717;
-  --text-secondary: #525252;
-  --text-tertiary: #737373;
+  --text-primary: #222222;
+  --text-secondary: #555555;
+  --text-tertiary: #777777;
   --border-primary: rgba(0, 0, 0, 0.08);
   --border-secondary: rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -97,9 +97,9 @@
   --bg-primary: #0a0a0a;
   --bg-secondary: #171717;
   --bg-tertiary: #262626;
-  --text-primary: #fafafa;
-  --text-secondary: #d4d4d4;
-  --text-tertiary: #a3a3a3;
+  --text-primary: #f5f5f5;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #888888;
   --border-primary: rgba(255, 255, 255, 0.1);
   --border-secondary: rgba(255, 255, 255, 0.05);
   --glass-bg: rgba(23, 23, 23, 0.95);
@@ -219,7 +219,7 @@ p {
 
 .btn-primary {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: #000;
+  color: #000000;
   box-shadow: 0 4px 12px var(--primary-300);
 }
 
@@ -637,6 +637,166 @@ p {
     width: 48px;
     height: 48px;
   }
+  
+  /* Mobile Product Grid Improvements */
+  .mobile-products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .mobile-product-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mobile-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-200);
+  }
+  
+  .mobile-product-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    width: 100%;
+  }
+  
+  .mobile-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+  
+  .mobile-product-card:hover .mobile-product-image img {
+    transform: scale(1.05);
+  }
+  
+  .mobile-product-info {
+    padding: 0.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mobile-product-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .mobile-product-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-top: auto;
+  }
+  
+  /* Cart Item Mobile Improvements */
+  .mobile-cart-item {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-cart-image {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  
+  .mobile-cart-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .mobile-cart-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  /* Quantity Controls */
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+  }
+  
+  .quantity-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-weight: 600;
+  }
+  
+  .quantity-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: #000000;
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+  
+  .quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .quantity-display {
+    min-width: 40px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1rem;
+  }
+  
+  .remove-btn {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-lg);
+    color: #ef4444;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .remove-btn:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    transform: scale(1.05);
+  }
 }
 
 /* Professional Accessibility */
@@ -694,6 +854,15 @@ p {
 [data-theme="dark"] .btn-secondary {
   background: rgba(23, 23, 23, 0.95);
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .btn-primary {
+  color: #000000;
+}
+
+[data-theme="dark"] .quantity-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #000000;
 }
 
 /* Professional RTL Support */

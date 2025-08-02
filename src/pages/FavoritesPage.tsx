@@ -71,7 +71,7 @@ const FavoritesPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="ecommerce-grid"
+            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           >
             {favoriteProducts.map((product, index) => (
               <motion.div
@@ -81,31 +81,35 @@ const FavoritesPage: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -4 }}
               >
-                <div className="product-card-pro group cursor-pointer">
+                <div className="product-card group cursor-pointer h-full">
                   <div className="relative overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name[lang]}
-                      className="product-image"
+                      className="w-full aspect-square object-cover"
                       loading={index < 6 ? "eager" : "lazy"}
                       decoding="async"
                     />
                     <FavoriteButton productId={product.id} size={20} />
                   </div>
                   
-                  <div className="product-info">
-                    <h3 className="mobile-product-title font-semibold mb-2 line-clamp-2 text-[#111]">
+                  <div className="product-card-content flex-1 flex flex-col">
+                    <h3 className="font-semibold text-sm sm:text-base mb-2 line-clamp-2 text-[var(--text-primary)]">
                       {product.name[lang]}
                     </h3>
-                    <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1">
                       {product.desc[lang]}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="mobile-product-price font-bold text-[#d1b16a]">
+                      <span className="font-bold text-sm sm:text-base text-[var(--primary)]">
                         {product.price} {t('egp')}
                       </span>
                       <Link to={`/product/${product.id}`}>
-                        <GlassButton className="bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-xs sm:text-sm py-2 px-3 sm:px-4">
+                        <GlassButton 
+                          variant="primary"
+                          size="sm"
+                          className="text-[#000000] text-xs sm:text-sm py-2 px-3 sm:px-4"
+                        >
                           {t('viewDetails')}
                         </GlassButton>
                       </Link>
