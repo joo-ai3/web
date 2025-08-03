@@ -848,8 +848,8 @@ p {
     align-items: center;
     gap: 0.5rem;
     background: var(--bg-secondary);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     border-radius: var(--radius-lg);
     padding: 0.25rem;
   }
@@ -860,8 +860,8 @@ p {
     border-radius: var(--radius-md);
     border: 1px solid var(--border-primary);
     background: var(--bg-primary);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     color: var(--text-primary);
     display: flex;
     align-items: center;
@@ -875,8 +875,8 @@ p {
     background: var(--primary);
     color: #000000;
     border-color: var(--primary);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px var(--primary-300);
+    transform: scale(1.15);
+    box-shadow: 0 6px 16px var(--primary-300);
   }
   
   .quantity-btn:disabled {
@@ -895,8 +895,8 @@ p {
   
   .remove-btn {
     background: rgba(239, 68, 68, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(239, 68, 68, 0.2);
     border-radius: var(--radius-lg);
     color: #ef4444;
@@ -908,8 +908,8 @@ p {
     background: #ef4444;
     color: white;
     border-color: #ef4444;
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    transform: scale(1.15);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
   }
 }
 

@@ -311,7 +311,7 @@ export default function ProductPage() {
                         src={item.image}
                         alt={item.name[lang]}
                         loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-115"
                       />
                       <FavoriteButton productId={item.id} />
                     </div>

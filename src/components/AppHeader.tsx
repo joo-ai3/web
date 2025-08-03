@@ -48,6 +48,7 @@ export default function AppHeader() {
             <Link
               key={link.to}
               to={link.to}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
               className={clsx(
                 'nav-link',
                 isActiveLink(link.to) && 'text-primary bg-primary-50'
