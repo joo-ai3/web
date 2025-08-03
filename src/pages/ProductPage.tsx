@@ -298,7 +298,7 @@ export default function ProductPage() {
             <h2 className="text-2xl font-bold mb-8 text-center">
               {lang === "ar" ? "منتجات مشابهة" : "Related Products"}
             </h2>
-            <div className="mobile-products-grid sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="products-grid">
               {relatedProducts.map((item, index) => (
                 <motion.div
                   key={item.id}
@@ -306,10 +306,10 @@ export default function ProductPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9 + index * 0.1 }}
                   whileHover={{ y: -6, scale: 1.02 }}
-                  className="mobile-product-card sm:product-card interactive-hover"
+                  className="product-card interactive-hover"
                 >
                   <Link to={`/product/${item.id}`}>
-                    <div className="mobile-product-image sm:product-card-image">
+                    <div className="product-card-image">
                       <img
                         src={item.image}
                         alt={item.name[lang]}
@@ -318,11 +318,11 @@ export default function ProductPage() {
                       />
                       <FavoriteButton productId={item.id} />
                     </div>
-                    <div className="mobile-product-info sm:product-card-content">
-                      <h3 className="mobile-product-title sm:product-card-title line-clamp-2">
+                    <div className="product-card-content">
+                      <h3 className="product-card-title line-clamp-2">
                         {item.name[lang]}
                       </h3>
-                      <p className="mobile-product-price sm:product-card-price">
+                      <p className="product-card-price">
                         {item.price} {t("egp")}
                       </p>
                     </div>

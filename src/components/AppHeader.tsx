@@ -124,4 +124,5 @@ export default function AppHeader() {
 
     </header>
   );
+  min-height: 60px;
 }

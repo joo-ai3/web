@@ -71,7 +71,7 @@ const FavoritesPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mobile-products-grid sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+           className="products-grid"
           >
             {favoriteProducts.map((product, index) => (
               <motion.div
@@ -80,10 +80,10 @@ const FavoritesPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -8, scale: 1.03 }}
-                className="mobile-product-card sm:product-card group interactive-hover h-full"
+               className="product-card group interactive-hover h-full"
               >
                 <Link to={`/product/${product.id}`} className="block h-full">
-                  <div className="mobile-product-image sm:product-card-image relative overflow-hidden">
+                 <div className="product-card-image relative overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name[lang]}
@@ -96,18 +96,18 @@ const FavoritesPage: React.FC = () => {
                     <FavoriteButton productId={product.id} size={20} />
                   </div>
                   
-                  <div className="mobile-product-info sm:product-card-content flex-1 flex flex-col">
-                    <h3 className="mobile-product-title sm:product-card-title">
+                 <div className="product-card-content flex-1 flex flex-col">
+                   <h3 className="product-card-title">
                       {product.name[lang]}
                     </h3>
-                    <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 hidden sm:block">
+                   <p className="product-card-description text-sm text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1">
                       {product.desc[lang]}
                     </p>
                     <div className="flex items-center justify-between sm:flex-col sm:items-start sm:gap-3">
-                      <span className="mobile-product-price sm:product-card-price">
+                     <span className="product-card-price">
                         {product.price} {t('egp')}
                       </span>
-                      <div className="hidden sm:block sm:w-full">
+                     <div className="w-full">
                         <GlassButton 
                           variant="primary"
                           className="w-full text-[#000000]"

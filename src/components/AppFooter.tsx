@@ -58,7 +58,7 @@ export default function AppFooter() {
   return (
     <footer className="section bg-bg-secondary border-t border-border-primary" role="contentinfo">
       <div className="container">
-        <GlassCard className="p-8 lg:p-12">
+        <div className="modern-glass-card p-8 lg:p-12 rounded-2xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* Brand Section */}
             <div className="lg:col-span-1">
@@ -78,7 +78,7 @@ export default function AppFooter() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-bg-tertiary hover:bg-primary hover:text-black rounded-full flex items-center justify-center transition-all duration-200"
+                    className="w-10 h-10 modern-glass-button hover:bg-primary hover:text-black rounded-full flex items-center justify-center transition-all duration-300"
                     aria-label={social.label}
                   >
                     {social.icon}
@@ -184,7 +184,7 @@ export default function AppFooter() {
               </div>
             </div>
           </div>
-        </GlassCard>
+        </div>
       </div>
     </footer>
   );

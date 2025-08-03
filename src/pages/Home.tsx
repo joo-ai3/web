@@ -173,10 +173,10 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -10, scale: 1.03 }}
-                className="mobile-product-card sm:product-card group interactive-hover"
+               className="product-card group interactive-hover"
               >
                 <Link to={`/product/${product.id}`} className="block h-full">
-                  <div className="mobile-product-image sm:product-card-image">
+                 <div className="product-card-image">
                     <img 
                       src={product.image} 
                       alt={product.name[lang]}
@@ -186,17 +186,17 @@ export default function Home() {
                     <FavoriteButton productId={product.id} />
                   </div>
                   
-                  <div className="mobile-product-info sm:product-card-content">
-                    <h3 className="mobile-product-title sm:product-card-title">
+                 <div className="product-card-content">
+                   <h3 className="product-card-title">
                       {product.name[lang]}
                     </h3>
-                    <p className="hidden sm:block product-card-description">
+                   <p className="product-card-description">
                       {product.desc[lang]}
                     </p>
-                    <div className="mobile-product-price sm:product-card-price">
+                   <div className="product-card-price">
                       {product.price} {t("egp")}
                     </div>
-                    <div className="hidden sm:block product-card-actions">
+                   <div className="product-card-actions">
                       <GlassButton 
                         variant="primary"
                         className="w-full text-[#000000]"

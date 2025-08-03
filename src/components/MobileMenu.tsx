@@ -28,6 +28,7 @@ export default function MobileMenu() {
     setIsOpen(false);
   }, [location.pathname]);
 
+  // Prevent body scroll when menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -91,14 +92,12 @@ export default function MobileMenu() {
 
   const menuVariants = {
     hidden: { 
-      opacity: 0, 
-      scale: 0.95, 
-      y: 20 
+      x: lang === 'ar' ? '100%' : '-100%',
+      opacity: 0
     },
     visible: { 
-      opacity: 1, 
-      scale: 1, 
-      y: 0, 
+      x: 0,
+      opacity: 1,
       transition: { 
         type: 'spring', 
         damping: 25, 
@@ -108,9 +107,8 @@ export default function MobileMenu() {
       } 
     },
     exit: { 
-      opacity: 0, 
-      scale: 0.95, 
-      y: 10, 
+      x: lang === 'ar' ? '100%' : '-100%',
+      opacity: 0,
       transition: { 
         duration: 0.25, 
         ease: [0.4, 0, 0.2, 1] 
@@ -119,10 +117,10 @@ export default function MobileMenu() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, x: lang === 'ar' ? 30 : -30 },
     visible: (i: number) => ({
       opacity: 1, 
-      y: 0,
+      x: 0,
       transition: { 
         delay: 0.1 + i * 0.05, 
         duration: 0.4, 
@@ -138,6 +136,7 @@ export default function MobileMenu() {
 
   return (
     <>
+      {/* Menu Toggle Button */}
       <motion.button
         whileTap={{ scale: 0.92 }}
         whileHover={{ scale: 1.08 }}
@@ -145,37 +144,39 @@ export default function MobileMenu() {
         className="md:hidden relative overflow-hidden group"
         aria-label="Open menu"
       >
-        <div className="glass backdrop-blur-20 p-3 rounded-xl border border-[#d1b16a]/30 hover:border-[#d1b16a]/50 transition-all duration-300 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px] flex items-center justify-center">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#d1b16a]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <FiMenu size={22} className="text-[#d1b16a] relative z-10 transition-transform duration-300 group-hover:rotate-180" />
+        <div className="modern-glass-button p-3 rounded-xl border border-primary/30 hover:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px] flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <FiMenu size={22} className="text-primary relative z-10 transition-transform duration-300 group-hover:rotate-180" />
         </div>
       </motion.button>
 
       <AnimatePresence mode="wait">
         {isOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
               variants={backdropVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
               onClick={closeMenu}
-              className="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] md:hidden"
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] md:hidden"
             />
 
-            {/* Fullscreen Menu */}
-            <div className="fixed inset-0 z-[110] md:hidden">
+            {/* Slide-out Menu */}
+            <div className="fixed inset-0 z-[110] md:hidden pointer-events-none">
               <motion.div
                 variants={menuVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
                 className={clsx(
-                  "w-full h-full overflow-y-auto",
-                  "glass backdrop-blur-30 border-0 shadow-2xl",
+                  "absolute top-0 h-full w-80 max-w-[85vw] overflow-y-auto pointer-events-auto",
+                  "modern-glass-menu backdrop-blur-40 border-0 shadow-2xl",
+                  lang === 'ar' ? 'right-0' : 'left-0',
                   theme === 'dark'
-                    ? "bg-[#0a0a0a]/95"
-                    : "bg-white/95"
+                    ? "bg-[#0a0a0a]/98"
+                    : "bg-white/98"
                 )}
               >
                 <div className="p-6 min-h-full flex flex-col">
@@ -194,9 +195,9 @@ export default function MobileMenu() {
                       className="relative overflow-hidden group"
                       aria-label="Close menu"
                     >
-                      <div className="glass backdrop-blur-20 p-3 rounded-xl border border-[#d1b16a]/30 hover:border-[#d1b16a]/60 transition-all duration-300 shadow-lg hover:shadow-xl min-h-[44px] min-w-[44px] flex items-center justify-center">
+                      <div className="modern-glass-button p-3 rounded-xl border border-primary/30 hover:border-red-400/60 transition-all duration-300 shadow-lg hover:shadow-xl min-h-[44px] min-w-[44px] flex items-center justify-center">
                         <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <FiX size={20} className="text-[#d1b16a] relative z-10 transition-transform duration-300 group-hover:rotate-90" />
+                        <FiX size={20} className="text-primary group-hover:text-red-500 relative z-10 transition-all duration-300" />
                       </div>
                     </motion.button>
                   </motion.div>
@@ -207,11 +208,11 @@ export default function MobileMenu() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.25, duration: 0.4 }}
-                      className="glass backdrop-blur-20 p-4 rounded-2xl mb-6 border border-[#d1b16a]/20 bg-gradient-to-br from-[#d1b16a]/10 via-transparent to-[#d1b16a]/5 shadow-lg"
+                      className="modern-glass-card p-4 rounded-2xl mb-6 border border-primary/20 bg-gradient-to-br from-primary/10 via-transparent to-primary/5 shadow-lg"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#d1b16a]/30 to-[#d1b16a]/10 rounded-full flex items-center justify-center shadow-inner border border-[#d1b16a]/20">
-                          <FiUser size={20} className="text-[#d1b16a]" />
+                        <div className="w-12 h-12 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full flex items-center justify-center shadow-inner border border-primary/20">
+                          <FiUser size={20} className="text-primary" />
                         </div>
                         <div>
                           <div className={`font-semibold text-base ${theme === 'dark' ? 'text-white' : 'text-[#111]'}`}>
@@ -249,10 +250,10 @@ export default function MobileMenu() {
                               to={item.to}
                               onClick={closeMenu}
                               className={clsx(
-                                'w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 group',
+                                'w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 group modern-menu-item',
                                 isActiveLink(item.to)
-                                  ? 'bg-[#d1b16a] text-black shadow-lg'
-                                  : `glass hover:bg-[#d1b16a]/20 ${theme === 'dark' ? 'text-gray-200 hover:text-[#d1b16a]' : 'text-gray-700 hover:text-[#d1b16a]'}`
+                                  ? 'bg-primary text-black shadow-lg modern-menu-item-active'
+                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`
                               )}
                             >
                               <div className="flex items-center gap-4">
@@ -269,7 +270,7 @@ export default function MobileMenu() {
                                   'px-2 py-1 rounded-full text-xs font-bold min-w-[20px] text-center',
                                   isActiveLink(item.to)
                                     ? 'bg-black/20 text-black'
-                                    : 'bg-[#d1b16a] text-black'
+                                    : 'bg-primary text-black'
                                 )}>
                                   {item.badge}
                                 </div>
@@ -303,10 +304,10 @@ export default function MobileMenu() {
                               to={item.to}
                               onClick={closeMenu}
                               className={clsx(
-                                'w-full flex items-center gap-4 p-4 rounded-xl font-semibold transition-all duration-300 group',
+                                'w-full flex items-center gap-4 p-4 rounded-xl font-semibold transition-all duration-300 group modern-menu-item',
                                 isActiveLink(item.to)
-                                  ? 'bg-[#d1b16a] text-black shadow-lg'
-                                  : `glass hover:bg-[#d1b16a]/20 ${theme === 'dark' ? 'text-gray-200 hover:text-[#d1b16a]' : 'text-gray-700 hover:text-[#d1b16a]'}`
+                                  ? 'bg-primary text-black shadow-lg modern-menu-item-active'
+                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`
                               )}
                             >
                               <div className={clsx(
@@ -338,7 +339,7 @@ export default function MobileMenu() {
                       {/* Theme Toggle */}
                       <button
                         onClick={toggleTheme}
-                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 glass hover:bg-[#d1b16a]/20 ${theme === 'dark' ? 'text-gray-200 hover:text-[#d1b16a]' : 'text-gray-700 hover:text-[#d1b16a]'}`}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`}
                       >
                         <div className="flex items-center gap-4">
                           {theme === "dark" ? <FiSun size={20} /> : <FiMoon size={20} />}
@@ -352,7 +353,7 @@ export default function MobileMenu() {
                       {/* Language Toggle */}
                       <button
                         onClick={toggleLang}
-                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 glass hover:bg-[#d1b16a]/20 ${theme === 'dark' ? 'text-gray-200 hover:text-[#d1b16a]' : 'text-gray-700 hover:text-[#d1b16a]'}`}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`}
                       >
                         <div className="flex items-center gap-4">
                           <FiGlobe size={20} />
@@ -371,7 +372,7 @@ export default function MobileMenu() {
                           logout();
                           closeMenu();
                         }}
-                        className="w-full flex items-center gap-4 p-4 rounded-xl font-semibold transition-all duration-300 glass hover:bg-red-100 text-red-600 hover:text-red-700 border border-red-200/50"
+                        className="w-full flex items-center gap-4 p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-red-100 text-red-600 hover:text-red-700 border border-red-200/50"
                       >
                         <FiLogOut size={20} />
                         <span className="text-base">{t("logout")}</span>

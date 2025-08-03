@@ -146,10 +146,10 @@ export const ProductsPage: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className={clsx(
-            'mobile-products-grid sm:grid gap-4 sm:gap-6',
+            'products-grid',
             viewMode === 'grid' 
-              ? 'sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-              : 'sm:grid-cols-1'
+              ? ''
+              : 'grid-cols-1 max-w-4xl mx-auto'
           )}
         >
           {filteredProducts.map((product, index) => (
@@ -160,14 +160,14 @@ export const ProductsPage: React.FC = () => {
               transition={{ duration: 0.5, delay: index * 0.05 }}
               whileHover={{ y: -8, scale: 1.03 }}
               className={clsx(
-                'mobile-product-card sm:product-card group h-full interactive-hover',
-                viewMode === 'list' && 'sm:flex sm:flex-row sm:items-center'
+                'product-card group h-full interactive-hover',
+                viewMode === 'list' && 'flex flex-row items-center'
               )}
             >
               <Link to={`/product/${product.id}`} className="block h-full">
                 <div className={clsx(
-                  'mobile-product-image sm:product-card-image relative',
-                  viewMode === 'list' && 'sm:w-48 sm:h-48 sm:flex-shrink-0'
+                  'product-card-image relative overflow-hidden',
+                  viewMode === 'list' && 'w-48 h-48 flex-shrink-0'
                 )}>
                   <img
                     src={product.image}
@@ -182,37 +182,37 @@ export const ProductsPage: React.FC = () => {
                 </div>
                 
                 <div className={clsx(
-                  'mobile-product-info sm:product-card-content flex-1 flex flex-col',
-                  viewMode === 'list' && 'sm:flex-1'
+                  'product-card-content flex-1 flex flex-col',
+                  viewMode === 'list' && 'flex-1'
                 )}>
                   <h3 className={clsx(
-                    'mobile-product-title sm:font-semibold mb-2 line-clamp-2 text-[var(--text-primary)]',
-                    viewMode === 'grid' ? 'sm:text-base' : 'sm:text-base'
+                    'product-card-title font-semibold mb-2 line-clamp-2 text-[var(--text-primary)]',
+                    viewMode === 'grid' ? 'text-base' : 'text-lg'
                   )}>
                     {product.name[lang]}
                   </h3>
                   <p className={clsx(
-                    'text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 hidden sm:block',
-                    viewMode === 'grid' ? 'sm:text-sm' : 'sm:text-sm'
+                    'text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1',
+                    viewMode === 'grid' ? 'text-sm' : 'text-base'
                   )}>
                     {product.desc[lang]}
                   </p>
                   
                   <div className={clsx(
-                    'flex items-center gap-2 sm:gap-4 mb-3 sm:mb-4',
-                    viewMode === 'list' ? 'sm:justify-start' : 'justify-between sm:justify-between'
+                    'flex items-center gap-2 gap-4 mb-3 mb-4',
+                    viewMode === 'list' ? 'justify-start' : 'justify-between'
                   )}>
                     <span className={clsx(
-                      'mobile-product-price sm:font-bold text-[var(--primary)]',
-                      viewMode === 'grid' ? 'sm:text-base' : 'sm:text-base'
+                      'product-card-price font-bold text-[var(--primary)]',
+                      viewMode === 'grid' ? 'text-lg' : 'text-xl'
                     )}>
                       {product.price} {t('egp')}
                     </span>
                     
                     {/* Colors Preview - Hidden on mobile */}
                     <div className={clsx(
-                      'hidden sm:flex gap-1',
-                      viewMode === 'grid' && 'sm:flex'
+                      'flex gap-1',
+                      viewMode === 'grid' && 'flex'
                     )}>
                       {product.colors.slice(0, 3).map((color, colorIndex) => (
                         <div
@@ -231,7 +231,7 @@ export const ProductsPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mt-auto hidden sm:block">
+                  <div className="mt-auto">
                     <GlassButton 
                       variant="primary" 
                       className="w-full text-[#000000]"

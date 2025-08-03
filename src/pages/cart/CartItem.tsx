@@ -24,7 +24,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
       whileHover={{ y: -3, scale: 1.02 }}
-      className="cart-item flex flex-col sm:flex-row items-start sm:items-center gap-4 glass rounded-xl border border-[var(--border-secondary)] hover:shadow-lg transition-all duration-300 p-4 sm:p-5"
+      className="cart-item flex flex-col sm:flex-row items-start sm:items-center gap-4 modern-glass-card rounded-xl border border-[var(--border-secondary)] hover:shadow-lg transition-all duration-300 p-4 sm:p-5"
     >
       <img 
         src={item.image} 

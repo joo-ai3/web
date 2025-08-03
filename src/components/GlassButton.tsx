@@ -8,6 +8,7 @@ interface GlassButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   loading?: boolean;
+  modern?: boolean;
 }
 
 export default function GlassButton({ 
@@ -17,6 +18,7 @@ export default function GlassButton({
   className = '', 
   loading = false,
   disabled,
+  modern = false,
   ...props 
 }: GlassButtonProps) {
   const sizeClasses = {
@@ -27,7 +29,7 @@ export default function GlassButton({
 
   const variantClasses = {
     primary: 'btn-primary text-[#000000]',
-    secondary: 'btn-secondary', 
+    secondary: modern ? 'modern-glass-button' : 'btn-secondary', 
     ghost: 'btn-ghost'
   };
 
