@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="section-lg text-center" role="banner">
+      <section className="section-lg text-center">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -118,13 +118,15 @@ export default function Home() {
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="feature-card"
               >
                 <GlassCard className="text-center h-full">
                   <div className="text-primary mb-6 flex justify-center">
@@ -163,7 +165,7 @@ export default function Home() {
             </p>
           </motion.div>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="mobile-products-grid sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {featuredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -171,10 +173,10 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -10, scale: 1.03 }}
-                className="product-card group interactive-hover"
+                className="mobile-product-card sm:product-card group interactive-hover"
               >
                 <Link to={`/product/${product.id}`} className="block h-full">
-                  <div className="product-card-image">
+                  <div className="mobile-product-image sm:product-card-image">
                     <img 
                       src={product.image} 
                       alt={product.name[lang]}
@@ -184,17 +186,17 @@ export default function Home() {
                     <FavoriteButton productId={product.id} />
                   </div>
                   
-                  <div className="product-card-content">
-                    <h3 className="product-card-title">
+                  <div className="mobile-product-info sm:product-card-content">
+                    <h3 className="mobile-product-title sm:product-card-title">
                       {product.name[lang]}
                     </h3>
-                    <p className="product-card-description">
+                    <p className="hidden sm:block product-card-description">
                       {product.desc[lang]}
                     </p>
-                    <div className="product-card-price">
+                    <div className="mobile-product-price sm:product-card-price">
                       {product.price} {t("egp")}
                     </div>
-                    <div className="product-card-actions">
+                    <div className="hidden sm:block product-card-actions">
                       <GlassButton 
                         variant="primary"
                         className="w-full text-[#000000]"

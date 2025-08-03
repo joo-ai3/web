@@ -30,6 +30,10 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
         src={item.image} 
         alt={item.name[lang]} 
         className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg flex-shrink-0 transition-transform duration-300 hover:scale-105" 
+        loading="lazy"
+        decoding="async"
+        width="96"
+        height="96"
       />
 
       <div className="flex-1 min-w-0 w-full">
@@ -49,6 +53,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
             onClick={() => handleQty(-1)}
             className="quantity-btn"
             disabled={item.qty <= 1}
+            aria-label="Decrease quantity"
           >
             <FiMinus />
           </button>
@@ -56,6 +61,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
           <button
             onClick={() => handleQty(1)}
             className="quantity-btn"
+            aria-label="Increase quantity"
           >
             <FiPlus />
           </button>
@@ -64,6 +70,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
         <button
           onClick={() => onRemove(item)}
           className="remove-btn w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center"
+          aria-label="Remove item from cart"
         >
           <FiTrash2 size={18} />
         </button>

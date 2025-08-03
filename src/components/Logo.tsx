@@ -22,6 +22,8 @@ export default function Logo({ className = '', size = 'medium' }: LogoProps) {
           className={`${sizeClasses[size]} w-auto transition-all duration-300 hover:scale-105 drop-shadow-sm object-contain`}
           loading="eager"
           decoding="async"
+          width="auto"
+          height={size === 'small' ? '40' : size === 'medium' ? '48' : '64'}
         />
       </div>
     </Link>

@@ -49,9 +49,7 @@ export default function RoutesWrapper() {
     >
       <Router>
         <ScrollToTop />
-        <header role="banner">
-          <AppHeader />
-        </header>
+        <AppHeader />
         <main 
           role="main" 
           className="pt-20 sm:pt-24 lg:pt-28 min-h-[calc(100vh-60px)] bg-app"
@@ -85,9 +83,7 @@ export default function RoutesWrapper() {
             </Routes>
           </AnimatePresence>
         </main>
-        <footer role="contentinfo">
-          <AppFooter />
-        </footer>
+        <AppFooter />
       </Router>
     </div>
   );

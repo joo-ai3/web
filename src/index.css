@@ -912,6 +912,99 @@ p {
     box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
   }
 }
+  /* Enhanced Mobile Menu Styles */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+
+  .mobile-menu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px) saturate(220%);
+    -webkit-backdrop-filter: blur(30px) saturate(220%);
+    z-index: 110;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Improved List Styles */
+  .list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .list-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .list-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-200);
+  }
+
+  /* Enhanced Touch Targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Improved Typography for Mobile */
+  .mobile-heading {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: 1.2;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .mobile-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* Enhanced Form Elements for Mobile */
+  .mobile-form-input {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    font-size: 16px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-primary);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-100);
+    transform: translateY(-1px);
+  }
 
 /* Professional Accessibility */
 @media (prefers-reduced-motion: reduce) {

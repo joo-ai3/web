@@ -37,13 +37,13 @@ export default function AppHeader() {
   };
 
   return (
-    <nav className="nav" role="navigation" aria-label="Main navigation">
+    <header className="nav" role="banner" aria-label="Main navigation">
       <div className="nav-container">
         {/* Logo */}
         <Logo size="medium" />
 
         {/* Desktop Navigation */}
-        <div className="nav-links hidden md:flex">
+        <nav className="nav-links hidden md:flex" role="navigation">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -53,11 +53,12 @@ export default function AppHeader() {
                 'nav-link',
                 isActiveLink(link.to) && 'text-primary bg-primary-50'
               )}
+              aria-current={isActiveLink(link.to) ? 'page' : undefined}
             >
               {link.label}
             </Link>
           ))}
-        </div>
+        </nav>
 
         {/* Actions */}
         <div className="nav-actions">
@@ -69,7 +70,7 @@ export default function AppHeader() {
           >
             <FiHeart size={20} />
             {favorites.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center" aria-hidden="true">
                 {favorites.length}
               </span>
             )}
@@ -83,7 +84,7 @@ export default function AppHeader() {
           >
             <FiShoppingCart size={20} />
             {cart.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-black rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-primary text-black rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center" aria-hidden="true">
                 {cart.length}
               </span>
             )}
@@ -121,6 +122,6 @@ export default function AppHeader() {
         </div>
       </div>
 
-    </nav>
+    </header>
   );
 }

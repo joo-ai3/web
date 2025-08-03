@@ -174,6 +174,9 @@ export const ProductsPage: React.FC = () => {
                     alt={product.name[lang]}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-115"
                     loading={index < 8 ? "eager" : "lazy"}
+                    decoding="async"
+                    width="300"
+                    height="300"
                   />
                   <FavoriteButton productId={product.id} />
                 </div>
@@ -217,6 +220,7 @@ export const ProductsPage: React.FC = () => {
                           className="w-4 h-4 rounded-full border border-[var(--border-primary)]"
                           style={{ backgroundColor: color.code }}
                           title={color.name[lang]}
+                          aria-label={color.name[lang]}
                         />
                       ))}
                       {product.colors.length > 3 && (

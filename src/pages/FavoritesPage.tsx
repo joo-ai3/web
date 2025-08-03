@@ -90,6 +90,8 @@ const FavoritesPage: React.FC = () => {
                       className="w-full aspect-square object-cover transition-transform duration-700 group-hover:scale-115"
                       loading={index < 6 ? "eager" : "lazy"}
                       decoding="async"
+                      width="300"
+                      height="300"
                     />
                     <FavoriteButton productId={product.id} size={20} />
                   </div>
