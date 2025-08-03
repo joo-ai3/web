@@ -79,7 +79,7 @@ const FavoritesPage: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -6, scale: 1.02 }}
+                whileHover={{ y: -8, scale: 1.03 }}
                 className="mobile-product-card sm:product-card group interactive-hover h-full"
               >
                 <Link to={`/product/${product.id}`} className="block h-full">
@@ -87,7 +87,7 @@ const FavoritesPage: React.FC = () => {
                     <img
                       src={product.image}
                       alt={product.name[lang]}
-                      className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full aspect-square object-cover transition-transform duration-700 group-hover:scale-115"
                       loading={index < 6 ? "eager" : "lazy"}
                       decoding="async"
                     />

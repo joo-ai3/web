@@ -149,6 +149,7 @@ export default function ContactPage() {
                     {t("name")}
                   </label>
                   <input
+                    className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all min-w-0"
                     type="text"
                     required
                     value={formData.name}
@@ -161,6 +162,7 @@ export default function ContactPage() {
                     {t("email")}
                   </label>
                   <input
+                    className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all min-w-0"
                     type="email"
                     required
                     value={formData.email}
@@ -175,6 +177,7 @@ export default function ContactPage() {
                   {t("subject")}
                 </label>
                 <input
+                  className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all min-w-0"
                   type="text"
                   required
                   value={formData.subject}
@@ -188,6 +191,7 @@ export default function ContactPage() {
                   {t("yourMessage")}
                 </label>
                 <textarea
+                  className="w-full glass border border-[#d1b16a]/40 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all resize-none min-w-0"
                   rows={6}
                   required
                   value={formData.message}

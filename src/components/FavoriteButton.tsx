@@ -64,41 +64,45 @@ export default function FavoriteButton({
         background: isCurrentlyFavorite 
           ? 'linear-gradient(135deg, #ef4444, #dc2626)' 
           : theme === 'dark' 
-            ? 'rgba(23, 23, 23, 0.95)' 
+            ? 'rgba(10, 10, 10, 0.95)' 
             : 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        backdropFilter: 'blur(25px) saturate(200%)',
+        WebkitBackdropFilter: 'blur(25px) saturate(200%)',
         border: isCurrentlyFavorite 
-          ? '1px solid #ef4444' 
+          ? '2px solid #ef4444' 
           : theme === 'dark'
-            ? '1px solid rgba(209, 177, 106, 0.3)'
-            : '1px solid rgba(209, 177, 106, 0.4)',
+            ? '2px solid rgba(209, 177, 106, 0.5)'
+            : '2px solid rgba(209, 177, 106, 0.4)',
         borderRadius: '50%',
         boxShadow: isCurrentlyFavorite
-          ? '0 8px 25px rgba(239, 68, 68, 0.4), 0 0 0 1px rgba(239, 68, 68, 0.2)'
+          ? '0 12px 30px rgba(239, 68, 68, 0.5), 0 0 0 1px rgba(239, 68, 68, 0.3)'
           : theme === 'dark'
-            ? '0 8px 25px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(209, 177, 106, 0.15)'
-            : '0 8px 25px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(209, 177, 106, 0.2)',
+            ? '0 12px 30px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(209, 177, 106, 0.3)'
+            : '0 12px 30px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(209, 177, 106, 0.25)',
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
       }}
     >
       {/* Animated Background Gradient */}
       <div 
         className={clsx(
-          "absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+          "absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300",
           isCurrentlyFavorite 
-            ? "bg-gradient-to-br from-red-400/20 to-red-600/20" 
-            : "bg-gradient-to-br from-[#d1b16a]/20 to-[#d1b16a]/10"
+            ? "bg-gradient-to-br from-red-400/30 to-red-600/30 animate-pulse-glow" 
+            : theme === 'dark'
+              ? "bg-gradient-to-br from-[#d1b16a]/30 to-[#d1b16a]/15"
+              : "bg-gradient-to-br from-[#d1b16a]/20 to-[#d1b16a]/10"
         )}
       />
       
       {/* Ripple Effect */}
       <div 
         className={clsx(
-          "absolute inset-0 rounded-full opacity-0 group-active:opacity-100 transition-opacity duration-150",
+          "absolute inset-0 rounded-full opacity-0 group-active:opacity-100 transition-all duration-150",
           isCurrentlyFavorite 
-            ? "bg-red-500/30" 
-            : "bg-[#d1b16a]/30"
+            ? "bg-red-500/40" 
+            : theme === 'dark'
+              ? "bg-[#d1b16a]/40"
+              : "bg-[#d1b16a]/30"
         )}
       />
 
@@ -113,17 +117,19 @@ export default function FavoriteButton({
         <FiHeart 
           size={size} 
           className={clsx(
-            'transition-all duration-300',
+            'transition-all duration-300 drop-shadow-sm',
             isCurrentlyFavorite 
-              ? 'fill-current text-white drop-shadow-sm' 
+              ? 'fill-current text-white' 
               : theme === 'dark'
-                ? 'text-gray-300 group-hover:text-[#d1b16a]'
+                ? 'text-gray-200 group-hover:text-[#d1b16a]'
                 : 'text-gray-600 group-hover:text-[#d1b16a]'
           )}
           style={{
             filter: isCurrentlyFavorite 
-              ? 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))' 
-              : 'none'
+              ? 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3))' 
+              : theme === 'dark'
+                ? 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))'
+                : 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))'
           }}
         />
       </motion.div>
@@ -131,15 +137,16 @@ export default function FavoriteButton({
       {/* Pulse Animation for Active State */}
       {isCurrentlyFavorite && (
         <motion.div
-          className="absolute inset-0 rounded-full border-2 border-red-400"
+          className="absolute inset-0 rounded-full border-2 border-red-400/60"
           animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.8, 0, 0.8],
+            scale: [1, 1.3, 1],
+            opacity: [0.6, 0, 0.6],
           }}
           transition={{
-            duration: 2,
+            duration: 2.5,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
+            repeatDelay: 0.5
           }}
         />
       )}

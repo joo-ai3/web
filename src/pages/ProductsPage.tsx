@@ -158,7 +158,7 @@ export const ProductsPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
-              whileHover={{ y: -6, scale: 1.02 }}
+              whileHover={{ y: -8, scale: 1.03 }}
               className={clsx(
                 'mobile-product-card sm:product-card group h-full interactive-hover',
                 viewMode === 'list' && 'sm:flex sm:flex-row sm:items-center'
@@ -172,7 +172,7 @@ export const ProductsPage: React.FC = () => {
                   <img
                     src={product.image}
                     alt={product.name[lang]}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-115"
                     loading={index < 8 ? "eager" : "lazy"}
                   />
                   <FavoriteButton productId={product.id} />

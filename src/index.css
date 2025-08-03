@@ -163,8 +163,8 @@ p {
 /* Professional Glass Effect System */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  backdrop-filter: blur(30px) saturate(220%);
+  -webkit-backdrop-filter: blur(30px) saturate(220%);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--glass-shadow);
@@ -186,10 +186,10 @@ p {
 
 .glass:hover {
   transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
   border-color: var(--primary-200);
-  backdrop-filter: blur(30px) saturate(220%);
-  -webkit-backdrop-filter: blur(30px) saturate(220%);
+  backdrop-filter: blur(35px) saturate(250%);
+  -webkit-backdrop-filter: blur(35px) saturate(250%);
 }
 
 /* Professional Button System */
@@ -236,16 +236,16 @@ p {
   background: var(--glass-bg);
   color: var(--text-primary);
   border-color: var(--border-primary);
-  backdrop-filter: blur(15px) saturate(150%);
-  -webkit-backdrop-filter: blur(15px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background: var(--primary-50);
   border-color: var(--primary-200);
   transform: translateY(-2px) scale(1.01);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
 }
 
 .btn-ghost {
@@ -268,8 +268,8 @@ p {
   line-height: 1.5;
   color: var(--text-primary);
   background: var(--glass-bg);
-  backdrop-filter: blur(15px) saturate(150%);
-  -webkit-backdrop-filter: blur(15px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-lg);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -281,8 +281,8 @@ p {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-100), 0 4px 12px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
 }
 
 .form-input::placeholder {
@@ -292,8 +292,8 @@ p {
 /* Professional Card System */
 .card {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
   border: 1px solid var(--border-secondary);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
@@ -302,11 +302,11 @@ p {
 }
 
 .card:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
   border-color: var(--primary-200);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  backdrop-filter: blur(30px) saturate(230%);
+  -webkit-backdrop-filter: blur(30px) saturate(230%);
 }
 
 .card-compact {
@@ -320,8 +320,8 @@ p {
 /* Professional Product Card */
 .product-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
   border: 1px solid var(--border-secondary);
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -333,11 +333,11 @@ p {
 }
 
 .product-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--primary-200);
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--primary-200);
   border-color: var(--primary-200);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  backdrop-filter: blur(30px) saturate(230%);
+  -webkit-backdrop-filter: blur(30px) saturate(230%);
 }
 
 .product-card-image {
@@ -436,8 +436,8 @@ p {
   right: 0;
   z-index: 50;
   background: var(--glass-bg);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  backdrop-filter: blur(30px) saturate(220%);
+  -webkit-backdrop-filter: blur(30px) saturate(220%);
   border-bottom: 1px solid var(--border-primary);
   padding: var(--space-4) 0;
   transition: all var(--transition-normal), backdrop-filter 0.3s ease;
@@ -543,6 +543,71 @@ p {
 }
 
 /* Professional Animations */
+/* Enhanced Liquid Glass Animations */
+@keyframes liquidFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-12px) rotate(0.5deg);
+  }
+}
+
+@keyframes glassShimmer {
+  0% {
+    background-position: -200% 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 200% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(209, 177, 106, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(209, 177, 106, 0.6);
+  }
+}
+
+.animate-liquid-float {
+  animation: liquidFloat 4s ease-in-out infinite;
+}
+
+.animate-glass-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-glass-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: glassShimmer 3s infinite;
+  pointer-events: none;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -683,8 +748,8 @@ p {
   
   .mobile-product-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
     border: 1px solid var(--border-secondary);
     border-radius: var(--radius-xl);
     overflow: hidden;
@@ -696,11 +761,11 @@ p {
   }
   
   .mobile-product-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
     border-color: var(--primary-200);
-    backdrop-filter: blur(25px) saturate(200%);
-    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    backdrop-filter: blur(30px) saturate(230%);
+    -webkit-backdrop-filter: blur(30px) saturate(230%);
   }
   
   .mobile-product-image {
@@ -893,22 +958,22 @@ p {
 [data-theme="dark"] .glass {
   background: rgba(10, 10, 10, 0.95);
   border-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  backdrop-filter: blur(30px) saturate(220%);
+  -webkit-backdrop-filter: blur(30px) saturate(220%);
 }
 
 [data-theme="dark"] .product-card {
   background: rgba(10, 10, 10, 0.95);
   border-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
 }
 
 [data-theme="dark"] .btn-secondary {
   background: rgba(10, 10, 10, 0.95);
   border-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px) saturate(150%);
-  -webkit-backdrop-filter: blur(15px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 [data-theme="dark"] .btn-primary {

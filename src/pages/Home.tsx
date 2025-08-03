@@ -170,7 +170,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ y: -10, scale: 1.03 }}
                 className="product-card group interactive-hover"
               >
                 <Link to={`/product/${product.id}`} className="block h-full">
@@ -179,7 +179,7 @@ export default function Home() {
                       src={product.image} 
                       alt={product.name[lang]}
                       loading={index < 3 ? "eager" : "lazy"}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-115"
                     />
                     <FavoriteButton productId={product.id} />
                   </div>

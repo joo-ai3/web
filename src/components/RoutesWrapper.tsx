@@ -1,4 +1,6 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useLang } from '../contexts/LangContext';
 import { AnimatePresence } from 'framer-motion';
@@ -24,6 +26,17 @@ import ContactPage from '../pages/ContactPage';
 import AboutPage from '../pages/AboutPage';
 import ProtectedRoute from './ProtectedRoute';
 
+// Scroll to top component
+function ScrollToTop() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [location.pathname]);
+  
+  return null;
+}
+
 export default function RoutesWrapper() {
   const { lang } = useLang();
   const safeLang = ["ar", "en"].includes(lang) ? lang : "en";
@@ -35,6 +48,7 @@ export default function RoutesWrapper() {
       lang={safeLang}
     >
       <Router>
+        <ScrollToTop />
         <header role="banner">
           <AppHeader />
         </header>
