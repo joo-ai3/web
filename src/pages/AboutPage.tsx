@@ -108,11 +108,13 @@ export default function AboutPage() {
                     : 'Today, we\'re proud to be an Egyptian brand offering a diverse range of shoes for men and women, plus our budget-friendly "Soleva Basics" line.'
                   }
                 </p>
-                <p>
-                  {lang === 'ar'
-                    ? 'كل حذاء نصنعه يحمل في طياته قصة من الإبداع والحرفية، ليكون أكثر من مجرد حذاء - بل رفيق يساعدك على التحرك بثقة وأناقة.'
-                    : 'Every shoe we craft carries a story of creativity and craftsmanship, to be more than just footwear - but a companion that helps you move with confidence and elegance.'
-                  }
+                <div className="glass p-8 rounded-2xl">
+                  <img
+                    src="/logo.png"
+                    alt="Soleva Logo"
+                    className="w-full max-w-sm mx-auto rounded-xl shadow-lg"
+                  />
+                </div>
                 </p>
               </div>
             </div>

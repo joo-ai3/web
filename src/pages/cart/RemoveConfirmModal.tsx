@@ -14,26 +14,39 @@ export default function RemoveConfirmModal({ item, onCancel, onConfirm }: {
   const t = useTranslation();
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-4">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-lg p-4" style={{
+      backdropFilter: 'blur(15px) saturate(180%)',
+      WebkitBackdropFilter: 'blur(15px) saturate(180%)'
+    }}>
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       >
-        <GlassCard className="max-w-sm w-full text-center">
-          <FiTrash2 size={48} className="mx-auto mb-4 text-red-500" />
-          <h3 className="text-xl font-bold mb-2">{t("confirmRemove")}</h3>
-          <p className="text-gray-600 mb-6">
+        <GlassCard className="max-w-md w-full text-center p-8 shadow-2xl">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 200 }}
+          >
+            <FiTrash2 size={64} className="mx-auto mb-6 text-red-500" />
+          </motion.div>
+          <h3 className="text-2xl font-bold mb-4 text-[var(--text-primary)]">{t("confirmRemove")}</h3>
+          <p className="text-[var(--text-secondary)] mb-8 text-lg leading-relaxed">
             {item?.name[lang]} - {item?.color} - {item?.size}
           </p>
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-4 justify-center">
             <GlassButton 
-              className="bg-red-500 text-white border-none hover:bg-red-600" 
+              className="bg-red-500 text-white border-none hover:bg-red-600 px-8 py-3 text-lg font-semibold hover:scale-105 transition-all duration-300" 
               onClick={onConfirm}
             >
               {t("yesRemove")}
             </GlassButton>
-            <GlassButton onClick={onCancel}>
+            <GlassButton 
+              onClick={onCancel}
+              className="px-8 py-3 text-lg font-semibold hover:scale-105 transition-all duration-300"
+            >
               {t("cancel")}
             </GlassButton>
           </div>

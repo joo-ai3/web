@@ -304,7 +304,7 @@ export default function CheckoutPage() {
               {/* Submit */}
               <GlassButton
                 type="submit"
-                className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-lg sm:text-xl py-4"
+                className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-lg sm:text-xl py-4 min-h-[56px] font-bold hover:scale-105 transition-all duration-300"
                 disabled={isUploading}
               >
                 {isUploading ? (

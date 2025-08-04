@@ -203,7 +203,7 @@ export default function ContactPage() {
               <GlassButton
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-lg py-4"
+                className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 text-lg py-4 min-h-[56px] font-bold hover:scale-105 transition-all duration-300"
               >
                 {isSubmitting ? (
                   <div className="w-6 h-6 border-2 border-black/20 border-t-black rounded-full animate-spin" />

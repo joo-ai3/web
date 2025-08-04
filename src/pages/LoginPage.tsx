@@ -149,7 +149,7 @@ export default function LoginPage() {
 
             <GlassButton 
               type="submit" 
-              className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80"
+              className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 min-h-[52px] font-bold hover:scale-105 transition-all duration-300"
               disabled={isLoading}
             >
               {isLoading ? (

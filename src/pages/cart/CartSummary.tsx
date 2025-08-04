@@ -42,7 +42,7 @@ export default function CartSummary() {
       <div className="mb-6">
         <div className="flex gap-2 mb-2">
           <input
-            className="glass border border-[#d1b16a]/40 px-3 py-2 rounded-lg flex-1 font-montserrat"
+            className="glass border border-[#d1b16a]/40 px-4 py-3 rounded-xl flex-1 font-montserrat text-base min-h-[48px] focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all"
             placeholder={lang === 'ar' ? "أدخل كود الكوبون" : "Enter coupon code"}
             value={coupon}
             onChange={e => setCoupon(e.target.value)}
@@ -51,7 +51,7 @@ export default function CartSummary() {
           <GlassButton 
             onClick={handleApplyCoupon} 
             disabled={!!applied}
-            className="px-4"
+            className="px-6 py-3 min-h-[48px] text-base font-semibold whitespace-nowrap flex items-center justify-center"
           >
             {applied ? t("applied") : t("applyCoupon")}
           </GlassButton>

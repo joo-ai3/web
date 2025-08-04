@@ -160,7 +160,11 @@ export default function MobileMenu() {
               animate="visible"
               exit="exit"
               onClick={closeMenu}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] md:hidden"
+              className="fixed inset-0 bg-black/40 backdrop-blur-xl z-[100] md:hidden"
+              style={{
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)'
+              }}
             />
 
             {/* Slide-out Menu */}

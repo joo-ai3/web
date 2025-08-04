@@ -93,7 +93,7 @@ export default function AppHeader() {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="btn btn-ghost p-2 interactive-hover"
+            className="btn btn-ghost p-3 interactive-hover min-h-[44px] min-w-[44px]"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
           >
             {theme === "dark" ? <FiSun size={20} /> : <FiMoon size={20} />}
@@ -102,7 +102,7 @@ export default function AppHeader() {
           {/* Language Toggle */}
           <button
             onClick={toggleLang}
-            className="btn btn-ghost px-3 py-2 text-sm font-semibold interactive-hover"
+            className="btn btn-ghost px-4 py-3 text-base font-bold interactive-hover min-h-[44px]"
             aria-label={`Switch to ${lang === "ar" ? "English" : "Arabic"} language`}
           >
             {lang === "ar" ? "EN" : "AR"}
@@ -111,7 +111,7 @@ export default function AppHeader() {
           {/* Account - Desktop */}
           <Link
             to={user ? "/account" : "/login"}
-            className="hidden md:flex btn btn-ghost p-2 interactive-hover"
+            className="hidden md:flex btn btn-ghost p-3 interactive-hover min-h-[44px] min-w-[44px]"
             aria-label={user ? t("account") : t("login")}
           >
             <FiUser size={20} />

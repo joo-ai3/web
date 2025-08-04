@@ -48,19 +48,19 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       </div>
 
       <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-4 sm:gap-3 w-full sm:w-auto">
-        <div className="quantity-control">
+        <div className="quantity-control glass border border-[#d1b16a]/30 rounded-xl p-2 shadow-lg">
           <button
             onClick={() => handleQty(-1)}
-            className="quantity-btn"
+            className="quantity-btn w-10 h-10 rounded-lg border border-[#d1b16a]/40 bg-white/80 hover:bg-[#d1b16a] hover:text-black transition-all duration-300 hover:scale-110 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             disabled={item.qty <= 1}
             aria-label="Decrease quantity"
           >
             <FiMinus />
           </button>
-          <span className="quantity-display">{item.qty}</span>
+          <span className="quantity-display min-w-[50px] text-center font-bold text-lg text-[var(--text-primary)]">{item.qty}</span>
           <button
             onClick={() => handleQty(1)}
-            className="quantity-btn"
+            className="quantity-btn w-10 h-10 rounded-lg border border-[#d1b16a]/40 bg-white/80 hover:bg-[#d1b16a] hover:text-black transition-all duration-300 hover:scale-110 hover:shadow-lg"
             aria-label="Increase quantity"
           >
             <FiPlus />
@@ -69,10 +69,10 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
 
         <button
           onClick={() => onRemove(item)}
-          className="remove-btn w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center"
+          className="remove-btn w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center glass border border-red-200/50 rounded-xl bg-red-50/80 text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 hover:scale-110 hover:shadow-lg transition-all duration-300"
           aria-label="Remove item from cart"
         >
-          <FiTrash2 size={18} />
+          <FiTrash2 size={20} />
         </button>
       </div>
     </motion.div>

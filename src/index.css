@@ -905,70 +905,26 @@ p {
   .quantity-control {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: var(--bg-secondary);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-radius: var(--radius-lg);
-    padding: 0.25rem;
+    gap: 0.75rem;
+    padding: 0.5rem;
   }
   
   .quantity-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-primary);
-    background: var(--bg-primary);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
-  }
-  
-  .quantity-btn:hover:not(:disabled) {
-    background: var(--primary);
-    color: #000000;
-    border-color: var(--primary);
-    transform: scale(1.15);
-    box-shadow: 0 6px 16px var(--primary-300);
-  }
-  
-  .quantity-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-  
-  .quantity-display {
-    min-width: 40px;
-    text-align: center;
-    font-weight: 600;
-    color: var(--text-primary);
     font-size: 1rem;
   }
   
-  .remove-btn {
-    background: rgba(239, 68, 68, 0.1);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    border-radius: var(--radius-lg);
-    color: #ef4444;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  .quantity-display {
+    user-select: none;
   }
   
-  .remove-btn:hover {
-    background: #ef4444;
-    color: white;
-    border-color: #ef4444;
-    transform: scale(1.15);
-    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+  .remove-btn {
+    cursor: pointer;
+    font-weight: 600;
   }
 
   /* Enhanced Mobile Menu Styles */
