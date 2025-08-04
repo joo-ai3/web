@@ -237,7 +237,7 @@ export default function MobileMenu() {
                       />
                     </div>
                   </motion.button>
-                </div>
+                </motion.div>
 
                 {/* User Profile Section (if logged in) */}
                 {user && (
@@ -519,7 +519,7 @@ export default function MobileMenu() {
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </>
         )}
