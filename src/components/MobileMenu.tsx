@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  FiMenu, FiX, FiShoppingCart, FiUser, FiGrid, FiBox, FiHeart, FiPhone,
-  FiSun, FiMoon, FiGlobe, FiLogOut, FiHome, FiInfo, FiChevronDown, FiChevronUp
+  FiMenu, FiX, FiShoppingCart, FiUser, FiHeart, FiHome, FiGrid,
+  FiPhone, FiInfo, FiSun, FiMoon, FiGlobe, FiLogOut, FiBox
 } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
@@ -15,7 +14,6 @@ import Logo from './Logo';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [collectionsExpanded, setCollectionsExpanded] = useState(false);
   const { user, logout } = useAuth();
   const { cart } = useCart();
   const { favorites } = useFavorites();
@@ -27,7 +25,6 @@ export default function MobileMenu() {
   // Close menu when route changes
   useEffect(() => {
     setIsOpen(false);
-    setCollectionsExpanded(false);
   }, [location.pathname]);
 
   // Prevent body scroll when menu is open
@@ -51,90 +48,78 @@ export default function MobileMenu() {
     };
   }, [isOpen]);
 
-  const menuItems = [
-    { to: "/", icon: <FiHome />, label: t("home") },
-    { 
-      to: null, 
-      icon: <FiGrid />, 
-      label: t("collections"), 
-      isCollections: true,
-      subItems: [
-        { to: "/products?collection=mens", icon: "👟", label: lang === 'ar' ? 'رجالي' : 'Men' },
-        { to: "/products?collection=womens", icon: "👠", label: lang === 'ar' ? 'نسائي' : 'Women' },
-        { to: "/products?collection=basics", icon: "⚡", label: lang === 'ar' ? 'أساسي' : 'Essentials' },
-      ]
-    },
-    { to: "/favorites", icon: <FiHeart />, label: t("favorites"), badge: favorites.length || null },
-    { to: "/cart", icon: <FiShoppingCart />, label: t("cart"), badge: cart.length || null },
-    { to: "/orders", icon: <FiBox />, label: t("orders") },
-    { to: "/contact", icon: <FiPhone />, label: t("contactUs") },
-    { to: "/about", icon: <FiInfo />, label: t("aboutUs") },
+  const mainMenuItems = [
+    { to: "/", icon: <FiHome size={24} />, label: t("home") },
+    { to: "/products", icon: <FiGrid size={24} />, label: t("products") },
+    { to: "/favorites", icon: <FiHeart size={24} />, label: t("favorites"), badge: favorites.length || null },
+    { to: "/cart", icon: <FiShoppingCart size={24} />, label: t("cart"), badge: cart.length || null },
+    { to: "/orders", icon: <FiBox size={24} />, label: t("orders") },
+    { to: "/about", icon: <FiInfo size={24} />, label: t("aboutUs") },
+    { to: "/contact", icon: <FiPhone size={24} />, label: t("contactUs") },
+  ];
+
+  const collections = [
+    { to: "/products?collection=mens", label: lang === 'ar' ? 'رجالي' : 'Men\'s', emoji: "👟" },
+    { to: "/products?collection=womens", label: lang === 'ar' ? 'نسائي' : 'Women\'s', emoji: "👠" },
+    { to: "/products?collection=basics", label: lang === 'ar' ? 'أساسي' : 'Essentials', emoji: "⚡" },
   ];
 
   const closeMenu = () => setIsOpen(false);
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
 
+  const isActiveLink = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path.split('?')[0]);
+  };
+
+  // Animation variants
   const backdropVariants = {
     hidden: { opacity: 0 },
     visible: { 
-      opacity: 1, 
-      transition: { 
-        duration: 0.4, 
-        ease: [0.4, 0, 0.2, 1] 
-      } 
+      opacity: 1,
+      transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
     },
     exit: { 
-      opacity: 0, 
-      transition: { 
-        duration: 0.3, 
-        ease: [0.4, 0, 0.2, 1] 
-      } 
+      opacity: 0,
+      transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
     }
   };
 
   const menuVariants = {
     hidden: { 
-      x: '-100%',
-      opacity: 0
+      opacity: 0,
+      scale: 0.95,
+      y: 20
     },
     visible: { 
-      x: 0,
       opacity: 1,
+      scale: 1,
+      y: 0,
       transition: { 
-        type: 'spring', 
-        damping: 25, 
-        stiffness: 300, 
-        mass: 0.8, 
-        duration: 0.6 
-      } 
+        duration: 0.5,
+        ease: [0.4, 0, 0.2, 1],
+        staggerChildren: 0.05
+      }
     },
     exit: { 
-      x: '-100%',
       opacity: 0,
+      scale: 0.95,
+      y: 20,
       transition: { 
-        duration: 0.4, 
-        ease: [0.4, 0, 0.2, 1] 
-      } 
+        duration: 0.3,
+        ease: [0.4, 0, 0.2, 1]
+      }
     }
   };
 
   const itemVariants = {
     hidden: { opacity: 0, x: -20 },
-    visible: (i: number) => ({
+    visible: { 
       opacity: 1, 
       x: 0,
-      transition: { 
-        delay: 0.1 + i * 0.05, 
-        duration: 0.4, 
-        ease: [0.4, 0, 0.2, 1] 
-      }
-    })
-  };
-
-  const isActiveLink = (path: string) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path.split('?')[0]);
+      transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+    }
   };
 
   return (
@@ -142,21 +127,20 @@ export default function MobileMenu() {
       {/* Menu Toggle Button */}
       <motion.button
         whileTap={{ scale: 0.92 }}
-        whileHover={{ scale: 1.08 }}
+        whileHover={{ scale: 1.05 }}
         onClick={() => setIsOpen(true)}
-        className="md:hidden relative overflow-hidden group"
+        className="md:hidden relative overflow-hidden"
         aria-label="Open menu"
       >
         <div className="modern-glass-button p-3 rounded-xl border border-primary/30 hover:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px] flex items-center justify-center">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <FiMenu size={22} className="text-primary relative z-10 transition-transform duration-300 group-hover:rotate-180" />
+          <FiMenu size={22} className="text-primary transition-transform duration-300" />
         </div>
       </motion.button>
 
       <AnimatePresence mode="wait">
         {isOpen && (
           <>
-            {/* Backdrop with Blur */}
+            {/* Full-Screen Backdrop */}
             <motion.div
               variants={backdropVariants}
               initial="hidden"
@@ -164,362 +148,352 @@ export default function MobileMenu() {
               exit="exit"
               className="fixed inset-0 z-[100] md:hidden"
               style={{
-                backdropFilter: 'blur(12px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-                background: 'rgba(0, 0, 0, 0.1)'
+                background: theme === 'dark' 
+                  ? 'rgba(0, 0, 0, 0.8)' 
+                  : 'rgba(0, 0, 0, 0.4)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)'
               }}
               onClick={closeMenu}
             />
 
-            {/* Mobile Menu Container */}
+            {/* Full-Screen Menu Container */}
             <motion.div
               variants={menuVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed top-0 left-0 bottom-0 w-full max-w-sm z-[110] md:hidden overflow-y-auto"
+              className="fixed inset-0 z-[110] md:hidden flex flex-col"
               style={{
                 background: theme === 'dark' 
-                  ? 'rgba(15, 15, 15, 0.85)' 
-                  : 'rgba(255, 255, 255, 0.85)',
-                backdropFilter: 'blur(12px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-                borderRight: theme === 'dark'
-                  ? '1px solid rgba(255, 255, 255, 0.1)'
-                  : '1px solid rgba(0, 0, 0, 0.1)',
-                boxShadow: theme === 'dark'
-                  ? '0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1)'
-                  : '0 25px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)'
+                  ? 'rgba(10, 10, 10, 0.95)' 
+                  : 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(40px) saturate(200%)',
+                WebkitBackdropFilter: 'blur(40px) saturate(200%)'
               }}
             >
-              <div className="flex flex-col h-full">
-                {/* Header Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                  className="flex items-center justify-between p-6 pt-8 border-b"
-                  style={{
-                    borderColor: theme === 'dark' 
-                      ? 'rgba(255, 255, 255, 0.1)' 
-                      : 'rgba(0, 0, 0, 0.1)'
-                  }}
+              {/* Header */}
+              <motion.div 
+                variants={itemVariants}
+                className="flex items-center justify-between p-6 pt-12"
+              >
+                <Logo size="medium" />
+                <motion.button
+                  whileTap={{ scale: 0.85 }}
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  onClick={closeMenu}
+                  className="relative overflow-hidden"
+                  aria-label="Close menu"
                 >
-                  <Logo size="medium" />
-                  
-                  <motion.button
-                    whileTap={{ scale: 0.85, rotate: 90 }}
-                    whileHover={{ scale: 1.15 }}
-                    onClick={closeMenu}
-                    className="relative overflow-hidden group"
-                    aria-label="Close menu"
-                  >
-                    <div 
-                      className="p-3 rounded-xl border transition-all duration-300 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px] flex items-center justify-center"
-                      style={{
-                        background: theme === 'dark' 
-                          ? 'rgba(30, 30, 30, 0.8)' 
-                          : 'rgba(255, 255, 255, 0.8)',
-                        backdropFilter: 'blur(25px) saturate(180%)',
-                        WebkitBackdropFilter: 'blur(25px) saturate(180%)',
-                        borderColor: theme === 'dark' 
-                          ? 'rgba(255, 255, 255, 0.2)' 
-                          : 'rgba(0, 0, 0, 0.1)'
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <FiX 
-                        size={24} 
-                        className="relative z-10 transition-all duration-300"
-                        style={{
-                          color: theme === 'dark' ? '#f5f5f5' : '#222'
-                        }}
-                      />
-                    </div>
-                  </motion.button>
-                </motion.div>
-
-                {/* User Profile Section (if logged in) */}
-                {user && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.4 }}
-                    className="p-6 border-b"
+                  <div 
+                    className="p-4 rounded-2xl border transition-all duration-300 shadow-lg hover:shadow-xl min-h-[56px] min-w-[56px] flex items-center justify-center"
                     style={{
+                      background: theme === 'dark' 
+                        ? 'rgba(30, 30, 30, 0.8)' 
+                        : 'rgba(255, 255, 255, 0.8)',
+                      backdropFilter: 'blur(25px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(25px) saturate(180%)',
                       borderColor: theme === 'dark' 
-                        ? 'rgba(255, 255, 255, 0.1)' 
+                        ? 'rgba(255, 255, 255, 0.2)' 
                         : 'rgba(0, 0, 0, 0.1)'
                     }}
                   >
-                    <div className="flex items-center gap-3">
+                    <FiX size={28} className="text-red-500" />
+                  </div>
+                </motion.button>
+              </motion.div>
+
+              {/* User Profile Section */}
+              {user && (
+                <motion.div
+                  variants={itemVariants}
+                  className="px-6 mb-8"
+                >
+                  <div 
+                    className="p-6 rounded-2xl border"
+                    style={{
+                      background: theme === 'dark'
+                        ? 'rgba(30, 30, 30, 0.6)'
+                        : 'rgba(255, 255, 255, 0.6)',
+                      backdropFilter: 'blur(25px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+                      borderColor: theme === 'dark'
+                        ? 'rgba(209, 177, 106, 0.3)'
+                        : 'rgba(209, 177, 106, 0.2)'
+                    }}
+                  >
+                    <div className="flex items-center gap-4">
                       <div 
-                        className="w-12 h-12 rounded-full flex items-center justify-center"
+                        className="w-16 h-16 rounded-2xl flex items-center justify-center"
                         style={{
-                          background: theme === 'dark'
-                            ? 'rgba(209, 177, 106, 0.2)'
-                            : 'rgba(209, 177, 106, 0.1)',
-                          color: '#d1b16a'
+                          background: 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)',
+                          boxShadow: '0 8px 25px rgba(209, 177, 106, 0.3)'
                         }}
                       >
-                        <FiUser size={20} />
+                        <FiUser size={24} className="text-black" />
                       </div>
                       <div>
                         <div 
-                          className="font-semibold"
+                          className="font-bold text-xl mb-1"
                           style={{ color: theme === 'dark' ? '#f5f5f5' : '#222' }}
                         >
                           {user.name}
                         </div>
                         <div 
-                          className="text-sm"
+                          className="text-sm opacity-70"
                           style={{ color: theme === 'dark' ? '#b0b0b0' : '#666' }}
                         >
                           {user.email}
                         </div>
                       </div>
                     </div>
-                  </motion.div>
-                )}
+                  </div>
+                </motion.div>
+              )}
 
-                {/* Navigation Links Section */}
-                <motion.div className="flex-1 p-6">
+              {/* Main Navigation */}
+              <div className="flex-1 px-6 overflow-y-auto">
+                <motion.div variants={itemVariants} className="mb-8">
+                  <h3 
+                    className="text-lg font-bold mb-4 px-2"
+                    style={{ color: theme === 'dark' ? '#d1b16a' : '#d1b16a' }}
+                  >
+                    {lang === 'ar' ? 'القائمة الرئيسية' : 'Main Menu'}
+                  </h3>
                   <div className="space-y-3">
-                    {menuItems.map((item, index) => (
+                    {mainMenuItems.map((item, index) => (
                       <motion.div
-                        key={item.to || item.label}
-                        custom={index}
+                        key={item.to}
                         variants={itemVariants}
-                        initial="hidden"
-                        animate="visible"
+                        custom={index}
                       >
-                        {item.isCollections ? (
-                          // Collections with sub-items
-                          <div>
-                            <button
-                              onClick={() => setCollectionsExpanded(!collectionsExpanded)}
-                              className="w-full flex items-center justify-between rounded-xl font-semibold text-base transition-all duration-300 group relative overflow-hidden px-4 py-3"
+                        <Link
+                          to={item.to}
+                          onClick={closeMenu}
+                          className="w-full flex items-center justify-between p-4 rounded-2xl font-semibold text-lg transition-all duration-300 group relative overflow-hidden"
+                          style={{
+                            background: isActiveLink(item.to) 
+                              ? 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)'
+                              : theme === 'dark'
+                                ? 'rgba(30, 30, 30, 0.6)'
+                                : 'rgba(255, 255, 255, 0.6)',
+                            backdropFilter: 'blur(25px) saturate(180%)',
+                            WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+                            border: isActiveLink(item.to)
+                              ? '2px solid #d1b16a'
+                              : theme === 'dark'
+                                ? '1px solid rgba(255, 255, 255, 0.1)'
+                                : '1px solid rgba(0, 0, 0, 0.1)',
+                            boxShadow: isActiveLink(item.to)
+                              ? '0 8px 25px rgba(209, 177, 106, 0.4)'
+                              : theme === 'dark'
+                                ? '0 4px 15px rgba(0, 0, 0, 0.3)'
+                                : '0 4px 15px rgba(0, 0, 0, 0.1)',
+                            color: isActiveLink(item.to)
+                              ? '#000'
+                              : theme === 'dark' ? '#f5f5f5' : '#222'
+                          }}
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="transition-transform duration-300 group-hover:scale-110">
+                              {item.icon}
+                            </div>
+                            <span className="font-bold">{item.label}</span>
+                          </div>
+                          {item.badge && (
+                            <div 
+                              className="px-3 py-1 rounded-full text-sm font-bold min-w-[24px] text-center"
                               style={{
-                                background: theme === 'dark'
-                                  ? 'rgba(30, 30, 30, 0.6)'
-                                  : 'rgba(255, 255, 255, 0.6)',
-                                backdropFilter: 'blur(20px) saturate(150%)',
-                                WebkitBackdropFilter: 'blur(20px) saturate(150%)',
-                                border: theme === 'dark'
-                                  ? '1px solid rgba(255, 255, 255, 0.1)'
-                                  : '1px solid rgba(0, 0, 0, 0.1)',
-                                boxShadow: theme === 'dark'
-                                  ? '0 4px 15px rgba(0, 0, 0, 0.3)'
-                                  : '0 4px 15px rgba(0, 0, 0, 0.1)',
-                                color: theme === 'dark' ? '#f5f5f5' : '#222'
+                                background: isActiveLink(item.to)
+                                  ? 'rgba(0, 0, 0, 0.2)'
+                                  : '#d1b16a',
+                                color: isActiveLink(item.to) ? '#000' : '#000'
                               }}
                             >
-                              <div className="flex items-center gap-3 relative z-10">
-                                <div 
-                                  className="transition-transform duration-300 group-hover:scale-110"
-                                  style={{ color: theme === 'dark' ? '#f5f5f5' : '#222' }}
-                                >
-                                  {item.icon}
-                                </div>
-                                <span className="font-semibold">{item.label}</span>
-                              </div>
-                              <div 
-                                className="transition-transform duration-300"
-                                style={{ color: theme === 'dark' ? '#f5f5f5' : '#222' }}
-                              >
-                                {collectionsExpanded ? <FiChevronUp /> : <FiChevronDown />}
-                              </div>
-                            </button>
-                            
-                            {/* Sub-items */}
-                            <AnimatePresence>
-                              {collectionsExpanded && (
-                                <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: 'auto', opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  transition={{ duration: 0.3 }}
-                                  className="overflow-hidden mt-2 ml-4 space-y-2"
-                                >
-                                  {item.subItems?.map((subItem, subIndex) => (
-                                    <motion.div
-                                      key={subItem.to}
-                                      initial={{ opacity: 0, x: -20 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{ delay: subIndex * 0.1 }}
-                                    >
-                                      <Link
-                                        to={subItem.to}
-                                        onClick={closeMenu}
-                                        className="w-full flex items-center gap-3 rounded-lg font-medium text-sm transition-all duration-300 group relative overflow-hidden px-3 py-2"
-                                        style={{
-                                          background: isActiveLink(subItem.to) 
-                                            ? 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)'
-                                            : theme === 'dark'
-                                              ? 'rgba(30, 30, 30, 0.4)'
-                                              : 'rgba(255, 255, 255, 0.4)',
-                                          backdropFilter: 'blur(15px) saturate(120%)',
-                                          WebkitBackdropFilter: 'blur(15px) saturate(120%)',
-                                          border: isActiveLink(subItem.to)
-                                            ? '1px solid #d1b16a'
-                                            : theme === 'dark'
-                                              ? '1px solid rgba(255, 255, 255, 0.05)'
-                                              : '1px solid rgba(0, 0, 0, 0.05)',
-                                          boxShadow: isActiveLink(subItem.to)
-                                            ? '0 4px 15px rgba(209, 177, 106, 0.3)'
-                                            : theme === 'dark'
-                                              ? '0 2px 8px rgba(0, 0, 0, 0.2)'
-                                              : '0 2px 8px rgba(0, 0, 0, 0.05)',
-                                          color: isActiveLink(subItem.to)
-                                            ? '#000'
-                                            : theme === 'dark' ? '#f5f5f5' : '#222'
-                                        }}
-                                      >
-                                        <span className="text-lg">{subItem.icon}</span>
-                                        <span>{subItem.label}</span>
-                                      </Link>
-                                    </motion.div>
-                                  ))}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        ) : (
-                          // Regular menu items
-                          <Link
-                            to={item.to!}
-                            onClick={closeMenu}
-                            className="w-full flex items-center justify-between rounded-xl font-semibold text-base transition-all duration-300 group relative overflow-hidden px-4 py-3"
-                            style={{
-                              background: isActiveLink(item.to!) 
-                                ? 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)'
-                                : theme === 'dark'
-                                  ? 'rgba(30, 30, 30, 0.6)'
-                                  : 'rgba(255, 255, 255, 0.6)',
-                              backdropFilter: 'blur(20px) saturate(150%)',
-                              WebkitBackdropFilter: 'blur(20px) saturate(150%)',
-                              border: isActiveLink(item.to!)
-                                ? '1px solid #d1b16a'
-                                : theme === 'dark'
-                                  ? '1px solid rgba(255, 255, 255, 0.1)'
-                                  : '1px solid rgba(0, 0, 0, 0.1)',
-                              boxShadow: isActiveLink(item.to!)
-                                ? '0 4px 15px rgba(209, 177, 106, 0.4)'
-                                : theme === 'dark'
-                                  ? '0 4px 15px rgba(0, 0, 0, 0.3)'
-                                  : '0 4px 15px rgba(0, 0, 0, 0.1)',
-                              color: isActiveLink(item.to!)
-                                ? '#000'
-                                : theme === 'dark' ? '#f5f5f5' : '#222'
-                            }}
-                          >
-                            <div className="flex items-center gap-3 relative z-10">
-                              <div className="transition-transform duration-300 group-hover:scale-110">
-                                {item.icon}
-                              </div>
-                              <span className="font-semibold">{item.label}</span>
+                              {item.badge}
                             </div>
-                            {item.badge && (
-                              <div 
-                                className="px-2 py-1 rounded-full text-xs font-bold min-w-[20px] text-center relative z-10"
-                                style={{
-                                  background: isActiveLink(item.to!)
-                                    ? 'rgba(0, 0, 0, 0.2)'
-                                    : '#d1b16a',
-                                  color: isActiveLink(item.to!) ? '#000' : '#000'
-                                }}
-                              >
-                                {item.badge}
-                              </div>
-                            )}
-                          </Link>
-                        )}
+                          )}
+                        </Link>
                       </motion.div>
                     ))}
                   </div>
                 </motion.div>
 
-                {/* Bottom Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
-                  className="p-6 border-t"
-                  style={{
-                    borderColor: theme === 'dark' 
-                      ? 'rgba(255, 255, 255, 0.1)' 
-                      : 'rgba(0, 0, 0, 0.1)'
-                  }}
-                >
-                  <div className="space-y-4">
-                    {/* Controls Row */}
-                    <div className="flex gap-3">
-                      {/* Language Toggle */}
-                      <button
-                        onClick={toggleLang}
-                        className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-sm transition-all duration-300"
+                {/* Collections Section */}
+                <motion.div variants={itemVariants} className="mb-8">
+                  <h3 
+                    className="text-lg font-bold mb-4 px-2"
+                    style={{ color: theme === 'dark' ? '#d1b16a' : '#d1b16a' }}
+                  >
+                    {t('collections')}
+                  </h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    {collections.map((collection, index) => (
+                      <motion.div
+                        key={collection.to}
+                        variants={itemVariants}
+                        custom={index}
+                      >
+                        <Link
+                          to={collection.to}
+                          onClick={closeMenu}
+                          className="w-full flex items-center gap-4 p-4 rounded-2xl font-semibold text-base transition-all duration-300 group"
+                          style={{
+                            background: isActiveLink(collection.to) 
+                              ? 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)'
+                              : theme === 'dark'
+                                ? 'rgba(30, 30, 30, 0.4)'
+                                : 'rgba(255, 255, 255, 0.4)',
+                            backdropFilter: 'blur(20px) saturate(150%)',
+                            WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+                            border: isActiveLink(collection.to)
+                              ? '1px solid #d1b16a'
+                              : theme === 'dark'
+                                ? '1px solid rgba(255, 255, 255, 0.05)'
+                                : '1px solid rgba(0, 0, 0, 0.05)',
+                            boxShadow: isActiveLink(collection.to)
+                              ? '0 4px 15px rgba(209, 177, 106, 0.3)'
+                              : theme === 'dark'
+                                ? '0 2px 8px rgba(0, 0, 0, 0.2)'
+                                : '0 2px 8px rgba(0, 0, 0, 0.05)',
+                            color: isActiveLink(collection.to)
+                              ? '#000'
+                              : theme === 'dark' ? '#f5f5f5' : '#222'
+                          }}
+                        >
+                          <span className="text-2xl transition-transform duration-300 group-hover:scale-125">
+                            {collection.emoji}
+                          </span>
+                          <span className="font-semibold">{collection.label}</span>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Bottom Controls */}
+              <motion.div
+                variants={itemVariants}
+                className="p-6 border-t"
+                style={{
+                  borderColor: theme === 'dark' 
+                    ? 'rgba(255, 255, 255, 0.1)' 
+                    : 'rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                <div className="space-y-4">
+                  {/* Theme & Language Controls */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      onClick={toggleTheme}
+                      className="flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-base transition-all duration-300"
+                      style={{
+                        background: theme === 'dark'
+                          ? 'rgba(30, 30, 30, 0.6)'
+                          : 'rgba(255, 255, 255, 0.6)',
+                        backdropFilter: 'blur(25px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+                        border: theme === 'dark'
+                          ? '1px solid rgba(255, 255, 255, 0.1)'
+                          : '1px solid rgba(0, 0, 0, 0.1)',
+                        color: theme === 'dark' ? '#f5f5f5' : '#222'
+                      }}
+                    >
+                      {theme === "dark" ? <FiSun size={20} /> : <FiMoon size={20} />}
+                      <span>{theme === "dark" ? (lang === 'ar' ? 'فاتح' : 'Light') : (lang === 'ar' ? 'داكن' : 'Dark')}</span>
+                    </motion.button>
+
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      onClick={toggleLang}
+                      className="flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-base transition-all duration-300"
+                      style={{
+                        background: theme === 'dark'
+                          ? 'rgba(30, 30, 30, 0.6)'
+                          : 'rgba(255, 255, 255, 0.6)',
+                        backdropFilter: 'blur(25px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+                        border: theme === 'dark'
+                          ? '1px solid rgba(255, 255, 255, 0.1)'
+                          : '1px solid rgba(0, 0, 0, 0.1)',
+                        color: theme === 'dark' ? '#f5f5f5' : '#222'
+                      }}
+                    >
+                      <FiGlobe size={20} />
+                      <span>{lang === "ar" ? "EN" : "AR"}</span>
+                    </motion.button>
+                  </div>
+
+                  {/* Account Actions */}
+                  {user ? (
+                    <div className="grid grid-cols-2 gap-4">
+                      <Link
+                        to="/account"
+                        onClick={closeMenu}
+                        className="flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-base transition-all duration-300"
                         style={{
-                          background: theme === 'dark'
-                            ? 'rgba(30, 30, 30, 0.6)'
-                            : 'rgba(255, 255, 255, 0.6)',
-                          backdropFilter: 'blur(20px) saturate(150%)',
-                          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
-                          border: theme === 'dark'
-                            ? '1px solid rgba(255, 255, 255, 0.1)'
-                            : '1px solid rgba(0, 0, 0, 0.1)',
-                          color: theme === 'dark' ? '#f5f5f5' : '#222'
+                          background: 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)',
+                          color: '#000',
+                          boxShadow: '0 8px 25px rgba(209, 177, 106, 0.3)'
                         }}
                       >
-                        <FiGlobe size={18} />
-                        <span>{lang === "ar" ? "EN" : "AR"}</span>
-                      </button>
+                        <FiUser size={20} />
+                        <span>{t("account")}</span>
+                      </Link>
 
-                      {/* Theme Toggle */}
-                      <button
-                        onClick={toggleTheme}
-                        className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-sm transition-all duration-300"
-                        style={{
-                          background: theme === 'dark'
-                            ? 'rgba(30, 30, 30, 0.6)'
-                            : 'rgba(255, 255, 255, 0.6)',
-                          backdropFilter: 'blur(20px) saturate(150%)',
-                          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
-                          border: theme === 'dark'
-                            ? '1px solid rgba(255, 255, 255, 0.1)'
-                            : '1px solid rgba(0, 0, 0, 0.1)',
-                          color: theme === 'dark' ? '#f5f5f5' : '#222'
-                        }}
-                      >
-                        {theme === "dark" ? <FiSun size={18} /> : <FiMoon size={18} />}
-                        <span>{theme === "dark" ? (lang === 'ar' ? 'فاتح' : 'Light') : (lang === 'ar' ? 'داكن' : 'Dark')}</span>
-                      </button>
-                    </div>
-
-                    {/* Logout Button for logged in users */}
-                    {user && (
-                      <button
+                      <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
                         onClick={() => {
                           logout();
                           closeMenu();
                         }}
-                        className="w-full flex items-center justify-center gap-3 p-3 rounded-xl font-semibold text-sm transition-all duration-300"
+                        className="flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-base transition-all duration-300"
                         style={{
                           background: theme === 'dark'
                             ? 'rgba(30, 30, 30, 0.6)'
                             : 'rgba(255, 255, 255, 0.6)',
-                          backdropFilter: 'blur(20px) saturate(150%)',
-                          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+                          backdropFilter: 'blur(25px) saturate(180%)',
+                          WebkitBackdropFilter: 'blur(25px) saturate(180%)',
                           border: '1px solid rgba(239, 68, 68, 0.3)',
                           color: '#ef4444'
                         }}
                       >
-                        <FiLogOut size={18} />
+                        <FiLogOut size={20} />
                         <span>{t("logout")}</span>
-                      </button>
-                    )}
+                      </motion.button>
+                    </div>
+                  ) : (
+                    <Link
+                      to="/login"
+                      onClick={closeMenu}
+                      className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-base transition-all duration-300"
+                      style={{
+                        background: 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)',
+                        color: '#000',
+                        boxShadow: '0 8px 25px rgba(209, 177, 106, 0.3)'
+                      }}
+                    >
+                      <FiUser size={20} />
+                      <span>{t("login")}</span>
+                    </Link>
+                  )}
+                </div>
+
+                {/* Brand Footer */}
+                <div className="mt-6 text-center">
+                  <div 
+                    className="text-sm font-medium opacity-70"
+                    style={{ color: theme === 'dark' ? '#b0b0b0' : '#666' }}
+                  >
+                    Soleva - {t('slogan')}
                   </div>
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
             </motion.div>
           </>
         )}
