@@ -518,7 +518,7 @@ export default function MobileMenu() {
                       </button>
                     )}
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             </motion.div>
           </>
