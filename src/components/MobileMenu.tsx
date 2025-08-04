@@ -162,9 +162,11 @@ export default function MobileMenu() {
               onClick={closeMenu}
               className="fixed inset-0 z-[100] md:hidden"
               style={{
-                background: 'rgba(0, 0, 0, 0.4)',
-                backdropFilter: 'blur(15px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(15px) saturate(180%)'
+                background: theme === 'dark' 
+                  ? 'rgba(0, 0, 0, 0.6)' 
+                  : 'rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(25px) saturate(200%) brightness(0.95)',
+                WebkitBackdropFilter: 'blur(25px) saturate(200%) brightness(0.95)'
               }}
             />
 
@@ -182,13 +184,16 @@ export default function MobileMenu() {
                 )}
                 style={{
                   background: theme === 'dark' 
-                    ? 'rgba(10, 10, 10, 0.95)' 
-                    : 'rgba(255, 255, 255, 0.95)',
-                  backdropFilter: 'blur(40px) saturate(220%)',
-                  WebkitBackdropFilter: 'blur(40px) saturate(220%)',
+                    ? 'rgba(10, 10, 10, 0.98)' 
+                    : 'rgba(255, 255, 255, 0.98)',
+                  backdropFilter: 'blur(50px) saturate(250%) brightness(1.05)',
+                  WebkitBackdropFilter: 'blur(50px) saturate(250%) brightness(1.05)',
                   borderColor: theme === 'dark' 
                     ? 'rgba(255, 255, 255, 0.1)' 
-                    : 'rgba(0, 0, 0, 0.1)'
+                    : 'rgba(0, 0, 0, 0.08)',
+                  boxShadow: theme === 'dark'
+                    ? '0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1)'
+                    : '0 25px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)'
                 }}
               >
                 <div className="p-6 min-h-full flex flex-col">
@@ -265,7 +270,7 @@ export default function MobileMenu() {
                                 'w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 group modern-menu-item',
                                 isActiveLink(item.to)
                                   ? 'bg-primary text-black shadow-lg modern-menu-item-active'
-                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`
+                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-800 hover:text-primary'}`
                               )}
                             >
                               <div className="flex items-center gap-4">
@@ -319,7 +324,7 @@ export default function MobileMenu() {
                                 'w-full flex items-center gap-4 p-4 rounded-xl font-semibold transition-all duration-300 group modern-menu-item',
                                 isActiveLink(item.to)
                                   ? 'bg-primary text-black shadow-lg modern-menu-item-active'
-                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`
+                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-800 hover:text-primary'}`
                               )}
                             >
                               <div className={clsx(
@@ -351,7 +356,7 @@ export default function MobileMenu() {
                       {/* Theme Toggle */}
                       <button
                         onClick={toggleTheme}
-                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-800 hover:text-primary'}`}
                       >
                         <div className="flex items-center gap-4">
                           {theme === "dark" ? <FiSun size={20} /> : <FiMoon size={20} />}
@@ -365,7 +370,7 @@ export default function MobileMenu() {
                       {/* Language Toggle */}
                       <button
                         onClick={toggleLang}
-                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-800 hover:text-primary'}`}
                       >
                         <div className="flex items-center gap-4">
                           <FiGlobe size={20} />
