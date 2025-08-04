@@ -160,26 +160,36 @@ export default function MobileMenu() {
               animate="visible"
               exit="exit"
               onClick={closeMenu}
-              className="fixed inset-0 bg-black/40 backdrop-blur-xl z-[100] md:hidden"
+              className="fixed inset-0 z-[100] md:hidden"
               style={{
-                backdropFilter: 'blur(20px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(20px) saturate(180%)'
+                background: 'rgba(0, 0, 0, 0.4)',
+                backdropFilter: 'blur(15px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(15px) saturate(180%)'
               }}
             />
 
             {/* Slide-out Menu */}
-            <div className="fixed inset-0 z-[110] md:hidden pointer-events-none">
+            <div className="fixed inset-0 z-[110] md:hidden pointer-events-none flex">
               <motion.div
                 variants={menuVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
                 className={clsx(
-                  "absolute top-0 h-full w-full pointer-events-auto", 
-                  "modern-glass-menu backdrop-blur-40 border-0 shadow-2xl",
-                  lang === 'ar' ? 'right-0' : 'left-0',
-                  theme === 'dark' ? "bg-[#0a0a0a]/98" : "bg-white/98"
+                  "h-full w-full max-w-sm pointer-events-auto", 
+                  "modern-glass-menu border-0 shadow-2xl",
+                  lang === 'ar' ? 'ml-auto border-l' : 'mr-auto border-r'
                 )}
+                style={{
+                  background: theme === 'dark' 
+                    ? 'rgba(10, 10, 10, 0.95)' 
+                    : 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(40px) saturate(220%)',
+                  WebkitBackdropFilter: 'blur(40px) saturate(220%)',
+                  borderColor: theme === 'dark' 
+                    ? 'rgba(255, 255, 255, 0.1)' 
+                    : 'rgba(0, 0, 0, 0.1)'
+                }}
               >
                 <div className="p-6 min-h-full flex flex-col">
                   {/* Header */}

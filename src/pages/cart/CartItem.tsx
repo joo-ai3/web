@@ -48,19 +48,19 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       </div>
 
       <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-4 sm:gap-3 w-full sm:w-auto">
-        <div className="quantity-control glass border border-[#d1b16a]/30 rounded-xl p-2 shadow-lg">
+        <div className="quantity-control">
           <button
             onClick={() => handleQty(-1)}
-            className="quantity-btn w-10 h-10 rounded-lg border border-[#d1b16a]/40 bg-white/80 hover:bg-[#d1b16a] hover:text-black transition-all duration-300 hover:scale-110 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="quantity-btn disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:transform-none"
             disabled={item.qty <= 1}
             aria-label="Decrease quantity"
           >
             <FiMinus />
           </button>
-          <span className="quantity-display min-w-[50px] text-center font-bold text-lg text-[var(--text-primary)]">{item.qty}</span>
+          <span className="quantity-display">{item.qty}</span>
           <button
             onClick={() => handleQty(1)}
-            className="quantity-btn w-10 h-10 rounded-lg border border-[#d1b16a]/40 bg-white/80 hover:bg-[#d1b16a] hover:text-black transition-all duration-300 hover:scale-110 hover:shadow-lg"
+            className="quantity-btn"
             aria-label="Increase quantity"
           >
             <FiPlus />
