@@ -40,9 +40,9 @@ export default function CartSummary() {
 
       {/* Coupon */}
       <div className="mb-6">
-        <div className="flex flex-col sm:flex-row gap-3 mb-3">
+        <div className="flex flex-col gap-3 mb-3">
           <input
-            className="glass border border-[#d1b16a]/40 px-4 py-3 rounded-xl flex-1 font-montserrat text-base min-h-[52px] focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all"
+            className="w-full glass border border-[#d1b16a]/40 px-4 py-3 rounded-xl font-montserrat text-base min-h-[52px] focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all"
             placeholder={lang === 'ar' ? "أدخل كود الكوبون" : "Enter coupon code"}
             value={coupon}
             onChange={e => setCoupon(e.target.value)}
@@ -51,7 +51,7 @@ export default function CartSummary() {
           <GlassButton 
             onClick={handleApplyCoupon} 
             disabled={!!applied}
-            className="px-6 py-3 min-h-[52px] text-base font-semibold whitespace-nowrap flex items-center justify-center w-full sm:w-auto bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80"
+            className="w-full px-6 py-4 min-h-[56px] text-lg font-bold flex items-center justify-center gap-2 bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             {applied ? t("applied") : t("applyCoupon")}
           </GlassButton>

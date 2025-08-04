@@ -48,19 +48,19 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       </div>
 
       <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-4 sm:gap-3 w-full sm:w-auto">
-        <div className="quantity-control">
+        <div className="flex items-center gap-3 bg-white/80 backdrop-blur-lg border border-gray-200/50 rounded-2xl p-2 shadow-lg">
           <button
             onClick={() => handleQty(-1)}
-            className="quantity-btn disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:transform-none"
+            className="w-11 h-11 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 hover:from-[#d1b16a] hover:to-[#b8965a] border border-gray-300 hover:border-[#d1b16a] rounded-xl text-gray-700 hover:text-black font-bold text-lg transition-all duration-300 hover:scale-110 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-gradient-to-br disabled:hover:from-gray-100 disabled:hover:to-gray-200"
             disabled={item.qty <= 1}
             aria-label="Decrease quantity"
           >
             <FiMinus />
           </button>
-          <span className="quantity-display">{item.qty}</span>
+          <span className="min-w-[2.5rem] text-center font-bold text-lg text-gray-800 px-2">{item.qty}</span>
           <button
             onClick={() => handleQty(1)}
-            className="quantity-btn"
+            className="w-11 h-11 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 hover:from-[#d1b16a] hover:to-[#b8965a] border border-gray-300 hover:border-[#d1b16a] rounded-xl text-gray-700 hover:text-black font-bold text-lg transition-all duration-300 hover:scale-110 hover:shadow-lg"
             aria-label="Increase quantity"
           >
             <FiPlus />

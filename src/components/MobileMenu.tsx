@@ -163,10 +163,10 @@ export default function MobileMenu() {
               className="fixed inset-0 z-[100] md:hidden"
               style={{
                 background: theme === 'dark' 
-                  ? 'rgba(0, 0, 0, 0.6)' 
-                  : 'rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(25px) saturate(200%) brightness(0.95)',
-                WebkitBackdropFilter: 'blur(25px) saturate(200%) brightness(0.95)'
+                  ? 'rgba(0, 0, 0, 0.7)' 
+                  : 'rgba(0, 0, 0, 0.4)',
+                backdropFilter: 'blur(40px) saturate(180%) brightness(0.8)',
+                WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(0.8)'
               }}
             />
 
@@ -184,16 +184,16 @@ export default function MobileMenu() {
                 )}
                 style={{
                   background: theme === 'dark' 
-                    ? 'rgba(10, 10, 10, 0.98)' 
-                    : 'rgba(255, 255, 255, 0.98)',
-                  backdropFilter: 'blur(50px) saturate(250%) brightness(1.05)',
-                  WebkitBackdropFilter: 'blur(50px) saturate(250%) brightness(1.05)',
+                    ? 'rgba(10, 10, 10, 0.95)' 
+                    : 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(60px) saturate(200%) brightness(1.1)',
+                  WebkitBackdropFilter: 'blur(60px) saturate(200%) brightness(1.1)',
                   borderColor: theme === 'dark' 
                     ? 'rgba(255, 255, 255, 0.1)' 
                     : 'rgba(0, 0, 0, 0.08)',
                   boxShadow: theme === 'dark'
-                    ? '0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1)'
-                    : '0 25px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)'
+                    ? '0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15)'
+                    : '0 30px 80px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(209, 177, 106, 0.2)'
                 }}
               >
                 <div className="p-6 min-h-full flex flex-col">

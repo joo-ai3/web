@@ -15,6 +15,13 @@ export const COUPONS = [
     maxDiscount: 300
   },
   {
+    code: "SOLEVA10",
+    discount: 10,
+    freeShipping: false,
+    desc: { ar: "خصم 10% على قيمة السلة (حد أقصى 300 ج.م)", en: "10% off your cart (max 300 EGP)" },
+    maxDiscount: 300
+  },
+  {
     code: "soleva10",
     discount: 10,
     freeShipping: false,
