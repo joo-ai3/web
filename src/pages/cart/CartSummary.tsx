@@ -30,7 +30,7 @@ export default function CartSummary() {
   };
 
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
-  const discount = applied?.discount ? Math.floor((subtotal * applied.discount) / 100) : 0;
+  const discount = applied?.discount ? Math.min(Math.floor((subtotal * applied.discount) / 100), applied.maxDiscount || Infinity) : 0;
   const shipping = applied?.freeShipping ? 0 : 60;
   const total = subtotal - discount + (cart.length > 0 ? shipping : 0);
 
@@ -40,9 +40,9 @@ export default function CartSummary() {
 
       {/* Coupon */}
       <div className="mb-6">
-        <div className="flex gap-2 mb-2">
+        <div className="flex flex-col sm:flex-row gap-3 mb-3">
           <input
-            className="glass border border-[#d1b16a]/40 px-4 py-3 rounded-xl flex-1 font-montserrat text-base min-h-[48px] focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all"
+            className="glass border border-[#d1b16a]/40 px-4 py-3 rounded-xl flex-1 font-montserrat text-base min-h-[52px] focus:outline-none focus:ring-2 focus:ring-[#d1b16a] transition-all"
             placeholder={lang === 'ar' ? "أدخل كود الكوبون" : "Enter coupon code"}
             value={coupon}
             onChange={e => setCoupon(e.target.value)}
@@ -51,7 +51,7 @@ export default function CartSummary() {
           <GlassButton 
             onClick={handleApplyCoupon} 
             disabled={!!applied}
-            className="px-6 py-3 min-h-[48px] text-base font-semibold whitespace-nowrap flex items-center justify-center"
+            className="px-6 py-3 min-h-[52px] text-base font-semibold whitespace-nowrap flex items-center justify-center w-full sm:w-auto bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80"
           >
             {applied ? t("applied") : t("applyCoupon")}
           </GlassButton>

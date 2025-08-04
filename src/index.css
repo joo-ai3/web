@@ -1045,8 +1045,8 @@ p {
   .quantity-control {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem;
+    gap: 0.75rem;
+    padding: 1rem;
     background: var(--glass-bg);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -1056,44 +1056,82 @@ p {
   }
   
   .quantity-btn {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-weight: 700;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     background: var(--glass-bg);
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-lg);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 2px solid var(--border-primary);
+    border-radius: var(--radius-xl);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--text-primary);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .quantity-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary)/10, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
   
   .quantity-btn:hover:not(:disabled) {
     background: var(--primary);
     color: #000000;
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 6px 20px rgba(209, 177, 106, 0.4);
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 8px 25px rgba(209, 177, 106, 0.5), 0 0 0 1px var(--primary);
     border-color: var(--primary);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+  }
+  
+  .quantity-btn:hover:not(:disabled)::before {
+    opacity: 1;
   }
   
   .quantity-btn:active {
-    transform: translateY(0) scale(0.95);
+    transform: translateY(-1px) scale(1.02);
+    transition: all 0.1s ease;
+  }
+  
+  .quantity-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
   
   .quantity-display {
-    min-width: 60px;
+    min-width: 64px;
     text-align: center;
     font-weight: 700;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     color: var(--text-primary);
     user-select: none;
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-lg);
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
   }
   
   .remove-btn {

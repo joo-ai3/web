@@ -29,7 +29,7 @@ export default function CheckoutPage() {
   const [isUploading, setIsUploading] = useState(false);
 
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
-  const discount = applied?.discount ? Math.floor((subtotal * applied.discount) / 100) : 0;
+  const discount = applied?.discount ? Math.min(Math.floor((subtotal * applied.discount) / 100), applied.maxDiscount || Infinity) : 0;
   const shipping = applied?.freeShipping ? 0 : 60;
   const total = subtotal - discount + (cart.length > 0 ? shipping : 0);
 
