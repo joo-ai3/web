@@ -283,7 +283,7 @@ export default function MobileMenu() {
                 )}
 
                 {/* Navigation Links Section */}
-                <div className="flex-1 p-6">
+                <motion.div className="flex-1 p-6">
                   <div className="space-y-3">
                     {menuItems.map((item, index) => (
                       <motion.div
@@ -437,7 +437,7 @@ export default function MobileMenu() {
                       </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Bottom Section */}
                 <motion.div
