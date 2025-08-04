@@ -115,7 +115,6 @@ export default function AboutPage() {
                     className="w-full max-w-sm mx-auto rounded-xl shadow-lg"
                   />
                 </div>
-                </p>
               </div>
             </div>
             <div className="relative">
