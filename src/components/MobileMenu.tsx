@@ -213,10 +213,10 @@ export default function MobileMenu() {
                           <FiUser size={20} className="text-primary" />
                         </div>
                         <div>
-                          <div className={font-semibold text-base ${theme === 'dark' ? 'text-white' : 'text-[#111]'}}>
+                          <div className={`font-semibold text-base ${theme === 'dark' ? 'text-white' : 'text-[#111]'}`}>
                             {user.name}
                           </div>
-                          <div className={text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}}>
+                          <div className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                             {user.email}
                           </div>
                         </div>
@@ -232,7 +232,7 @@ export default function MobileMenu() {
                       transition={{ delay: 0.3, duration: 0.4 }}
                       className="mb-8"
                     >
-                      <h3 className={text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}}>
+                      <h3 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                         {lang === 'ar' ? 'التنقل' : 'Navigation'}
                       </h3>
                       <div className="space-y-2">
@@ -251,7 +251,7 @@ export default function MobileMenu() {
                                 'w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 group modern-menu-item',
                                 isActiveLink(item.to)
                                   ? 'bg-primary text-black shadow-lg modern-menu-item-active'
-                                  : modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}
+                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`
                               )}
                             >
                               <div className="flex items-center gap-4">
@@ -286,7 +286,7 @@ export default function MobileMenu() {
                       transition={{ delay: 0.4, duration: 0.4 }}
                       className="mb-8"
                     >
-                      <h3 className={text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}}>
+                      <h3 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                         {t("account")}
                       </h3>
                       <div className="space-y-2">
@@ -305,7 +305,7 @@ export default function MobileMenu() {
                                 'w-full flex items-center gap-4 p-4 rounded-xl font-semibold transition-all duration-300 group modern-menu-item',
                                 isActiveLink(item.to)
                                   ? 'bg-primary text-black shadow-lg modern-menu-item-active'
-                                  : modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}
+                                  : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`
                               )}
                             >
                               <div className={clsx(
@@ -329,7 +329,7 @@ export default function MobileMenu() {
                     transition={{ delay: 0.5, duration: 0.4 }}
                     className="mt-auto"
                   >
-                    <h3 className={text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}}>
+                    <h3 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                       {t("settings")}
                     </h3>
                     
@@ -337,7 +337,7 @@ export default function MobileMenu() {
                       {/* Theme Toggle */}
                       <button
                         onClick={toggleTheme}
-                        className={w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`}
                       >
                         <div className="flex items-center gap-4">
                           {theme === "dark" ? <FiSun size={20} /> : <FiMoon size={20} />}
@@ -351,7 +351,7 @@ export default function MobileMenu() {
                       {/* Language Toggle */}
                       <button
                         onClick={toggleLang}
-                        className={w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl font-semibold transition-all duration-300 modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-700 hover:text-primary'}`}
                       >
                         <div className="flex items-center gap-4">
                           <FiGlobe size={20} />
