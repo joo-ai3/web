@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import {
   FiMenu, FiX, FiShoppingCart, FiUser, FiGrid, FiBox, FiHeart, FiPhone,
-  FiSun, FiMoon, FiGlobe, FiLogOut, FiHome, FiInfo, FiSettings
+  FiSun, FiMoon, FiGlobe, FiLogOut, FiHome, FiInfo, FiChevronDown, FiChevronUp
 } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
@@ -15,6 +15,7 @@ import Logo from './Logo';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [collectionsExpanded, setCollectionsExpanded] = useState(false);
   const { user, logout } = useAuth();
   const { cart } = useCart();
   const { favorites } = useFavorites();
@@ -26,6 +27,7 @@ export default function MobileMenu() {
   // Close menu when route changes
   useEffect(() => {
     setIsOpen(false);
+    setCollectionsExpanded(false);
   }, [location.pathname]);
 
   // Prevent body scroll when menu is open
@@ -51,9 +53,17 @@ export default function MobileMenu() {
 
   const menuItems = [
     { to: "/", icon: <FiHome />, label: t("home") },
-    { to: "/products?collection=mens", icon: <FiUser />, label: lang === 'ar' ? 'رجالي' : 'Men' },
-    { to: "/products?collection=womens", icon: <FiUser />, label: lang === 'ar' ? 'نسائي' : 'Women' },
-    { to: "/products?collection=basics", icon: <FiGrid />, label: lang === 'ar' ? 'سوليفا بيسكس' : 'Soleva Basics' },
+    { 
+      to: null, 
+      icon: <FiGrid />, 
+      label: t("collections"), 
+      isCollections: true,
+      subItems: [
+        { to: "/products?collection=mens", icon: "👟", label: lang === 'ar' ? 'رجالي' : 'Men' },
+        { to: "/products?collection=womens", icon: "👠", label: lang === 'ar' ? 'نسائي' : 'Women' },
+        { to: "/products?collection=basics", icon: "⚡", label: lang === 'ar' ? 'سوليفا بيسكس' : 'Soleva Basics' },
+      ]
+    },
     { to: "/favorites", icon: <FiHeart />, label: t("favorites"), badge: favorites.length || null },
     { to: "/cart", icon: <FiShoppingCart />, label: t("cart"), badge: cart.length || null },
     { to: "/orders", icon: <FiBox />, label: t("orders") },
@@ -146,7 +156,7 @@ export default function MobileMenu() {
       <AnimatePresence mode="wait">
         {isOpen && (
           <>
-            {/* Full Screen Overlay */}
+            {/* Full Screen Overlay with Blur */}
             <motion.div
               variants={backdropVariants}
               initial="hidden"
@@ -155,10 +165,10 @@ export default function MobileMenu() {
               className="fixed inset-0 z-[100] md:hidden"
               style={{
                 background: theme === 'dark' 
-                  ? 'rgba(15, 15, 15, 0.75)' 
-                  : 'rgba(255, 255, 255, 0.75)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)'
+                  ? 'rgba(15, 15, 15, 0.85)' 
+                  : 'rgba(255, 255, 255, 0.85)',
+                backdropFilter: 'blur(25px) saturate(200%)',
+                WebkitBackdropFilter: 'blur(25px) saturate(200%)'
               }}
             >
               {/* Full Screen Menu Container */}
@@ -168,6 +178,14 @@ export default function MobileMenu() {
                 animate="visible"
                 exit="exit"
                 className="w-full h-full flex flex-col"
+                style={{
+                  background: theme === 'dark' 
+                    ? 'rgba(15, 15, 15, 0.95)' 
+                    : 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(40px) saturate(220%)',
+                  WebkitBackdropFilter: 'blur(40px) saturate(220%)',
+                  color: theme === 'dark' ? '#f5f5f5' : '#222'
+                }}
               >
                 {/* Header Section */}
                 <motion.div
@@ -189,9 +207,29 @@ export default function MobileMenu() {
                     className="relative overflow-hidden group"
                     aria-label="Close menu"
                   >
-                    <div className="modern-glass-button p-3 rounded-xl border border-primary/30 hover:border-red-400/60 transition-all duration-300 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px] flex items-center justify-center">
+                    <div 
+                      className="p-3 rounded-xl border transition-all duration-300 shadow-lg hover:shadow-xl min-h-[48px] min-w-[48px] flex items-center justify-center"
+                      style={{
+                        background: theme === 'dark' 
+                          ? 'rgba(10, 10, 10, 0.8)' 
+                          : 'rgba(255, 255, 255, 0.8)',
+                        backdropFilter: 'blur(25px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+                        borderColor: theme === 'dark' 
+                          ? 'rgba(255, 255, 255, 0.1)' 
+                          : 'rgba(0, 0, 0, 0.1)'
+                      }}
+                    >
                       <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <FiX size={24} className="text-primary group-hover:text-red-500 relative z-10 transition-all duration-300" />
+                      <FiX 
+                        size={24} 
+                        className={clsx(
+                          'relative z-10 transition-all duration-300',
+                          theme === 'dark' 
+                            ? 'text-gray-200 group-hover:text-red-400' 
+                            : 'text-gray-700 group-hover:text-red-500'
+                        )}
+                      />
                     </div>
                   </motion.button>
                 </motion.div>
@@ -201,71 +239,158 @@ export default function MobileMenu() {
                   <div className="space-y-4 max-w-sm mx-auto w-full">
                     {menuItems.map((item, index) => (
                       <motion.div
-                        key={item.to}
+                        key={item.to || item.label}
                         custom={index}
                         variants={itemVariants}
                         initial="hidden"
                         animate="visible"
                       >
-                        <Link
-                          to={item.to}
-                          onClick={closeMenu}
-                          className={clsx(
-                            'w-full flex items-center justify-between rounded-2xl font-bold text-lg transition-all duration-300 group relative overflow-hidden',
-                            'px-5 py-4 letter-spacing-wide',
-                            isActiveLink(item.to)
-                              ? 'bg-primary text-black shadow-lg'
-                              : `modern-glass-button hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-800 hover:text-primary'}`
-                          )}
-                          style={{
-                            letterSpacing: '0.5px',
-                            background: isActiveLink(item.to) 
-                              ? 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)'
-                              : theme === 'dark'
-                                ? 'rgba(10, 10, 10, 0.6)'
-                                : 'rgba(255, 255, 255, 0.6)',
-                            backdropFilter: 'blur(25px) saturate(180%)',
-                            WebkitBackdropFilter: 'blur(25px) saturate(180%)',
-                            border: isActiveLink(item.to)
-                              ? '2px solid #d1b16a'
-                              : theme === 'dark'
-                                ? '2px solid rgba(255, 255, 255, 0.1)'
-                                : '2px solid rgba(0, 0, 0, 0.1)',
-                            boxShadow: isActiveLink(item.to)
-                              ? '0 8px 25px rgba(209, 177, 106, 0.5), 0 0 0 1px rgba(209, 177, 106, 0.3)'
-                              : theme === 'dark'
-                                ? '0 8px 25px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)'
-                                : '0 8px 25px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)'
-                          }}
-                        >
-                          {/* Glow effect on hover */}
-                          <div className={clsx(
-                            'absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300',
-                            isActiveLink(item.to) 
-                              ? 'bg-gradient-to-br from-primary/30 to-primary/10' 
-                              : 'bg-gradient-to-br from-primary/20 to-primary/5'
-                          )} />
-                          
-                          <div className="flex items-center gap-4 relative z-10">
-                            <div className={clsx(
-                              'transition-transform duration-300 group-hover:scale-110',
-                              isActiveLink(item.to) ? 'text-black' : ''
-                            )}>
-                              {item.icon}
-                            </div>
-                            <span className="text-lg font-bold">{item.label}</span>
+                        {item.isCollections ? (
+                          // Collections with sub-items
+                          <div>
+                            <button
+                              onClick={() => setCollectionsExpanded(!collectionsExpanded)}
+                              className={clsx(
+                                'w-full flex items-center justify-between rounded-2xl font-bold text-lg transition-all duration-300 group relative overflow-hidden',
+                                'px-5 py-4 letter-spacing-wide'
+                              )}
+                              style={{
+                                letterSpacing: '0.5px',
+                                background: theme === 'dark'
+                                  ? 'rgba(10, 10, 10, 0.6)'
+                                  : 'rgba(255, 255, 255, 0.6)',
+                                backdropFilter: 'blur(25px) saturate(180%)',
+                                WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+                                border: theme === 'dark'
+                                  ? '2px solid rgba(255, 255, 255, 0.1)'
+                                  : '2px solid rgba(0, 0, 0, 0.1)',
+                                boxShadow: theme === 'dark'
+                                  ? '0 8px 25px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)'
+                                  : '0 8px 25px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+                                color: theme === 'dark' ? '#f5f5f5' : '#222'
+                              }}
+                            >
+                              <div className="flex items-center gap-4 relative z-10">
+                                <div className="transition-transform duration-300 group-hover:scale-110">
+                                  {item.icon}
+                                </div>
+                                <span className="text-lg font-bold">{item.label}</span>
+                              </div>
+                              <div className="transition-transform duration-300">
+                                {collectionsExpanded ? <FiChevronUp /> : <FiChevronDown />}
+                              </div>
+                            </button>
+                            
+                            {/* Sub-items */}
+                            <AnimatePresence>
+                              {collectionsExpanded && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="overflow-hidden mt-2 ml-4 space-y-2"
+                                >
+                                  {item.subItems?.map((subItem, subIndex) => (
+                                    <motion.div
+                                      key={subItem.to}
+                                      initial={{ opacity: 0, x: -20 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{ delay: subIndex * 0.1 }}
+                                    >
+                                      <Link
+                                        to={subItem.to}
+                                        onClick={closeMenu}
+                                        className={clsx(
+                                          'w-full flex items-center gap-3 rounded-xl font-semibold text-base transition-all duration-300 group relative overflow-hidden',
+                                          'px-4 py-3',
+                                          isActiveLink(subItem.to)
+                                            ? 'bg-primary text-black shadow-lg'
+                                            : `hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-300 hover:text-primary' : 'text-gray-700 hover:text-primary'}`
+                                        )}
+                                        style={{
+                                          background: isActiveLink(subItem.to) 
+                                            ? 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)'
+                                            : theme === 'dark'
+                                              ? 'rgba(10, 10, 10, 0.4)'
+                                              : 'rgba(255, 255, 255, 0.4)',
+                                          backdropFilter: 'blur(20px) saturate(150%)',
+                                          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+                                          border: isActiveLink(subItem.to)
+                                            ? '1px solid #d1b16a'
+                                            : theme === 'dark'
+                                              ? '1px solid rgba(255, 255, 255, 0.05)'
+                                              : '1px solid rgba(0, 0, 0, 0.05)',
+                                          boxShadow: isActiveLink(subItem.to)
+                                            ? '0 4px 15px rgba(209, 177, 106, 0.3)'
+                                            : theme === 'dark'
+                                              ? '0 4px 15px rgba(0, 0, 0, 0.2)'
+                                              : '0 4px 15px rgba(0, 0, 0, 0.05)'
+                                        }}
+                                      >
+                                        <span className="text-xl">{subItem.icon}</span>
+                                        <span>{subItem.label}</span>
+                                      </Link>
+                                    </motion.div>
+                                  ))}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
-                          {item.badge && (
-                            <div className={clsx(
-                              'px-3 py-1 rounded-full text-sm font-bold min-w-[24px] text-center relative z-10',
-                              isActiveLink(item.to)
-                                ? 'bg-black/20 text-black'
-                                : 'bg-primary text-black'
-                            )}>
-                              {item.badge}
+                        ) : (
+                          // Regular menu items
+                          <Link
+                            to={item.to!}
+                            onClick={closeMenu}
+                            className={clsx(
+                              'w-full flex items-center justify-between rounded-2xl font-bold text-lg transition-all duration-300 group relative overflow-hidden',
+                              'px-5 py-4 letter-spacing-wide',
+                              isActiveLink(item.to!)
+                                ? 'bg-primary text-black shadow-lg'
+                                : `hover:bg-primary/20 ${theme === 'dark' ? 'text-gray-200 hover:text-primary' : 'text-gray-800 hover:text-primary'}`
+                            )}
+                            style={{
+                              letterSpacing: '0.5px',
+                              background: isActiveLink(item.to!) 
+                                ? 'linear-gradient(135deg, #d1b16a 0%, #b8965a 100%)'
+                                : theme === 'dark'
+                                  ? 'rgba(10, 10, 10, 0.6)'
+                                  : 'rgba(255, 255, 255, 0.6)',
+                              backdropFilter: 'blur(25px) saturate(180%)',
+                              WebkitBackdropFilter: 'blur(25px) saturate(180%)',
+                              border: isActiveLink(item.to!)
+                                ? '2px solid #d1b16a'
+                                : theme === 'dark'
+                                  ? '2px solid rgba(255, 255, 255, 0.1)'
+                                  : '2px solid rgba(0, 0, 0, 0.1)',
+                              boxShadow: isActiveLink(item.to!)
+                                ? '0 8px 25px rgba(209, 177, 106, 0.5), 0 0 0 1px rgba(209, 177, 106, 0.3)'
+                                : theme === 'dark'
+                                  ? '0 8px 25px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)'
+                                  : '0 8px 25px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)'
+                            }}
+                          >
+                            <div className="flex items-center gap-4 relative z-10">
+                              <div className={clsx(
+                                'transition-transform duration-300 group-hover:scale-110',
+                                isActiveLink(item.to!) ? 'text-black' : ''
+                              )}>
+                                {item.icon}
+                              </div>
+                              <span className="text-lg font-bold">{item.label}</span>
                             </div>
-                          )}
-                        </Link>
+                            {item.badge && (
+                              <div className={clsx(
+                                'px-3 py-1 rounded-full text-sm font-bold min-w-[24px] text-center relative z-10',
+                                isActiveLink(item.to!)
+                                  ? 'bg-black/20 text-black'
+                                  : 'bg-primary text-black'
+                              )}>
+                                {item.badge}
+                              </div>
+                            )}
+                          </Link>
+                        )}
                       </motion.div>
                     ))}
                   </div>
@@ -284,7 +409,7 @@ export default function MobileMenu() {
                       {/* Language Toggle */}
                       <button
                         onClick={toggleLang}
-                        className="flex-1 flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg transition-all duration-300 modern-glass-button hover:bg-primary/20"
+                        className="flex-1 flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:bg-primary/20"
                         style={{
                           letterSpacing: '0.5px',
                           background: theme === 'dark'
@@ -305,7 +430,7 @@ export default function MobileMenu() {
                       {/* Theme Toggle */}
                       <button
                         onClick={toggleTheme}
-                        className="flex-1 flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg transition-all duration-300 modern-glass-button hover:bg-primary/20"
+                        className="flex-1 flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:bg-primary/20"
                         style={{
                           letterSpacing: '0.5px',
                           background: theme === 'dark'
@@ -330,7 +455,7 @@ export default function MobileMenu() {
                         href="https://instagram.com/soleva"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 modern-glass-button hover:bg-primary/20"
+                        className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-primary/20"
                         style={{
                           background: theme === 'dark'
                             ? 'rgba(10, 10, 10, 0.6)'
@@ -352,7 +477,7 @@ export default function MobileMenu() {
                         href="https://facebook.com/soleva"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 modern-glass-button hover:bg-primary/20"
+                        className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-primary/20"
                         style={{
                           background: theme === 'dark'
                             ? 'rgba(10, 10, 10, 0.6)'
@@ -379,7 +504,7 @@ export default function MobileMenu() {
                           logout();
                           closeMenu();
                         }}
-                        className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg transition-all duration-300 modern-glass-button hover:bg-red-100 text-red-600 hover:text-red-700"
+                        className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:bg-red-100 text-red-600 hover:text-red-700"
                         style={{
                           letterSpacing: '0.5px',
                           background: theme === 'dark'

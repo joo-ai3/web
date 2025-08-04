@@ -26,7 +26,16 @@ export default function AppHeader() {
 
   const navLinks = [
     { to: '/', label: t('home') },
-    { to: '/products', label: t('products') },
+    { 
+      to: null, 
+      label: t('collections'), 
+      isDropdown: true,
+      subItems: [
+        { to: '/products?collection=mens', label: lang === 'ar' ? 'رجالي' : 'Men' },
+        { to: '/products?collection=womens', label: lang === 'ar' ? 'نسائي' : 'Women' },
+        { to: '/products?collection=basics', label: lang === 'ar' ? 'سوليفا بيسكس' : 'Soleva Basics' },
+      ]
+    },
     { to: '/about', label: t('aboutUs') },
     { to: '/contact', label: t('contactUs') }
   ];
@@ -45,18 +54,51 @@ export default function AppHeader() {
         {/* Desktop Navigation */}
         <nav className="nav-links hidden md:flex" role="navigation">
           {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
-              className={clsx(
-                'nav-link',
-                isActiveLink(link.to) && 'text-primary bg-primary-50'
+            <div key={link.to || link.label} className="relative group">
+              {link.isDropdown ? (
+                <>
+                  <button
+                    className="nav-link flex items-center gap-1"
+                    aria-expanded="false"
+                  >
+                    {link.label}
+                    <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {/* Dropdown Menu */}
+                  <div className="absolute top-full left-0 mt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                    <div className="modern-glass-card rounded-xl shadow-xl border border-border-primary overflow-hidden">
+                      {link.subItems?.map((subItem) => (
+                        <Link
+                          key={subItem.to}
+                          to={subItem.to}
+                          onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+                          className={clsx(
+                            'block px-4 py-3 text-sm font-medium transition-colors hover:bg-primary hover:text-black',
+                            isActiveLink(subItem.to) ? 'bg-primary text-black' : 'text-text-primary'
+                          )}
+                        >
+                          {subItem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Link
+                  to={link.to!}
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+                  className={clsx(
+                    'nav-link',
+                    isActiveLink(link.to!) && 'text-primary bg-primary-50'
+                  )}
+                  aria-current={isActiveLink(link.to!) ? 'page' : undefined}
+                >
+                  {link.label}
+                </Link>
               )}
-              aria-current={isActiveLink(link.to) ? 'page' : undefined}
-            >
-              {link.label}
-            </Link>
+            </div>
           ))}
         </nav>
 
