@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FiGrid, FiList, FiFilter } from 'react-icons/fi';
@@ -12,7 +13,9 @@ import clsx from 'clsx';
 export const ProductsPage: React.FC = () => {
   const { lang } = useLang();
   const t = useTranslation();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchParams] = useSearchParams();
+  const collectionParam = searchParams.get('collection');
+  const [selectedCategory, setSelectedCategory] = useState<string>(collectionParam || 'all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState<'name' | 'price-low' | 'price-high'>('name');
 
@@ -20,7 +23,7 @@ export const ProductsPage: React.FC = () => {
     { id: 'all', label: lang === 'ar' ? 'الكل' : 'All' },
     { id: 'mens', label: lang === 'ar' ? 'رجالي' : 'Men\'s' },
     { id: 'womens', label: lang === 'ar' ? 'نسائي' : 'Women\'s' },
-    { id: 'basics', label: lang === 'ar' ? 'أساسي' : 'Basics' }
+    { id: 'basics', label: lang === 'ar' ? 'أساسي' : 'Essentials' }
   ];
 
   const sortOptions = [
@@ -28,6 +31,13 @@ export const ProductsPage: React.FC = () => {
     { id: 'price-low', label: lang === 'ar' ? 'السعر: من الأقل للأعلى' : 'Price: Low to High' },
     { id: 'price-high', label: lang === 'ar' ? 'السعر: من الأعلى للأقل' : 'Price: High to Low' }
   ];
+
+  // Update selected category when URL params change
+  React.useEffect(() => {
+    if (collectionParam && collectionParam !== selectedCategory) {
+      setSelectedCategory(collectionParam);
+    }
+  }, [collectionParam, selectedCategory]);
 
   let filteredProducts = selectedCategory === 'all' 
     ? products 

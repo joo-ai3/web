@@ -33,7 +33,7 @@ export default function AppHeader() {
       subItems: [
         { to: '/products?collection=mens', label: lang === 'ar' ? 'رجالي' : 'Men' },
         { to: '/products?collection=womens', label: lang === 'ar' ? 'نسائي' : 'Women' },
-        { to: '/products?collection=basics', label: lang === 'ar' ? 'سوليفا بيسكس' : 'Soleva Basics' },
+        { to: '/products?collection=basics', label: lang === 'ar' ? 'أساسي' : 'Essentials' },
       ]
     },
     { to: '/about', label: t('aboutUs') },

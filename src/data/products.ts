@@ -13,7 +13,7 @@ export const collections = [
   },
   {
     id: "basics",
-    name: { ar: "سوليفا بيسكس", en: "Soleva Basics" },
+    name: { ar: "سوليفا أساسي", en: "Soleva Essentials" },
     desc: { ar: "خط اقتصادي عملي", en: "Budget-friendly essentials" },
     image: "https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
@@ -105,7 +105,7 @@ export const products = [
   // Soleva Basics
   {
     id: 5,
-    name: { ar: "Soleva Basic Classic", en: "Soleva Basic Classic" },
+    name: { ar: "Soleva Essential Classic", en: "Soleva Essential Classic" },
     price: 1800,
     image: "https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=600",
     desc: {
@@ -125,7 +125,7 @@ export const products = [
   },
   {
     id: 6,
-    name: { ar: "Soleva Basic Sport", en: "Soleva Basic Sport" },
+    name: { ar: "Soleva Essential Sport", en: "Soleva Essential Sport" },
     price: 1500,
     image: "https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?auto=compress&cs=tinysrgb&w=600",
     desc: {
