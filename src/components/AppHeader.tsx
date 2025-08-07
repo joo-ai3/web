@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiShoppingCart, FiUser, FiMoon, FiSun, FiHeart, FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,11 +19,16 @@ export default function AppHeader() {
   const { favorites } = useFavorites();
   const t = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
 
+  const handleCollectionClick = (collection: string) => {
+    navigate(`/products?collection=${collection}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const navLinks = [
     { to: '/', label: t('home') },
     { 
@@ -31,9 +36,9 @@ export default function AppHeader() {
       label: t('collections'), 
       isDropdown: true,
       subItems: [
-        { to: '/products?collection=mens', label: lang === 'ar' ? 'رجالي' : 'Men' },
-        { to: '/products?collection=womens', label: lang === 'ar' ? 'نسائي' : 'Women' },
-        { to: '/products?collection=basics', label: lang === 'ar' ? 'أساسي' : 'Essentials' },
+        { collection: 'mens', label: lang === 'ar' ? 'رجالي' : 'Men' },
+        { collection: 'womens', label: lang === 'ar' ? 'نسائي' : 'Women' },
+        { collection: 'basics', label: lang === 'ar' ? 'أساسي' : 'Essentials' },
       ]
     },
     { to: '/about', label: t('aboutUs') },
@@ -70,17 +75,16 @@ export default function AppHeader() {
                   <div className="absolute top-full left-0 mt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                     <div className="modern-glass-card rounded-xl shadow-xl border border-border-primary overflow-hidden">
                       {link.subItems?.map((subItem) => (
-                        <Link
-                          key={subItem.to}
-                          to={subItem.to}
-                          onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+                        <button
+                          key={subItem.collection}
+                          onClick={() => handleCollectionClick(subItem.collection)}
                           className={clsx(
-                            'block px-4 py-3 text-sm font-medium transition-colors hover:bg-primary hover:text-black',
-                            isActiveLink(subItem.to) ? 'bg-primary text-black' : 'text-text-primary'
+                            'block w-full text-left px-4 py-3 text-sm font-medium transition-colors hover:bg-primary hover:text-black',
+                            location.search.includes(`collection=${subItem.collection}`) ? 'bg-primary text-black' : 'text-text-primary'
                           )}
                         >
                           {subItem.label}
-                        </Link>
+                        </button>
                       ))}
                     </div>
                   </div>

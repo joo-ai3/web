@@ -135,7 +135,9 @@ export const translations = {
     premiumQuality: "Premium Quality",
     freeShipping: "Free Shipping",
     securePayment: "Secure Payment",
-    customerSupport: "24/7 Customer Support"
+    customerSupport: "24/7 Customer Support",
+    emptyCartConfirm: "Are you sure you want to empty your cart?",
+    yesEmptyCart: "Yes, Empty Cart"
   },
   ar: {
     home: "الرئيسية",
@@ -273,6 +275,8 @@ export const translations = {
     premiumQuality: "جودة فائقة",
     freeShipping: "شحن مجاني",
     securePayment: "دفع آمن",
-    customerSupport: "دعم العملاء على مدار الساعة"
+    customerSupport: "دعم العملاء على مدار الساعة",
+    emptyCartConfirm: "هل أنت متأكد من إفراغ السلة؟",
+    yesEmptyCart: "نعم، إفراغ السلة"
   }
 };

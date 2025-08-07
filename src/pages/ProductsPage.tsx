@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FiGrid, FiList, FiFilter } from 'react-icons/fi';
@@ -14,6 +14,7 @@ export const ProductsPage: React.FC = () => {
   const { lang } = useLang();
   const t = useTranslation();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const collectionParam = searchParams.get('collection');
   const [selectedCategory, setSelectedCategory] = useState<string>(collectionParam || 'all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -32,12 +33,14 @@ export const ProductsPage: React.FC = () => {
     { id: 'price-high', label: lang === 'ar' ? 'السعر: من الأعلى للأقل' : 'Price: High to Low' }
   ];
 
-  // Update selected category when URL params change
+  // Update selected category when URL params change and scroll to top
   React.useEffect(() => {
-    if (collectionParam && collectionParam !== selectedCategory) {
-      setSelectedCategory(collectionParam);
+    const newCollection = collectionParam || 'all';
+    if (newCollection !== selectedCategory) {
+      setSelectedCategory(newCollection);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [collectionParam, selectedCategory]);
+  }, [collectionParam, selectedCategory, location.search]);
 
   let filteredProducts = selectedCategory === 'all' 
     ? products 

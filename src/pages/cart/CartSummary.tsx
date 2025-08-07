@@ -7,6 +7,7 @@ import { useLang, useTranslation } from '../../contexts/LangContext';
 import { COUPONS } from '../../constants/brand';
 import GlassCard from '../../components/GlassCard';
 import GlassButton from '../../components/GlassButton';
+import EmptyCartConfirmModal from './EmptyCartConfirmModal';
 
 export default function CartSummary() {
   const { cart, clearCart } = useCart();
@@ -17,6 +18,7 @@ export default function CartSummary() {
 
   const [coupon, setCoupon] = useState('');
   const [applied, setApplied] = useState<any>(null);
+  const [showEmptyConfirm, setShowEmptyConfirm] = useState(false);
 
   const handleApplyCoupon = () => {
     const found = COUPONS.find(c => c.code.toUpperCase() === coupon.trim().toUpperCase());
@@ -29,13 +31,23 @@ export default function CartSummary() {
     }
   };
 
+  const handleEmptyCart = () => {
+    setShowEmptyConfirm(true);
+  };
+
+  const confirmEmptyCart = () => {
+    clearCart();
+    setShowEmptyConfirm(false);
+    showToast(t("cartEmptied"));
+  };
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const discount = applied?.discount ? Math.min(Math.floor((subtotal * applied.discount) / 100), applied.maxDiscount || Infinity) : 0;
   const shipping = applied?.freeShipping ? 0 : 60;
   const total = subtotal - discount + (cart.length > 0 ? shipping : 0);
 
   return (
-    <GlassCard>
+    <>
+      <GlassCard>
       <h3 className="text-xl font-bold mb-6">{t("total")}</h3>
 
       {/* Coupon */}
@@ -48,10 +60,7 @@ export default function CartSummary() {
             onChange={e => setCoupon(e.target.value)}
             disabled={!!applied}
           />
-          <GlassButton 
-            onClick={handleApplyCoupon} 
-            disabled={!!applied}
-            className="w-full px-6 py-4 min-h-[56px] text-lg font-bold flex items-center justify-center gap-2 bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            onClick={handleEmptyCart}
           >
             {applied ? t("applied") : t("applyCoupon")}
           </GlassButton>
@@ -110,6 +119,15 @@ export default function CartSummary() {
           {t("emptyCart")}
         </GlassButton>
       </div>
-    </GlassCard>
+      </GlassCard>
+
+      {/* Empty Cart Confirmation Modal */}
+      {showEmptyConfirm && (
+        <EmptyCartConfirmModal 
+          onCancel={() => setShowEmptyConfirm(false)} 
+          onConfirm={confirmEmptyCart} 
+        />
+      )}
+    </>
   );
 }

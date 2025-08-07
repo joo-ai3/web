@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiMenu, FiShoppingCart, FiUser, FiHeart } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
@@ -13,18 +13,24 @@ export default function MobileMenu() {
   const { cart } = useCart();
   const { favorites } = useFavorites();
   const t = useTranslation();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    closeMenu();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const menuItems = [
-    { to: '/', label: t('home'), icon: null },
-    { to: '/products', label: t('collections'), icon: null },
-    { to: '/favorites', label: t('favorites'), icon: FiHeart, badge: favorites.length },
-    { to: '/cart', label: t('cart'), icon: FiShoppingCart, badge: cart.length },
-    { to: '/about', label: t('aboutUs'), icon: null },
-    { to: '/contact', label: t('contactUs'), icon: null },
-    { to: user ? '/account' : '/login', label: user ? t('account') : t('login'), icon: FiUser }
+    { path: '/', label: t('home'), icon: null },
+    { path: '/products', label: t('collections'), icon: null },
+    { path: '/favorites', label: t('favorites'), icon: FiHeart, badge: favorites.length },
+    { path: '/cart', label: t('cart'), icon: FiShoppingCart, badge: cart.length },
+    { path: '/about', label: t('aboutUs'), icon: null },
+    { path: '/contact', label: t('contactUs'), icon: null },
+    { path: user ? '/account' : '/login', label: user ? t('account') : t('login'), icon: FiUser }
   ];
 
   return (
@@ -79,10 +85,9 @@ export default function MobileMenu() {
                     {menuItems.map((item) => {
                       const Icon = item.icon;
                       return (
-                        <Link
-                          key={item.to}
-                          to={item.to}
-                          onClick={closeMenu}
+                        <button
+                          key={item.path}
+                          onClick={() => handleNavigation(item.path)}
                           className="flex items-center justify-between p-4 rounded-xl bg-white/60 dark:bg-white/10 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black transition-all duration-300 group"
                         >
                           <div className="flex items-center gap-3">
@@ -94,7 +99,7 @@ export default function MobileMenu() {
                               {item.badge}
                             </span>
                           )}
-                        </Link>
+                        </button>
                       );
                     })}
                   </nav>
