@@ -1,145 +1,109 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mobile Menu - Soleva</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Cairo', sans-serif;
-    }
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiX, FiMenu, FiShoppingCart, FiUser, FiHeart } from 'react-icons/fi';
+import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
+import { useFavorites } from '../contexts/FavoritesContext';
+import { useTranslation } from '../contexts/LangContext';
 
-    body {
-      background: #f9f9f9;
-      overflow-x: hidden;
-    }
+export default function MobileMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+  const { cart } = useCart();
+  const { favorites } = useFavorites();
+  const t = useTranslation();
 
-    .overlay {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100vw;
-      height: 100vh;
-      backdrop-filter: blur(12px);
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 0.3s ease-in-out forwards;
-    }
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const closeMenu = () => setIsOpen(false);
 
-    .mobile-menu {
-      width: 90%;
-      max-width: 400px;
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.2);
-      padding: 20px;
-      position: relative;
-      animation: slideIn 0.4s ease-in-out forwards;
-    }
+  const menuItems = [
+    { to: '/', label: t('home'), icon: null },
+    { to: '/products', label: t('collections'), icon: null },
+    { to: '/favorites', label: t('favorites'), icon: FiHeart, badge: favorites.length },
+    { to: '/cart', label: t('cart'), icon: FiShoppingCart, badge: cart.length },
+    { to: '/about', label: t('aboutUs'), icon: null },
+    { to: '/contact', label: t('contactUs'), icon: null },
+    { to: user ? '/account' : '/login', label: user ? t('account') : t('login'), icon: FiUser }
+  ];
 
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      font-size: 24px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #111;
-    }
+  return (
+    <>
+      {/* Mobile Menu Toggle Button */}
+      <button
+        onClick={toggleMenu}
+        className="md:hidden btn btn-ghost p-3 interactive-hover min-h-[44px] min-w-[44px]"
+        aria-label="Toggle mobile menu"
+        aria-expanded={isOpen}
+      >
+        {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+      </button>
 
-    .menu-item {
-      background: rgba(255, 255, 255, 0.6);
-      padding: 14px 20px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #000;
-      text-decoration: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.3s ease-in-out;
-    }
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 md:hidden"
+            onClick={closeMenu}
+          >
+            {/* Backdrop with Professional Blur */}
+            <div className="absolute inset-0 bg-black/30 dark:bg-black/60 backdrop-blur-[25px] backdrop-saturate-[200%] backdrop-brightness-95" />
+            
+            {/* Menu Container */}
+            <div className="flex items-center justify-center min-h-screen p-4">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 50 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 50 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="w-full max-w-sm"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Menu Card */}
+                <div className="modern-glass-card rounded-2xl p-6 shadow-2xl border border-border-primary backdrop-blur-[50px] backdrop-saturate-[250%] backdrop-brightness-105">
+                  {/* Close Button */}
+                  <button
+                    onClick={closeMenu}
+                    className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <FiX size={20} className="text-text-primary" />
+                  </button>
 
-    .menu-item:hover {
-      background-color: rgba(255, 215, 0, 0.6);
-      color: #000;
-    }
-
-    .dark .mobile-menu {
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-    }
-
-    .dark .menu-item {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .dark .menu-item:hover {
-      background-color: rgba(255, 215, 0, 0.2);
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateY(100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        background: rgba(0, 0, 0, 0);
-      }
-      to {
-        background: rgba(0, 0, 0, 0.4);
-      }
-    }
-  </style>
-</head>
-<body class="light">
-
-<div class="overlay" id="menuOverlay">
-  <div class="mobile-menu">
-    <button class="close-btn" onclick="closeMenu()">&times;</button>
-    <a href="/" class="menu-item">الرئيسية</a>
-    <a href="/collections" class="menu-item">الكوليكشن</a>
-    <a href="/favorites" class="menu-item">المفضلة</a>
-    <a href="/cart" class="menu-item">السلة</a>
-    <a href="/about" class="menu-item">من نحن</a>
-    <a href="/contact" class="menu-item">اتصل بنا</a>
-  </div>
-</div>
-
-<script>
-  function closeMenu() {
-    document.getElementById("menuOverlay").style.display = "none";
-  }
-
-  // auto close on item click
-  document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-      closeMenu();
-    });
-  });
-
-  // Theme toggle (optional)
-  const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (isDark) {
-    document.body.classList.remove("light");
-    document.body.classList.add("dark");
-  }
-</script>
-</body>
-</html>
+                  {/* Menu Items */}
+                  <nav className="mt-8 space-y-3">
+                    {menuItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.to}
+                          to={item.to}
+                          onClick={closeMenu}
+                          className="flex items-center justify-between p-4 rounded-xl bg-white/60 dark:bg-white/10 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black transition-all duration-300 group"
+                        >
+                          <div className="flex items-center gap-3">
+                            {Icon && <Icon size={20} />}
+                            <span className="font-semibold text-lg">{item.label}</span>
+                          </div>
+                          {item.badge && item.badge > 0 && (
+                            <span className="bg-red-500 text-white rounded-full w-6 h-6 text-sm font-bold flex items-center justify-center">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
