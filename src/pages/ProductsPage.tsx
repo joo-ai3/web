@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiGrid, FiList, FiFilter } from "react-icons/fi";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useLang, useTranslation } from "../contexts/LangContext";
 import { products } from "../data/products";
 import clsx from "clsx";
@@ -15,6 +16,7 @@ export const ProductsPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<"name" | "price-low" | "price-high">("name");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
+  const [favorites, setFavorites] = useState<number[]>([]);
 
   const categories = [
     { id: "all", label: lang === "ar" ? "الكل" : "All" },
@@ -55,6 +57,12 @@ export const ProductsPage: React.FC = () => {
     }
   });
 
+  const toggleFavorite = (id: number) => {
+    setFavorites((prev) =>
+      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary">
       <div className="container mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -63,7 +71,7 @@ export const ProductsPage: React.FC = () => {
         <motion.aside
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-bg-secondary rounded-lg p-4 shadow-lg"
+          className="backdrop-blur-lg bg-white/20 dark:bg-black/30 rounded-lg p-4 shadow-lg border border-white/20"
         >
           <h2 className="text-lg font-bold mb-4">{lang === "ar" ? "تصفية" : "Filters"}</h2>
 
@@ -76,7 +84,7 @@ export const ProductsPage: React.FC = () => {
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
                   className={clsx(
-                    "px-3 py-2 rounded text-sm text-left",
+                    "px-3 py-2 rounded text-sm text-left transition",
                     selectedCategory === cat.id
                       ? "bg-primary text-black font-semibold"
                       : "hover:bg-bg-tertiary"
@@ -118,7 +126,7 @@ export const ProductsPage: React.FC = () => {
                     "px-4 py-2 rounded",
                     sortBy === option.id
                       ? "bg-primary text-black font-semibold"
-                      : "bg-bg-secondary hover:bg-bg-tertiary"
+                      : "backdrop-blur-lg bg-white/20 dark:bg-black/30 hover:bg-white/30"
                   )}
                 >
                   {option.label}
@@ -132,7 +140,7 @@ export const ProductsPage: React.FC = () => {
                 onClick={() => setViewMode("grid")}
                 className={clsx(
                   "p-2 rounded",
-                  viewMode === "grid" ? "bg-primary text-black" : "bg-bg-secondary"
+                  viewMode === "grid" ? "bg-primary text-black" : "backdrop-blur-lg bg-white/20 dark:bg-black/30"
                 )}
               >
                 <FiGrid />
@@ -141,7 +149,7 @@ export const ProductsPage: React.FC = () => {
                 onClick={() => setViewMode("list")}
                 className={clsx(
                   "p-2 rounded",
-                  viewMode === "list" ? "bg-primary text-black" : "bg-bg-secondary"
+                  viewMode === "list" ? "bg-primary text-black" : "backdrop-blur-lg bg-white/20 dark:bg-black/30"
                 )}
               >
                 <FiList />
@@ -166,8 +174,23 @@ export const ProductsPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-bg-secondary rounded-lg shadow-lg overflow-hidden group"
+                className="relative backdrop-blur-lg bg-white/20 dark:bg-black/30 rounded-lg shadow-lg overflow-hidden group border border-white/20"
               >
+                {/* Favorite Button */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFavorite(product.id);
+                  }}
+                  className="absolute top-3 right-3 p-2 rounded-full backdrop-blur-md bg-white/30 hover:bg-white/50 dark:bg-black/40 dark:hover:bg-black/60 transition"
+                >
+                  {favorites.includes(product.id) ? (
+                    <FaHeart className="text-red-500 text-lg" />
+                  ) : (
+                    <FaRegHeart className="text-white text-lg" />
+                  )}
+                </button>
+
                 <Link to={`/product/${product.id}`} className="block">
                   <div className="relative">
                     <img
@@ -181,7 +204,7 @@ export const ProductsPage: React.FC = () => {
                     <p className="text-sm text-text-secondary line-clamp-2 mb-3">
                       {product.desc[lang]}
                     </p>
-                    <span className="font-bold text-primary">
+                    <span className="font-bold text-xl text-primary drop-shadow-md">
                       {product.price} {t("egp")}
                     </span>
                   </div>
