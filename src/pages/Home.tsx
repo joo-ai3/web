@@ -90,7 +90,7 @@ export default function Home() {
                 size="lg"
                 className="w-full sm:w-auto"
               >
-                {t("discoverCollection")}
+                {lang === 'ar' ? 'تصفح المجموعة' : 'Browse Collection'}
                 <FiArrowRight />
               </GlassButton>
             </Link>

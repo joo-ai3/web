@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiGrid, FiList, FiFilter, FiSearch } from "react-icons/fi";
 import { useLang, useTranslation } from "../contexts/LangContext";
@@ -16,6 +16,7 @@ export const ProductsPage: React.FC = () => {
   const t = useTranslation();
   const { favorites } = useFavorites();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const collectionParam = searchParams.get("collection");
   
   const [selectedCategory, setSelectedCategory] = useState(collectionParam || "all");
@@ -44,6 +45,15 @@ export const ProductsPage: React.FC = () => {
     }
   }, [collectionParam, selectedCategory]);
 
+  // Handle category change and update URL
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    if (categoryId === "all") {
+      navigate("/products", { replace: true });
+    } else {
+      navigate(`/products?collection=${categoryId}`, { replace: true });
+    }
+  };
   // Filter and sort products
   let filteredProducts = selectedCategory === "all"
     ? products
@@ -138,7 +148,7 @@ export const ProductsPage: React.FC = () => {
                   {categories.map((cat) => (
                     <button
                       key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
+                      onClick={() => handleCategoryChange(cat.id)}
                       className={clsx(
                         "w-full text-left px-4 py-3 rounded-lg transition-all duration-200",
                         selectedCategory === cat.id
@@ -177,7 +187,7 @@ export const ProductsPage: React.FC = () => {
               {/* Clear Filters */}
               <GlassButton
                 onClick={() => {
-                  setSelectedCategory("all");
+                  handleCategoryChange("all");
                   setPriceRange([0, 5000]);
                   setSearchQuery("");
                   setSortBy("name");
