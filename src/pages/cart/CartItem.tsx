@@ -48,7 +48,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       </div>
 
       <div className="flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-4 sm:gap-3 w-full sm:w-auto">
-        <div className="flex items-center gap-3 bg-white/80 backdrop-blur-lg border border-gray-200/50 rounded-2xl p-2 shadow-lg">
+        <div className="quantity-control">
           <button
             onClick={() => handleQty(-1)}
             className="quantity-btn"
@@ -69,10 +69,10 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
 
         <button
           onClick={() => onRemove(item)}
-          className="remove-btn w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center glass border border-red-200/50 rounded-xl bg-red-50/80 text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 hover:scale-110 hover:shadow-lg transition-all duration-300"
+          className="remove-btn w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center glass border border-red-200/50 rounded-xl bg-red-50/80 text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 hover:scale-110 hover:shadow-lg transition-all duration-300"
           aria-label="Remove item from cart"
         >
-          <FiTrash2 size={20} />
+          <FiTrash2 size={22} />
         </button>
       </div>
     </motion.div>
