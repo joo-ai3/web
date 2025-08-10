@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiFileText, FiCreditCard, FiTruck, FiRotateCcw, FiShield, FiScale } from 'react-icons/fi';
+import { FiFileText, FiCreditCard, FiTruck, FiRotateCcw, FiShield, FiFile } from 'react-icons/fi';
 import { useLang, useTranslation } from '../contexts/LangContext';
 import GlassCard from '../components/GlassCard';
 
@@ -95,7 +95,7 @@ export default function TermsPage() {
           ]
     },
     {
-      icon: <FiScale />,
+      icon: <FiFile />,
       title: lang === 'ar' ? 'القانون الحاكم' : 'Governing Law',
       content: lang === 'ar'
         ? [
