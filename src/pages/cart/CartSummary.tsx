@@ -60,7 +60,10 @@ export default function CartSummary() {
             onChange={e => setCoupon(e.target.value)}
             disabled={!!applied}
           />
-            onClick={handleEmptyCart}
+          <GlassButton 
+            onClick={handleApplyCoupon}
+            className="w-full"
+            disabled={!!applied}
           >
             {applied ? t("applied") : t("applyCoupon")}
           </GlassButton>
