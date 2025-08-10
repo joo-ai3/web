@@ -14,6 +14,14 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
   const handleQty = (diff: number) => {
     const newQty = item.qty + diff;
     if (newQty < 1) return;
+    
+    // Add updating animation class
+    const displayElement = document.querySelector(`[data-item-id="${item.id}-${item.color}-${item.size}"] .quantity-display`);
+    if (displayElement) {
+      displayElement.classList.add('updating');
+      setTimeout(() => displayElement.classList.remove('updating'), 300);
+    }
+    
     updateQty(item.id, item.color, item.size, newQty);
     showToast(t("updateSuccess"));
   };
@@ -25,6 +33,7 @@ export default function CartItem({ item, index, onRemove }: { item: any, index: 
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
       whileHover={{ y: -3, scale: 1.02 }}
       className="cart-item flex flex-col sm:flex-row items-start sm:items-center gap-4 modern-glass-card rounded-xl border border-[var(--border-secondary)] hover:shadow-lg transition-all duration-300 p-4 sm:p-5"
+      data-item-id={`${item.id}-${item.color}-${item.size}`}
     >
       <img 
         src={item.image} 
