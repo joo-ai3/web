@@ -112,11 +112,8 @@ export default function CartSummary() {
         </GlassButton>
 
         <GlassButton 
-          className="w-full bg-gray-400 text-black hover:bg-gray-500 border-none" 
-          onClick={() => {
-            clearCart();
-            showToast(t("cartEmptied"));
-          }}
+          className="w-full bg-red-500 text-white hover:bg-red-600 border-none" 
+          onClick={handleEmptyCart}
         >
           <FiTrash2 />
           {t("emptyCart")}

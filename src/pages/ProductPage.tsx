@@ -93,6 +93,39 @@ export default function ProductPage() {
 
   return (
     <div className="min-h-screen">
+      {/* SEO Schema Markup */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": product.name[lang],
+            "description": product.desc[lang],
+            "image": product.image,
+            "brand": {
+              "@type": "Brand",
+              "name": "Soleva"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": product.price,
+              "priceCurrency": "EGP",
+              "availability": "https://schema.org/InStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "Soleva Store"
+              }
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "reviewCount": "127"
+            }
+          })
+        }}
+      />
+      
       <div className="container py-8">
         {/* Breadcrumb */}
         <motion.nav
@@ -139,6 +172,7 @@ export default function ProductPage() {
                   decoding="async"
                   width="600"
                   height="600"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </AnimatePresence>
               

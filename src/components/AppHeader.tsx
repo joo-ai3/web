@@ -26,7 +26,12 @@ export default function AppHeader() {
   const toggleLang = () => setLang(lang === "ar" ? "en" : "ar");
 
   const handleCollectionClick = (collection: string) => {
-    navigate(`/products?collection=${collection}`);
+    const currentPath = location.pathname;
+    const newPath = `/products?collection=${collection}`;
+    
+    if (currentPath !== '/products' || !location.search.includes(`collection=${collection}`)) {
+      navigate(newPath);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   const navLinks = [

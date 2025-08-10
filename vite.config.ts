@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+  },
   build: {
     rollupOptions: {
       output: {
@@ -22,7 +25,9 @@ export default defineConfig({
         drop_console: true,
         drop_debugger: true
       }
-    }
+    },
+    target: 'es2015',
+    cssCodeSplit: true
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
@@ -31,6 +36,7 @@ export default defineConfig({
   server: {
     hmr: {
       overlay: false
-    }
+    },
+    host: true
   }
 });

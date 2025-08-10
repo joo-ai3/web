@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiGrid, FiList, FiFilter } from "react-icons/fi";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FiGrid, FiList, FiFilter, FiSearch } from "react-icons/fi";
 import { useLang, useTranslation } from "../contexts/LangContext";
+import { useFavorites } from "../contexts/FavoritesContext";
 import { products } from "../data/products";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import FavoriteButton from "../components/FavoriteButton";
+import SectionTitle from "../components/SectionTitle";
 import clsx from "clsx";
 
 export const ProductsPage: React.FC = () => {
   const { lang } = useLang();
   const t = useTranslation();
+  const { favorites } = useFavorites();
   const [searchParams] = useSearchParams();
   const collectionParam = searchParams.get("collection");
+  
   const [selectedCategory, setSelectedCategory] = useState(collectionParam || "all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<"name" | "price-low" | "price-high">("name");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const categories = [
     { id: "all", label: lang === "ar" ? "الكل" : "All" },
@@ -34,18 +40,29 @@ export const ProductsPage: React.FC = () => {
   useEffect(() => {
     if (collectionParam && collectionParam !== selectedCategory) {
       setSelectedCategory(collectionParam);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [collectionParam]);
+  }, [collectionParam, selectedCategory]);
 
+  // Filter and sort products
   let filteredProducts = selectedCategory === "all"
     ? products
     : products.filter((p) => p.collection === selectedCategory);
 
+  // Apply search filter
+  if (searchQuery.trim()) {
+    filteredProducts = filteredProducts.filter(product =>
+      product.name[lang].toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.desc[lang].toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  // Apply price filter
   filteredProducts = filteredProducts.filter(
     (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
   );
 
+  // Apply sorting
   filteredProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case "price-low":
@@ -57,161 +74,271 @@ export const ProductsPage: React.FC = () => {
     }
   });
 
-  const toggleFavorite = (id: number) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
-    );
-  };
-
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary">
-      <div className="container mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        
-        {/* Sidebar Filters */}
-        <motion.aside
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="backdrop-blur-lg bg-white/20 dark:bg-black/30 rounded-lg p-4 shadow-lg border border-white/20"
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
         >
-          <h2 className="text-lg font-bold mb-4">{lang === "ar" ? "تصفية" : "Filters"}</h2>
+          <SectionTitle className="mb-4">
+            {selectedCategory === "all" 
+              ? t("products") 
+              : categories.find(c => c.id === selectedCategory)?.label || t("products")
+            }
+          </SectionTitle>
+          <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+            {lang === 'ar' 
+              ? 'اكتشف مجموعتنا المتنوعة من الأحذية عالية الجودة'
+              : 'Discover our diverse collection of premium quality footwear'
+            }
+          </p>
+        </motion.div>
 
-          {/* Categories */}
-          <div className="mb-6">
-            <h3 className="font-semibold mb-2">{lang === "ar" ? "الفئة" : "Category"}</h3>
-            <div className="flex flex-col gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={clsx(
-                    "px-3 py-2 rounded text-sm text-left transition",
-                    selectedCategory === cat.id
-                      ? "bg-primary text-black font-semibold"
-                      : "hover:bg-bg-tertiary"
-                  )}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Price Filter */}
-          <div>
-            <h3 className="font-semibold mb-2">{lang === "ar" ? "السعر" : "Price"}</h3>
-            <input
-              type="range"
-              min={0}
-              max={5000}
-              value={priceRange[1]}
-              onChange={(e) => setPriceRange([0, Number(e.target.value)])}
-              className="w-full"
-            />
-            <p className="text-sm mt-1">
-              {lang === "ar" ? "حتى" : "Up to"} {priceRange[1]} {t("egp")}
-            </p>
-          </div>
-        </motion.aside>
-
-        {/* Products Section */}
-        <div className="lg:col-span-3">
-          {/* Controls */}
-          <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-            <div className="flex gap-2">
-              {sortOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => setSortBy(option.id as any)}
-                  className={clsx(
-                    "px-4 py-2 rounded",
-                    sortBy === option.id
-                      ? "bg-primary text-black font-semibold"
-                      : "backdrop-blur-lg bg-white/20 dark:bg-black/30 hover:bg-white/30"
-                  )}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-
-            {/* View Mode */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={clsx(
-                  "p-2 rounded",
-                  viewMode === "grid" ? "bg-primary text-black" : "backdrop-blur-lg bg-white/20 dark:bg-black/30"
-                )}
-              >
-                <FiGrid />
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={clsx(
-                  "p-2 rounded",
-                  viewMode === "list" ? "bg-primary text-black" : "backdrop-blur-lg bg-white/20 dark:bg-black/30"
-                )}
-              >
-                <FiList />
-              </button>
-            </div>
-          </div>
-
-          {/* Products */}
-          <motion.div
-            layout
-            className={clsx(
-              "gap-6",
-              viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                : "flex flex-col"
-            )}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar Filters */}
+          <motion.aside
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-1"
           >
-            {filteredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                whileHover={{ scale: 1.02 }}
-                className="relative backdrop-blur-lg bg-white/20 dark:bg-black/30 rounded-lg shadow-lg overflow-hidden group border border-white/20"
-              >
-                {/* Favorite Button */}
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleFavorite(product.id);
-                  }}
-                  className="absolute top-3 right-3 p-2 rounded-full backdrop-blur-md bg-white/30 hover:bg-white/50 dark:bg-black/40 dark:hover:bg-black/60 transition"
-                >
-                  {favorites.includes(product.id) ? (
-                    <FaHeart className="text-red-500 text-lg" />
-                  ) : (
-                    <FaRegHeart className="text-white text-lg" />
-                  )}
-                </button>
+            <GlassCard className="sticky top-24">
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <FiFilter />
+                {lang === "ar" ? "تصفية" : "Filters"}
+              </h2>
 
-                <Link to={`/product/${product.id}`} className="block">
-                  <div className="relative">
-                    <img
-                      src={product.image}
-                      alt={product.name[lang]}
-                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform"
-                    />
+              {/* Search */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
+                  {lang === "ar" ? "البحث" : "Search"}
+                </label>
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full form-input pl-10"
+                    placeholder={lang === "ar" ? "ابحث عن المنتجات..." : "Search products..."}
+                  />
+                </div>
+              </div>
+
+              {/* Categories */}
+              <div className="mb-6">
+                <h3 className="font-semibold mb-3 text-text-primary">
+                  {lang === "ar" ? "الفئة" : "Category"}
+                </h3>
+                <div className="space-y-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={clsx(
+                        "w-full text-left px-4 py-3 rounded-lg transition-all duration-200",
+                        selectedCategory === cat.id
+                          ? "bg-primary text-black font-semibold shadow-md"
+                          : "text-text-secondary hover:bg-bg-tertiary hover:text-text-primary"
+                      )}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Filter */}
+              <div className="mb-6">
+                <h3 className="font-semibold mb-3 text-text-primary">
+                  {lang === "ar" ? "السعر" : "Price Range"}
+                </h3>
+                <div className="space-y-3">
+                  <input
+                    type="range"
+                    min={0}
+                    max={5000}
+                    step={100}
+                    value={priceRange[1]}
+                    onChange={(e) => setPriceRange([0, Number(e.target.value)])}
+                    className="w-full accent-primary"
+                  />
+                  <div className="flex justify-between text-sm text-text-secondary">
+                    <span>0 {t("egp")}</span>
+                    <span>{priceRange[1]} {t("egp")}</span>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold mb-2">{product.name[lang]}</h3>
-                    <p className="text-sm text-text-secondary line-clamp-2 mb-3">
-                      {product.desc[lang]}
-                    </p>
-                    <span className="font-bold text-xl text-primary drop-shadow-md">
-                      {product.price} {t("egp")}
-                    </span>
-                  </div>
-                </Link>
+                </div>
+              </div>
+
+              {/* Clear Filters */}
+              <GlassButton
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setPriceRange([0, 5000]);
+                  setSearchQuery("");
+                  setSortBy("name");
+                }}
+                variant="ghost"
+                className="w-full"
+              >
+                {lang === "ar" ? "مسح الفلاتر" : "Clear Filters"}
+              </GlassButton>
+            </GlassCard>
+          </motion.aside>
+
+          {/* Products Section */}
+          <div className="lg:col-span-3">
+            {/* Controls */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-wrap justify-between items-center mb-8 gap-4"
+            >
+              {/* Sort Options */}
+              <div className="flex flex-wrap gap-2">
+                {sortOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setSortBy(option.id as any)}
+                    className={clsx(
+                      "px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium",
+                      sortBy === option.id
+                        ? "bg-primary text-black shadow-md"
+                        : "modern-glass-button hover:bg-primary hover:text-black"
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* View Mode & Results Count */}
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-text-secondary">
+                  {filteredProducts.length} {lang === "ar" ? "منتج" : "products"}
+                </span>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={clsx(
+                      "p-2 rounded-lg transition-all duration-200",
+                      viewMode === "grid" 
+                        ? "bg-primary text-black" 
+                        : "modern-glass-button hover:bg-primary hover:text-black"
+                    )}
+                    aria-label="Grid view"
+                  >
+                    <FiGrid size={18} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={clsx(
+                      "p-2 rounded-lg transition-all duration-200",
+                      viewMode === "list" 
+                        ? "bg-primary text-black" 
+                        : "modern-glass-button hover:bg-primary hover:text-black"
+                    )}
+                    aria-label="List view"
+                  >
+                    <FiList size={18} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Products Grid/List */}
+            {filteredProducts.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-16"
+              >
+                <GlassCard className="max-w-md mx-auto">
+                  <div className="text-6xl mb-4">🔍</div>
+                  <h3 className="text-xl font-semibold mb-2 text-text-primary">
+                    {lang === "ar" ? "لا توجد منتجات" : "No Products Found"}
+                  </h3>
+                  <p className="text-text-secondary">
+                    {lang === "ar" 
+                      ? "جرب تغيير الفلاتر أو البحث عن شيء آخر"
+                      : "Try adjusting your filters or search for something else"
+                    }
+                  </p>
+                </GlassCard>
               </motion.div>
-            ))}
-          </motion.div>
+            ) : (
+              <motion.div
+                layout
+                className={clsx(
+                  "gap-6",
+                  viewMode === "grid"
+                    ? "products-grid"
+                    : "flex flex-col space-y-6"
+                )}
+              >
+                {filteredProducts.map((product, index) => (
+                  <motion.div
+                    key={product.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05, duration: 0.5 }}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className={clsx(
+                      "product-card group interactive-hover",
+                      viewMode === "list" && "flex flex-row items-center gap-6 p-6"
+                    )}
+                  >
+                    <Link to={`/product/${product.id}`} className="block h-full">
+                      <div className={clsx(
+                        "product-card-image relative overflow-hidden",
+                        viewMode === "list" && "w-48 h-48 flex-shrink-0"
+                      )}>
+                        <img
+                          src={product.image}
+                          alt={product.name[lang]}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          loading={index < 6 ? "eager" : "lazy"}
+                          decoding="async"
+                          width="300"
+                          height="300"
+                        />
+                        <FavoriteButton productId={product.id} />
+                      </div>
+                      
+                      <div className={clsx(
+                        "product-card-content",
+                        viewMode === "list" && "flex-1"
+                      )}>
+                        <h3 className="product-card-title">
+                          {product.name[lang]}
+                        </h3>
+                        <p className="product-card-description line-clamp-2">
+                          {product.desc[lang]}
+                        </p>
+                        <div className="product-card-price">
+                          {product.price} {t("egp")}
+                        </div>
+                        <div className="product-card-actions">
+                          <GlassButton 
+                            variant="primary"
+                            className="w-full text-[#000000]"
+                          >
+                            {t("viewDetails")}
+                          </GlassButton>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
     </div>

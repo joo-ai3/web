@@ -137,7 +137,12 @@ export const translations = {
     securePayment: "Secure Payment",
     customerSupport: "24/7 Customer Support",
     emptyCartConfirm: "Are you sure you want to empty your cart?",
-    yesEmptyCart: "Yes, Empty Cart"
+    yesEmptyCart: "Yes, Empty Cart",
+    clearFilters: "Clear Filters",
+    searchProducts: "Search products...",
+    noProductsFound: "No Products Found",
+    tryAdjustingFilters: "Try adjusting your filters or search for something else",
+    priceRange: "Price Range"
   },
   ar: {
     home: "الرئيسية",
@@ -277,6 +282,11 @@ export const translations = {
     securePayment: "دفع آمن",
     customerSupport: "دعم العملاء على مدار الساعة",
     emptyCartConfirm: "هل أنت متأكد من إفراغ السلة؟",
-    yesEmptyCart: "نعم، إفراغ السلة"
+    yesEmptyCart: "نعم، إفراغ السلة",
+    clearFilters: "مسح الفلاتر",
+    searchProducts: "ابحث عن المنتجات...",
+    noProductsFound: "لا توجد منتجات",
+    tryAdjustingFilters: "جرب تغيير الفلاتر أو البحث عن شيء آخر",
+    priceRange: "نطاق السعر"
   }
 };
