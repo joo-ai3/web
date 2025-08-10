@@ -24,6 +24,8 @@ import NotFoundPage from '../pages/NotFoundPage';
 import FavoritesPage from '../pages/FavoritesPage';
 import ContactPage from '../pages/ContactPage';
 import AboutPage from '../pages/AboutPage';
+import PrivacyPage from '../pages/PrivacyPage';
+import TermsPage from '../pages/TermsPage';
 import ProtectedRoute from './ProtectedRoute';
 
 // Scroll to top component
@@ -65,6 +67,8 @@ export default function RoutesWrapper() {
               <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route
