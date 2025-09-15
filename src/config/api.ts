@@ -1,7 +1,7 @@
 // API Configuration for Backend Integration
 export const API_CONFIG = {
   // Base URL - can be overridden by environment variable
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
   
   // API Version
   VERSION: 'v1',
@@ -24,11 +24,13 @@ export const API_CONFIG = {
 export const API_ENDPOINTS = {
   // Authentication
   AUTH: {
-    LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
-    LOGOUT: '/auth/logout',
+    LOGIN: '/auth/customer/login',
+    REGISTER: '/auth/customer/register',
+    LOGOUT: '/auth/customer/logout',
     REFRESH: '/auth/refresh',
-    PROFILE: '/auth/profile',
+    PROFILE: '/auth/customer/profile',
+    GOOGLE: '/auth/customer/google',
+    FACEBOOK: '/auth/customer/facebook',
   },
   
   // Products
@@ -57,10 +59,10 @@ export const API_ENDPOINTS = {
   
   // Orders
   ORDERS: {
-    LIST: '/orders',
-    SHOW: (id: number) => `/orders/${id}`,
+    LIST: '/orders/user',
+    SHOW: (id: string) => `/orders/${id}`,
     CREATE: '/orders',
-    TRACK: (id: number) => `/orders/${id}/track`,
+    TRACK: (identifier: string) => `/orders/track/${identifier}`,
   },
   
   // Favorites
@@ -86,6 +88,16 @@ export const API_ENDPOINTS = {
   UPLOAD: {
     IMAGE: '/upload/image',
     PAYMENT_SCREENSHOT: '/upload/payment-screenshot',
+  },
+
+  // Chat
+  CHAT: {
+    CONVERSATIONS: '/chat/conversations',
+    CURRENT_CONVERSATION: '/chat/conversations/current',
+    MESSAGES: '/chat/messages',
+    AI_RESPONSE: '/chat/ai-response',
+    REQUEST_HUMAN: '/chat/request-human',
+    UPLOAD: '/chat/upload',
   },
 };
 

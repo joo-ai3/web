@@ -6,6 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 
 import AppHeader from './AppHeader';
 import AppFooter from './AppFooter';
+import ChatWidget from './ChatWidget';
 
 import Home from '../pages/Home';
 import { ProductsPage } from '../pages/ProductsPage';
@@ -90,6 +91,7 @@ export default function RoutesWrapper() {
           </AnimatePresence>
         </main>
         <AppFooter />
+        <ChatWidget />
       </Router>
     </div>
   );

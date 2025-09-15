@@ -7,7 +7,8 @@ import {
   getAIResponse,
   requestHumanAgent,
   getConversationMessages,
-  uploadChatFile
+  uploadChatFile,
+  getChatAvailability
 } from '../controllers/chatController';
 import { auth } from '../middleware/auth';
 import multer from 'multer';
@@ -43,6 +44,7 @@ router.post('/ai-response', getAIResponse);
 router.post('/request-human', requestHumanAgent);
 router.get('/conversations/:id/messages', getConversationMessages);
 router.post('/upload', upload.single('file'), uploadChatFile);
+router.get('/availability', getChatAvailability);
 
 // Admin routes for managing conversations
 router.get('/admin/conversations', auth, async (_req, res) => {

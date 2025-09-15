@@ -5,6 +5,8 @@ import { FiUser, FiLock, FiMail, FiUserPlus, FiEye, FiEyeOff } from 'react-icons
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { useLang, useTranslation } from '../contexts/LangContext';
+import { useAuthGuard } from '../hooks/useAuthGuard';
+import AuthWarningModal from '../components/AuthWarningModal';
 import GlassCard from '../components/GlassCard';
 import GlassButton from '../components/GlassButton';
 import SocialLogin from '../components/SocialLogin';
@@ -15,6 +17,15 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const { lang } = useLang();
   const t = useTranslation();
+  
+  const {
+    showWarning,
+    warningType,
+    handleLoginClick,
+    handleSignUpClick,
+    handleCloseWarning,
+    executePendingAction
+  } = useAuthGuard();
   
   const [formData, setFormData] = useState({
     name: "",
@@ -82,7 +93,11 @@ export default function RegisterPage() {
       
       if (result.success) {
         showToast(lang === "ar" ? "تم إنشاء الحساب بنجاح" : "Account created successfully");
-        navigate("/account");
+        // Execute pending action if there was one, otherwise go to account
+        const actionExecuted = executePendingAction();
+        if (!actionExecuted) {
+          navigate("/account");
+        }
       } else {
         showToast(result.message || (lang === "ar" ? "فشل في إنشاء الحساب" : "Registration failed"));
       }
@@ -259,6 +274,15 @@ export default function RegisterPage() {
           </div>
         </GlassCard>
       </motion.div>
+      
+      {/* Auth Warning Modal */}
+      <AuthWarningModal
+        isOpen={showWarning}
+        onClose={handleCloseWarning}
+        onLogin={handleLoginClick}
+        onSignUp={handleSignUpClick}
+        type={warningType}
+      />
     </div>
   );
 }

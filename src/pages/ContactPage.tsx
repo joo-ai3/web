@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   FiMail, 
-  FiPhone, 
   FiMapPin, 
   FiClock, 
   FiSend,
   FiUser,
   FiMessageSquare,
-  FiShoppingBag
+  FiShoppingBag,
+  FiMessageCircle,
+  FiFacebook,
+  FiInstagram
 } from 'react-icons/fi';
 import { useLang } from '../contexts/LangContext';
 import { useToast } from '../contexts/ToastContext';
@@ -21,7 +23,6 @@ interface ContactFormData {
   subject: string;
   message: string;
   orderNumber: string;
-  phone: string;
   honeypot: string; // Anti-spam honeypot field
 }
 
@@ -32,7 +33,6 @@ const ContactPage: React.FC = () => {
     subject: '',
     message: '',
     orderNumber: '',
-    phone: '',
     honeypot: ''
   });
   
@@ -50,7 +50,8 @@ const ContactPage: React.FC = () => {
       business: 'business@solevaeg.com',
       support: 'support@solevaeg.com'
     },
-    phone: '+20 100 123 4567',
+    whatsapp: '010 2835 4015',
+    whatsappLink: 'https://wa.me/201028354015',
     address: {
       ar: 'القاهرة، مصر',
       en: 'Cairo, Egypt'
@@ -58,6 +59,12 @@ const ContactPage: React.FC = () => {
     hours: {
       ar: 'السبت - الخميس: 9:00 ص - 6:00 م',
       en: 'Saturday - Thursday: 9:00 AM - 6:00 PM'
+    },
+    socialMedia: {
+      facebook: 'https://www.facebook.com/solevaeg',
+      instagram: 'https://www.instagram.com/soleva.eg/',
+      // Twitter hidden but kept for future use
+      // twitter: 'https://twitter.com/soleva'
     }
   };
 
@@ -103,9 +110,6 @@ const ContactPage: React.FC = () => {
       newErrors.message = lang === 'ar' ? 'الرسالة قصيرة جداً' : 'Message is too short';
     }
 
-    if (formData.phone && !/^(010|011|012|015)\d{8}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = lang === 'ar' ? 'رقم الهاتف غير صحيح' : 'Invalid phone number';
-    }
 
     if (formData.subject === 'order' && !formData.orderNumber.trim()) {
       newErrors.orderNumber = lang === 'ar' ? 'رقم الطلب مطلوب للاستفسارات المتعلقة بالطلبات' : 'Order number is required for order inquiries';
@@ -139,7 +143,6 @@ const ContactPage: React.FC = () => {
           subject: formData.subject,
           message: formData.message.trim(),
           orderNumber: formData.orderNumber.trim() || undefined,
-          phone: formData.phone.trim() || undefined,
           language: lang,
           timestamp: new Date().toISOString(),
           userAgent: navigator.userAgent,
@@ -164,7 +167,6 @@ const ContactPage: React.FC = () => {
           subject: '',
           message: '',
           orderNumber: '',
-          phone: '',
           honeypot: ''
         });
       } else {
@@ -270,18 +272,18 @@ const ContactPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Phone */}
+              {/* WhatsApp */}
               <div className="contact-item">
                 <div className="contact-icon">
-                  <FiPhone />
+                  <FiMessageCircle />
                 </div>
                 <div className="contact-details">
-                  <h4>{lang === 'ar' ? 'الهاتف' : 'Phone'}</h4>
-                  <a href={`tel:${contactInfo.phone}`}>
-                    {contactInfo.phone}
+                  <h4>WhatsApp</h4>
+                  <a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer">
+                    {contactInfo.whatsapp}
                   </a>
                 </div>
-            </div>
+              </div>
 
               {/* Address */}
               <div className="contact-item">
@@ -302,10 +304,40 @@ const ContactPage: React.FC = () => {
                 <div className="contact-details">
                   <h4>{lang === 'ar' ? 'ساعات العمل' : 'Business Hours'}</h4>
                   <p>{contactInfo.hours[lang as 'ar' | 'en']}</p>
+                </div>
               </div>
-            </div>
-          </GlassCard>
-        </motion.div>
+
+              {/* Social Media */}
+              <div className="contact-item">
+                <div className="contact-icon">
+                  <FiFacebook />
+                </div>
+                <div className="contact-details">
+                  <h4>{lang === 'ar' ? 'وسائل التواصل الاجتماعي' : 'Social Media'}</h4>
+                  <div className="social-links">
+                    <a 
+                      href={contactInfo.socialMedia.facebook} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="social-link"
+                    >
+                      <FiFacebook size={16} />
+                      <span>Facebook</span>
+                    </a>
+                    <a 
+                      href={contactInfo.socialMedia.instagram} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="social-link"
+                    >
+                      <FiInstagram size={16} />
+                      <span>Instagram</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
+          </motion.div>
 
         {/* Contact Form */}
         <motion.div
@@ -387,21 +419,6 @@ const ContactPage: React.FC = () => {
                       {errors.email && <span className="error-text">{errors.email}</span>}
                     </div>
 
-                    {/* Phone */}
-                    <div className="form-group">
-                      <label className="form-label">
-                        <FiPhone />
-                        {lang === 'ar' ? 'الهاتف' : 'Phone'} ({lang === 'ar' ? 'اختياري' : 'Optional'})
-                      </label>
-                      <input
-                        type="tel"
-                        className={`form-input ${errors.phone ? 'error' : ''}`}
-                        value={formData.phone}
-                        onChange={(e) => handleInputChange('phone', e.target.value)}
-                        placeholder={lang === 'ar' ? '01xxxxxxxxx' : '01xxxxxxxxx'}
-                      />
-                      {errors.phone && <span className="error-text">{errors.phone}</span>}
-                </div>
 
                     {/* Subject */}
                     <div className="form-group">

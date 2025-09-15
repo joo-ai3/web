@@ -4,7 +4,9 @@ import { FiHeart } from 'react-icons/fi';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useToast } from '../contexts/ToastContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { useLang, useTranslation } from '../contexts/LangContext';
+import { useTranslation } from '../contexts/LangContext';
+import { useAuthGuard } from '../hooks/useAuthGuard';
+import AuthWarningModal from './AuthWarningModal';
 import clsx from 'clsx';
 
 interface FavoriteButtonProps {
@@ -25,13 +27,20 @@ export default function FavoriteButton({
   const { theme } = useTheme();
   const t = useTranslation();
   const [isAnimating, setIsAnimating] = useState(false);
+  
+  const {
+    showWarning,
+    warningType,
+    actionDescription,
+    requireAuth,
+    handleLoginClick,
+    handleSignUpClick,
+    handleCloseWarning
+  } = useAuthGuard();
 
   const isCurrentlyFavorite = isFavorite(productId);
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
+  const handleToggleFavorite = () => {
     setIsAnimating(true);
     toggleFavorite(productId);
     
@@ -43,7 +52,19 @@ export default function FavoriteButton({
     setTimeout(() => setIsAnimating(false), 400);
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const actionDescription = isCurrentlyFavorite ? t("removeFromFavorites") : t("addToFavorites");
+    
+    requireAuth(handleToggleFavorite, {
+      action: actionDescription
+    });
+  };
+
   return (
+    <>
     <motion.button
       onClick={handleClick}
       className={clsx(
@@ -151,5 +172,16 @@ export default function FavoriteButton({
         />
       )}
     </motion.button>
+    
+    {/* Auth Warning Modal */}
+    <AuthWarningModal
+      isOpen={showWarning}
+      onClose={handleCloseWarning}
+      onLogin={handleLoginClick}
+      onSignUp={handleSignUpClick}
+      type={warningType}
+      action={actionDescription}
+    />
+  </>
   );
 }

@@ -35,16 +35,16 @@ const StructuredData: React.FC<StructuredDataProps> = ({ type, data, product, br
         "@value": "Premium luxury shoe brand offering exclusive footwear collections with sophisticated design and exceptional quality."
       },
       "sameAs": [
-        "https://facebook.com/solevaeg",
-        "https://instagram.com/solevaeg",
-        "https://twitter.com/solevaeg"
+        "https://www.facebook.com/solevaeg",
+        "https://www.instagram.com/soleva.eg/"
+        // Twitter hidden but kept for future use
+        // "https://twitter.com/solevaeg"
       ],
       "contactPoint": [
         {
           "@type": "ContactPoint",
-          "telephone": "+20-100-123-4567",
-          "contactType": "customer service",
           "email": "support@solevaeg.com",
+          "contactType": "customer service",
           "availableLanguage": ["English", "Arabic"]
         },
         {
@@ -241,9 +241,10 @@ const StructuredData: React.FC<StructuredDataProps> = ({ type, data, product, br
         }
       ],
       "sameAs": [
-        "https://facebook.com/solevaeg",
-        "https://instagram.com/solevaeg",
-        "https://twitter.com/solevaeg"
+        "https://www.facebook.com/solevaeg",
+        "https://www.instagram.com/soleva.eg/"
+        // Twitter hidden but kept for future use
+        // "https://twitter.com/solevaeg"
       ]
     };
   };

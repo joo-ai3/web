@@ -178,17 +178,19 @@ export const cartApi = {
 };
 
 export const ordersApi = {
-  getAll: () =>
-    apiClient.get(API_ENDPOINTS.ORDERS.LIST),
+  getAll: (params?: { page?: number; limit?: number }) => {
+    const queryParams = params ? '?' + new URLSearchParams(params as any).toString() : '';
+    return apiClient.get(API_ENDPOINTS.ORDERS.LIST + queryParams);
+  },
   
-  getById: (id: number) =>
+  getById: (id: string) =>
     apiClient.get(API_ENDPOINTS.ORDERS.SHOW(id)),
   
   create: (orderData: any) =>
     apiClient.post(API_ENDPOINTS.ORDERS.CREATE, orderData),
   
-  track: (id: number) =>
-    apiClient.get(API_ENDPOINTS.ORDERS.TRACK(id)),
+  track: (identifier: string) =>
+    apiClient.get(API_ENDPOINTS.ORDERS.TRACK(identifier)),
 };
 
 export const favoritesApi = {

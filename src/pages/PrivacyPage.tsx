@@ -182,12 +182,6 @@ export default function PrivacyPage() {
                   privacy@soleva.com
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">{lang === 'ar' ? 'الهاتف:' : 'Phone:'}</span>
-                <a href="tel:+201001234567" className="text-[#d1b16a] hover:underline">
-                  +20 100 123 4567
-                </a>
-              </div>
             </div>
           </GlassCard>
         </motion.div>

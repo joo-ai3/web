@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiShoppingCart, FiArrowLeft, FiCheck } from "react-icons/fi";
@@ -6,6 +6,8 @@ import clsx from "clsx";
 import { useLang, useTranslation } from "../contexts/LangContext";
 import { useCart } from "../contexts/CartContext";
 import { useToast } from "../contexts/ToastContext";
+import { useAuthGuard } from "../hooks/useAuthGuard";
+import AuthWarningModal from "../components/AuthWarningModal";
 import { products } from "../data/products";
 import GlassButton from "../components/GlassButton";
 import GlassCard from "../components/GlassCard";
@@ -17,11 +19,21 @@ export default function ProductPage() {
   const t = useTranslation();
   const { addToCart } = useCart();
   const { showToast } = useToast();
+  
+  const {
+    showWarning,
+    warningType,
+    actionDescription,
+    requireAuth,
+    handleLoginClick,
+    handleSignUpClick,
+    handleCloseWarning
+  } = useAuthGuard();
 
   const product = products.find(p => p.id === parseInt(id || "0"));
   const relatedProducts = products.filter(p => p.id !== product?.id && p.collection === product?.collection).slice(0, 4);
 
-  const [selectedColor, setSelectedColor] = useState(product?.colors[0]?.name[lang] || "");
+  const [selectedColor, setSelectedColor] = useState(product?.colors[0]?.name[lang as 'ar' | 'en'] || "");
   const [selectedSize, setSelectedSize] = useState(product?.sizes[0] || 0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageChanging, setIsImageChanging] = useState(false);
@@ -41,7 +53,7 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (!product || !selectedColor) return;
-    const colorIndex = product.colors.findIndex(color => color.name[lang] === selectedColor);
+    const colorIndex = product.colors.findIndex(color => color.name[lang as 'ar' | 'en'] === selectedColor);
     if (colorIndex !== -1 && colorIndex !== currentImageIndex) {
       setIsImageChanging(true);
       setTimeout(() => {
@@ -69,7 +81,7 @@ export default function ProductPage() {
     );
   }
 
-  const handleAddToCart = async () => {
+  const handleAddToCartAction = async () => {
     if (!selectedColor || !selectedSize) {
       showToast(lang === "ar" ? "يرجى اختيار اللون والمقاس" : "Please select color and size");
       return;
@@ -85,8 +97,14 @@ export default function ProductPage() {
     setIsAddingToCart(false);
   };
 
+  const handleAddToCart = () => {
+    requireAuth(handleAddToCartAction, {
+      action: t("addToCart")
+    });
+  };
+
   const handleColorSelect = (color: any) => {
-    setSelectedColor(color.name[lang]);
+    setSelectedColor(color.name[lang as 'ar' | 'en']);
   };
 
   const currentImage = product.image;
@@ -100,8 +118,8 @@ export default function ProductPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org/",
             "@type": "Product",
-            "name": product.name[lang],
-            "description": product.desc[lang],
+            "name": product.name[lang as 'ar' | 'en'],
+            "description": product.desc[lang as 'ar' | 'en'],
             "image": product.image,
             "brand": {
               "@type": "Brand",
@@ -142,7 +160,7 @@ export default function ProductPage() {
               {t('products')}
             </Link>
             <span>/</span>
-            <span className="text-text-primary">{product.name[lang]}</span>
+            <span className="text-text-primary">{product.name[lang as 'ar' | 'en']}</span>
           </div>
         </motion.nav>
 
@@ -159,7 +177,7 @@ export default function ProductPage() {
                 <motion.img
                   key={currentImageIndex}
                   src={currentImage}
-                  alt={product.name[lang]}
+                  alt={product.name[lang as 'ar' | 'en']}
                   className={clsx(
                     'w-full aspect-square object-cover transition-all duration-500',
                     isImageChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
@@ -211,10 +229,10 @@ export default function ProductPage() {
             <div className="flex justify-between items-start">
               <div className="flex-1">
                 <h1 className="text-3xl lg:text-4xl font-bold mb-3">
-                  {product.name[lang]}
+                  {product.name[lang as 'ar' | 'en']}
                 </h1>
                 <p className="text-lg text-text-secondary leading-relaxed">
-                  {product.desc[lang]}
+                  {product.desc[lang as 'ar' | 'en']}
                 </p>
               </div>
               <FavoriteButton productId={product.id} size={24} />
@@ -238,14 +256,14 @@ export default function ProductPage() {
                     whileHover={{ scale: 1.1 }}
                     className={clsx(
                       "w-12 h-12 rounded-full border-2 cursor-pointer transition-all duration-200 relative",
-                      selectedColor === color.name[lang]
+                      selectedColor === color.name[lang as 'ar' | 'en']
                         ? "border-primary ring-2 ring-primary ring-offset-2"
                         : "border-border-primary hover:border-primary"
                     )}
                     style={{ backgroundColor: color.code }}
-                    aria-label={color.name[lang]}
+                    aria-label={color.name[lang as 'ar' | 'en']}
                   >
-                    {selectedColor === color.name[lang] && (
+                    {selectedColor === color.name[lang as 'ar' | 'en'] && (
                       <FiCheck className="absolute inset-0 m-auto text-white drop-shadow-lg" size={20} />
                     )}
                   </motion.button>
@@ -284,7 +302,9 @@ export default function ProductPage() {
                 {t("specs")}
               </h3>
               <div className="space-y-3">
-                {product.specs[lang].map(([key, value], index) => (
+                {product.specs[lang as 'ar' | 'en'].map((spec: string[], index: number) => {
+                  const [key, value] = spec;
+                  return (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -295,7 +315,8 @@ export default function ProductPage() {
                     <span className="text-text-secondary font-medium">{key}:</span>
                     <span className="text-text-primary font-semibold">{value}</span>
                   </motion.div>
-                ))}
+                  );
+                })}
               </div>
             </GlassCard>
 
@@ -346,7 +367,7 @@ export default function ProductPage() {
                     <div className="product-card-image">
                       <img
                         src={item.image}
-                        alt={item.name[lang]}
+                        alt={item.name[lang as 'ar' | 'en']}
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 hover:scale-115"
                       />
@@ -354,7 +375,7 @@ export default function ProductPage() {
                     </div>
                     <div className="product-card-content">
                       <h3 className="product-card-title line-clamp-2">
-                        {item.name[lang]}
+                        {item.name[lang as 'ar' | 'en']}
                       </h3>
                       <p className="product-card-price">
                         {item.price} {t("egp")}
@@ -367,6 +388,16 @@ export default function ProductPage() {
           </motion.section>
         )}
       </div>
+      
+      {/* Auth Warning Modal */}
+      <AuthWarningModal
+        isOpen={showWarning}
+        onClose={handleCloseWarning}
+        onLogin={handleLoginClick}
+        onSignUp={handleSignUpClick}
+        type={warningType}
+        action={actionDescription}
+      />
     </div>
   );
 }

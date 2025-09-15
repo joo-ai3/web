@@ -58,7 +58,7 @@ async function main() {
     { name: { ar: 'مطروح', en: 'Matrouh' }, code: 'MTR', shippingCost: 110 }
   ];
 
-  const governorates = [];
+  const governorates: any[] = [];
   for (const govData of governoratesData) {
     const governorate = await prisma.governorate.upsert({
       where: { code: govData.code },
@@ -75,8 +75,8 @@ async function main() {
   console.log('✅ Governorates seeded:', governorates.length);
 
   // Seed some centers for Cairo and Giza
-  const cairoGov = governorates.find(g => g.code === 'CAI');
-  const gizaGov = governorates.find(g => g.code === 'GIZ');
+  const cairoGov = governorates.find(g => g.code === 'CAI')!;
+  const gizaGov = governorates.find(g => g.code === 'GIZ')!;
 
   if (cairoGov) {
     const cairoCenters = [

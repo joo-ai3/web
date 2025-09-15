@@ -1,4 +1,3 @@
-import React from 'react';
 import { LangProvider } from './contexts/LangContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';

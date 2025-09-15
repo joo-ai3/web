@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FiCreditCard, FiTrash2 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useLang, useTranslation } from '../../contexts/LangContext';
+import { useAuthGuard } from '../../hooks/useAuthGuard';
+import AuthWarningModal from '../../components/AuthWarningModal';
 import { COUPONS } from '../../constants/brand';
 import GlassCard from '../../components/GlassCard';
 import GlassButton from '../../components/GlassButton';
@@ -15,6 +17,16 @@ export default function CartSummary() {
   const navigate = useNavigate();
   const { lang } = useLang();
   const t = useTranslation();
+  
+  const {
+    showWarning,
+    warningType,
+    actionDescription,
+    requireAuth,
+    handleLoginClick,
+    handleSignUpClick,
+    handleCloseWarning
+  } = useAuthGuard();
 
   const [coupon, setCoupon] = useState('');
   const [applied, setApplied] = useState<any>(null);
@@ -39,6 +51,14 @@ export default function CartSummary() {
     clearCart();
     setShowEmptyConfirm(false);
     showToast(t("cartEmptied"));
+  };
+
+  const handleCheckout = () => {
+    requireAuth(() => {
+      navigate("/checkout", { state: { appliedCoupon: applied } });
+    }, {
+      action: t("checkout")
+    });
   };
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
   const discount = applied?.discount ? Math.min(Math.floor((subtotal * applied.discount) / 100), applied.maxDiscount || Infinity) : 0;
@@ -104,7 +124,7 @@ export default function CartSummary() {
       {/* Actions */}
       <div className="space-y-3">
         <GlassButton 
-          onClick={() => navigate("/checkout", { state: { appliedCoupon: applied } })}
+          onClick={handleCheckout}
           className="w-full bg-[#d1b16a] text-black border-none hover:bg-[#d1b16a]/80"
         >
           <FiCreditCard />
@@ -128,6 +148,16 @@ export default function CartSummary() {
           onConfirm={confirmEmptyCart} 
         />
       )}
+      
+      {/* Auth Warning Modal */}
+      <AuthWarningModal
+        isOpen={showWarning}
+        onClose={handleCloseWarning}
+        onLogin={handleLoginClick}
+        onSignUp={handleSignUpClick}
+        type={warningType}
+        action={actionDescription}
+      />
     </>
   );
 }

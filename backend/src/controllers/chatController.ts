@@ -152,12 +152,20 @@ export const sendMessage = async (req: Request, res: Response): Promise<Response
 // Get AI response
 export const getAIResponse = async (req: Request, res: Response): Promise<Response | void> => {
   try {
+    const userId = (req as any).user?.userId;
     const { conversationId, message, language = 'en', context } = req.body;
 
     if (!message) {
       return res.status(400).json({
         success: false,
         message: 'Message is required'
+      });
+    }
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required'
       });
     }
 
@@ -190,8 +198,39 @@ export const getAIResponse = async (req: Request, res: Response): Promise<Respon
       });
     }
 
-    // Generate AI response using OpenAI or similar service
-    const aiResponse = await generateAIResponse(message, language, context);
+    // Get user data for AI context
+    let userData = null;
+    if (context?.includeUserData && userId) {
+      userData = await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          orders: {
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            include: {
+              items: {
+                include: {
+                  product: true
+                }
+              }
+            }
+          },
+          cartItems: {
+            include: {
+              product: true
+            }
+          },
+          favorites: {
+            include: {
+              product: true
+            }
+          }
+        }
+      });
+    }
+
+    // Generate AI response using OpenAI or similar service with user data
+    const aiResponse = await generateAIResponse(message, language, { ...context, userData });
 
     // Save AI response to conversation
     if (conversationId) {
@@ -223,9 +262,10 @@ export const getAIResponse = async (req: Request, res: Response): Promise<Respon
   }
 };
 
-// Request human agent
+// Request human agent with queue system
 export const requestHumanAgent = async (req: Request, res: Response): Promise<Response | void> => {
   try {
+    const userId = (req as any).user?.userId;
     const { conversationId } = req.body;
 
     if (!conversationId) {
@@ -235,20 +275,69 @@ export const requestHumanAgent = async (req: Request, res: Response): Promise<Re
       });
     }
 
-    // Update conversation to request human agent
-    await prisma.conversation.update({
-      where: { id: conversationId },
-      data: {
-        status: 'PENDING',
-        priority: 'HIGH'
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required'
+      });
+    }
+
+    // Check current active human chat sessions (limit to 3)
+    const activeSessions = await prisma.conversation.count({
+      where: {
+        status: 'OPEN',
+        assignedToId: { not: null },
+        createdAt: {
+          gte: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
+        }
       }
     });
+
+    const maxConcurrentSessions = 3;
+    let queued = false;
+    let queuePosition = 0;
+
+    if (activeSessions >= maxConcurrentSessions) {
+      // Add to queue
+      queued = true;
+      
+      // Count users in queue
+      queuePosition = await prisma.conversation.count({
+        where: {
+          status: 'PENDING',
+          priority: 'HIGH',
+          createdAt: {
+            gte: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
+          }
+        }
+      }) + 1;
+
+      // Update conversation to pending (in queue)
+      await prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+          status: 'PENDING',
+          priority: 'HIGH'
+        }
+      });
+    } else {
+      // Connect directly to human agent
+      await prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+          status: 'OPEN',
+          priority: 'HIGH'
+        }
+      });
+    }
 
     // Create system message
     await prisma.message.create({
       data: {
         conversationId,
-        content: 'Customer has requested to speak with a human agent',
+        content: queued 
+          ? `Customer requested human agent - Added to queue (Position: ${queuePosition})`
+          : 'Customer requested human agent - Connected directly',
         type: 'SYSTEM',
         senderType: 'SYSTEM',
         senderName: 'System'
@@ -259,7 +348,13 @@ export const requestHumanAgent = async (req: Request, res: Response): Promise<Re
 
     res.json({
       success: true,
-      message: 'Human agent request submitted'
+      data: {
+        queued,
+        queuePosition: queued ? queuePosition : 0,
+        message: queued 
+          ? 'Added to waiting queue' 
+          : 'Connected to human agent'
+      }
     });
 
   } catch (error) {
@@ -473,12 +568,77 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
   }
 };
 
-const generateAIResponse = async (message: string, language: string, _context: any): Promise<{ response: string; confidence: number; model: string }> => {
+const generateAIResponse = async (message: string, language: string, context: any): Promise<{ response: string; confidence: number; model: string }> => {
   try {
     // For now, return a simple response based on keywords
     // In production, you would integrate with OpenAI, Claude, or similar service
     
     const lowerMessage = message.toLowerCase();
+    const userData = context?.userData;
+    
+    // Check if user is asking about their orders
+    if (lowerMessage.includes('order') || lowerMessage.includes('طلب')) {
+      if (userData?.orders && userData.orders.length > 0) {
+        const latestOrder = userData.orders[0];
+        return {
+          response: language === 'ar'
+            ? `لديك ${userData.orders.length} طلب. آخر طلب لك رقم ${latestOrder.orderNumber} بحالة ${latestOrder.orderStatus}. هل تريد معرفة تفاصيل أكثر؟`
+            : `You have ${userData.orders.length} orders. Your latest order ${latestOrder.orderNumber} is ${latestOrder.orderStatus}. Would you like more details?`,
+          confidence: 0.9,
+          model: 'user-data-bot'
+        };
+      } else {
+        return {
+          response: language === 'ar'
+            ? 'لم أجد أي طلبات في حسابك. هل تريد المساعدة في العثور على منتجات مناسبة؟'
+            : 'I don\'t see any orders in your account. Would you like help finding suitable products?',
+          confidence: 0.9,
+          model: 'user-data-bot'
+        };
+      }
+    }
+    
+    // Check if user is asking about cart
+    if (lowerMessage.includes('cart') || lowerMessage.includes('سلة')) {
+      if (userData?.cartItems && userData.cartItems.length > 0) {
+        return {
+          response: language === 'ar'
+            ? `لديك ${userData.cartItems.length} منتج في السلة. هل تريد إكمال عملية الشراء؟`
+            : `You have ${userData.cartItems.length} items in your cart. Would you like to complete your purchase?`,
+          confidence: 0.9,
+          model: 'user-data-bot'
+        };
+      } else {
+        return {
+          response: language === 'ar'
+            ? 'سلة التسوق فارغة. هل تريد استكشاف منتجاتنا؟'
+            : 'Your cart is empty. Would you like to explore our products?',
+          confidence: 0.9,
+          model: 'user-data-bot'
+        };
+      }
+    }
+    
+    // Check if user is asking about favorites
+    if (lowerMessage.includes('favorite') || lowerMessage.includes('مفضل')) {
+      if (userData?.favorites && userData.favorites.length > 0) {
+        return {
+          response: language === 'ar'
+            ? `لديك ${userData.favorites.length} منتج في المفضلة. هل تريد رؤية قائمة المفضلة؟`
+            : `You have ${userData.favorites.length} items in your favorites. Would you like to see your favorites list?`,
+          confidence: 0.9,
+          model: 'user-data-bot'
+        };
+      } else {
+        return {
+          response: language === 'ar'
+            ? 'لا توجد منتجات في المفضلة. هل تريد استكشاف منتجاتنا؟'
+            : 'No items in your favorites. Would you like to explore our products?',
+          confidence: 0.9,
+          model: 'user-data-bot'
+        };
+      }
+    }
     
     // FAQ responses
     if (lowerMessage.includes('shipping') || lowerMessage.includes('شحن')) {
@@ -529,5 +689,105 @@ const generateAIResponse = async (message: string, language: string, _context: a
       confidence: 0.5,
       model: 'error-handler'
     };
+  }
+};
+
+// Get chat availability status
+export const getChatAvailability = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { language = 'en' } = req.query;
+    
+    // Working hours configuration
+    const workingHours = {
+      timezone: 'Africa/Cairo',
+      days: {
+        saturday: { start: '09:00', end: '18:00', enabled: true },
+        sunday: { start: '09:00', end: '18:00', enabled: true },
+        monday: { start: '09:00', end: '18:00', enabled: true },
+        tuesday: { start: '09:00', end: '18:00', enabled: true },
+        wednesday: { start: '09:00', end: '18:00', enabled: true },
+        thursday: { start: '09:00', end: '18:00', enabled: true },
+        friday: { start: '09:00', end: '18:00', enabled: false },
+      }
+    };
+
+    // Check if current time is within working hours
+    const now = new Date();
+    const timeInTimezone = new Date(now.toLocaleString('en-US', { timeZone: workingHours.timezone }));
+    const currentDay = timeInTimezone.toLocaleDateString('en-US', { 
+      weekday: 'long',
+      timeZone: workingHours.timezone
+    }).toLowerCase();
+    
+    const dayConfig = workingHours.days[currentDay as keyof typeof workingHours.days];
+    let isLiveChatAvailable = dayConfig?.enabled || false;
+    
+    if (isLiveChatAvailable && dayConfig) {
+      const currentTime = timeInTimezone.getHours() * 60 + timeInTimezone.getMinutes();
+      const startParts = dayConfig.start.split(':');
+      const endParts = dayConfig.end.split(':');
+      
+      if (startParts.length === 2 && endParts.length === 2 && 
+          startParts[0] && startParts[1] && endParts[0] && endParts[1]) {
+        const startTime = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
+        const endTime = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
+        
+        if (currentTime < startTime || currentTime > endTime) {
+          isLiveChatAvailable = false;
+        }
+      }
+    }
+
+    // Get next available time
+    let nextAvailableTime = null;
+    if (!isLiveChatAvailable) {
+      // Find next available day
+      for (let i = 0; i < 7; i++) {
+        const checkDate = new Date(now);
+        checkDate.setDate(now.getDate() + i);
+        
+        const dayName = checkDate.toLocaleDateString('en-US', { 
+          weekday: 'long',
+          timeZone: workingHours.timezone
+        }).toLowerCase();
+        
+        const dayConfig = workingHours.days[dayName as keyof typeof workingHours.days];
+        
+        if (dayConfig && dayConfig.enabled) {
+          const startParts = dayConfig.start.split(':');
+          if (startParts.length === 2 && startParts[0] && startParts[1]) {
+            const startHour = parseInt(startParts[0]);
+            const startMinute = parseInt(startParts[1]);
+            nextAvailableTime = new Date(checkDate);
+            nextAvailableTime.setHours(startHour, startMinute, 0, 0);
+            break;
+          }
+        }
+      }
+    }
+
+    const availability = {
+      isLiveChatAvailable,
+      isAIAvailable: true, // AI is always available
+      nextAvailableTime,
+      currentMode: isLiveChatAvailable ? 'LIVE' : 'AI',
+      message: isLiveChatAvailable 
+        ? (language === 'ar' ? 'وكلاؤنا المباشرون متاحون الآن' : 'Our live agents are available now')
+        : (language === 'ar' 
+          ? `وكلاؤنا المباشرون غير متاحين حالياً. يرجى ترك رسالة أو التحدث مع مساعدنا الذكي.${nextAvailableTime ? ` سيكونون متاحين ${nextAvailableTime.toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US', { timeZone: workingHours.timezone, weekday: 'long', hour: '2-digit', minute: '2-digit' })}` : ''}`
+          : `Our live agents are currently offline. Please leave a message or chat with our AI Assistant.${nextAvailableTime ? ` They will be available ${nextAvailableTime.toLocaleString('en-US', { timeZone: workingHours.timezone, weekday: 'long', hour: '2-digit', minute: '2-digit' })}` : ''}`)
+    };
+
+    res.json({
+      success: true,
+      data: availability
+    });
+
+  } catch (error) {
+    console.error('Get chat availability error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get chat availability'
+    });
   }
 };

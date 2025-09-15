@@ -7,11 +7,16 @@ import {
   FiUser, 
   FiMinimize2, 
   FiMaximize2,
-  FiPaperclip
+  FiPaperclip,
+  FiWifi,
+  FiWifiOff
 } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { useLang } from '../contexts/LangContext';
 import { useToast } from '../contexts/ToastContext';
+import { useAuthGuard } from '../hooks/useAuthGuard';
+import AuthWarningModal from './AuthWarningModal';
+import { getChatAvailability, ChatAvailability } from '../utils/workingHours';
 
 interface Message {
   id: string;
@@ -45,9 +50,20 @@ const ChatWidget: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [agentTyping, setAgentTyping] = useState(false);
+  
+  const {
+    showWarning,
+    warningType,
+    actionDescription,
+    requireAuth,
+    handleLoginClick,
+    handleSignUpClick,
+    handleCloseWarning
+  } = useAuthGuard();
   const [chatMode, setChatMode] = useState<'AI' | 'HUMAN'>('AI');
   const [loading, setLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [availability, setAvailability] = useState<ChatAvailability | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -77,8 +93,48 @@ const ChatWidget: React.FC = () => {
     }
   }, [conversation]);
 
+  // Check chat availability on component mount and periodically
+  useEffect(() => {
+    checkAvailability();
+    const interval = setInterval(checkAvailability, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, [lang]);
+
+  // Update chat mode based on availability
+  useEffect(() => {
+    if (availability) {
+      setChatMode(availability.currentMode === 'LIVE' ? 'HUMAN' : 'AI');
+    }
+  }, [availability]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const checkAvailability = async () => {
+    try {
+      // First try to get availability from backend
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'}/v1/chat/availability?language=${lang}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAvailability(data.data);
+      } else {
+        // Fallback to client-side calculation
+        const clientAvailability = getChatAvailability(undefined, lang as 'en' | 'ar');
+        setAvailability(clientAvailability);
+      }
+    } catch (error) {
+      console.error('Failed to check availability:', error);
+      // Fallback to client-side calculation
+      const clientAvailability = getChatAvailability(undefined, lang as 'en' | 'ar');
+      setAvailability(clientAvailability);
+    }
   };
 
   const initializeChat = async () => {
@@ -149,8 +205,8 @@ const ChatWidget: React.FC = () => {
     const welcomeMessage: Message = {
       id: 'welcome',
       content: lang === 'ar' 
-        ? 'مرحباً! كيف يمكنني مساعدتك اليوم؟ يمكنني مساعدتك في:\n\n• تتبع طلبك\n• معلومات المنتجات\n• الشحن والتوصيل\n• المرتجعات والاستبدال\n\nأو يمكنك طلب التحدث مع أحد موظفي خدمة العملاء.'
-        : 'Hello! How can I help you today? I can assist you with:\n\n• Order tracking\n• Product information\n• Shipping and delivery\n• Returns and exchanges\n\nOr you can request to speak with a human agent.',
+        ? `مرحباً ${user?.name}! أنا مساعد سوليفا الذكي 🤖\n\nكيف يمكنني مساعدتك اليوم؟ يمكنني:\n\n✨ تتبع طلباتك\n🛍️ اقتراح منتجات مناسبة\n📦 معلومات الشحن والتوصيل\n🔄 المرتجعات والاستبدال\n💳 مساعدة في الدفع\n❓ الإجابة على الأسئلة الشائعة\n\nسأحاول مساعدتك أولاً، وإذا لم أتمكن من حل مشكلتك، سأقوم بتوصيلك بأحد موظفي خدمة العملاء 👨‍💼`
+        : `Hello ${user?.name}! I'm Soleva's AI Assistant 🤖\n\nHow can I help you today? I can assist with:\n\n✨ Your order tracking\n🛍️ Product recommendations\n📦 Shipping and delivery info\n🔄 Returns and exchanges\n💳 Payment assistance\n❓ FAQ answers\n\nI'll try to help you first, and if I can't resolve your issue, I'll connect you with a human agent 👨‍💼`,
       type: 'TEXT',
       senderType: 'AI',
       senderName: 'Soleva Assistant',
@@ -163,6 +219,16 @@ const ChatWidget: React.FC = () => {
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || !conversation || loading) return;
+    
+    // Ensure user is logged in
+    if (!user) {
+      showToast(
+        lang === 'ar' 
+          ? 'يجب تسجيل الدخول أولاً لاستخدام خدمة الدردشة' 
+          : 'Please log in first to use the chat service'
+      );
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -220,17 +286,30 @@ const ChatWidget: React.FC = () => {
         return;
       }
 
+      // Check if user wants product recommendations
+      if (isProductRecommendationQuery(userMessage)) {
+        await handleProductRecommendations(userMessage);
+        return;
+      }
+
+      // Check if user is asking FAQ questions
+      if (isFAQQuery(userMessage)) {
+        await handleFAQQuery(userMessage);
+        return;
+      }
+
       // Check if user wants to speak with human
       if (isHumanRequestQuery(userMessage)) {
         await switchToHumanMode();
         return;
       }
 
-      // Generate AI response
+      // Generate AI response with user data access
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'}/v1/chat/ai-response`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify({
           conversationId: conversation?.id,
@@ -238,7 +317,10 @@ const ChatWidget: React.FC = () => {
           language: lang,
           context: {
             userId: user?.id,
-            previousMessages: messages.slice(-5) // Last 5 messages for context
+            userEmail: user?.email,
+            userName: user?.name,
+            previousMessages: messages.slice(-5), // Last 5 messages for context
+            includeUserData: true // Flag to include user's orders, cart, favorites, etc.
           }
         })
       });
@@ -298,6 +380,26 @@ const ChatWidget: React.FC = () => {
     };
     
     const keywords = humanKeywords[lang as keyof typeof humanKeywords];
+    return keywords.some(keyword => message.toLowerCase().includes(keyword.toLowerCase()));
+  };
+
+  const isProductRecommendationQuery = (message: string): boolean => {
+    const productKeywords = {
+      ar: ['منتج', 'اقتراح', 'توصية', 'أفضل', 'جديد', 'شائع', 'مطلوب', 'أريد', 'ابحث', 'أبحث'],
+      en: ['product', 'recommend', 'suggestion', 'best', 'new', 'popular', 'want', 'looking', 'search', 'find']
+    };
+    
+    const keywords = productKeywords[lang as keyof typeof productKeywords];
+    return keywords.some(keyword => message.toLowerCase().includes(keyword.toLowerCase()));
+  };
+
+  const isFAQQuery = (message: string): boolean => {
+    const faqKeywords = {
+      ar: ['كيف', 'متى', 'أين', 'لماذا', 'ما هو', 'ما هي', 'سؤال', 'استفسار', 'معلومات', 'مساعدة'],
+      en: ['how', 'when', 'where', 'why', 'what is', 'what are', 'question', 'help', 'information', 'support']
+    };
+    
+    const keywords = faqKeywords[lang as keyof typeof faqKeywords];
     return keywords.some(keyword => message.toLowerCase().includes(keyword.toLowerCase()));
   };
 
@@ -392,36 +494,201 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
     }
   };
 
-  const switchToHumanMode = async () => {
-    setChatMode('HUMAN');
+  const handleProductRecommendations = async (message: string) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'}/v1/products/search?q=${encodeURIComponent(message)}&limit=3`, {
+        headers: user ? {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        } : {}
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const products = data.data || [];
+        
+        if (products.length > 0) {
+          const productMessage: Message = {
+            id: Date.now().toString() + '_products',
+            content: formatProductRecommendations(products),
+            type: 'PRODUCT_LINK',
+            senderType: 'AI',
+            senderName: 'Soleva Assistant',
+            isFromAI: true,
+            timestamp: new Date(),
+            metadata: { products }
+          };
+
+          setMessages(prev => [...prev, productMessage]);
+        } else {
+          const noProductsMessage: Message = {
+            id: Date.now().toString() + '_no_products',
+            content: lang === 'ar'
+              ? 'لم أجد منتجات تطابق بحثك. هل يمكنك وصف ما تبحث عنه بشكل أكثر تفصيلاً؟'
+              : 'I couldn\'t find products matching your search. Could you describe what you\'re looking for in more detail?',
+            type: 'TEXT',
+            senderType: 'AI',
+            senderName: 'Soleva Assistant',
+            isFromAI: true,
+            timestamp: new Date()
+          };
+
+          setMessages(prev => [...prev, noProductsMessage]);
+        }
+      }
+    } catch (error) {
+      console.error('Product recommendation error:', error);
+    }
+  };
+
+  const handleFAQQuery = async (message: string) => {
+    const faqResponses = {
+      ar: {
+        'كيف أتتبع طلبي': 'يمكنك تتبع طلبك بإدخال رقم الطلب في هذا المحادثة، أو من خلال قسم "طلباتي" في حسابك.',
+        'متى سيصل طلبي': 'عادة ما تصل الطلبات خلال 3-5 أيام عمل داخل القاهرة، و5-7 أيام للمحافظات الأخرى.',
+        'كيف يمكنني إرجاع منتج': 'يمكنك إرجاع المنتج خلال 14 يوم من تاريخ الاستلام. اتصل بنا أو استخدم نموذج الإرجاع.',
+        'ما هي طرق الدفع المتاحة': 'نقبل الدفع عند الاستلام، التحويل البنكي، والمحافظ الرقمية.',
+        'كيف أغير عنوان الشحن': 'يمكنك تغيير العنوان من حسابك أو الاتصال بنا قبل شحن الطلب.'
+      },
+      en: {
+        'how to track order': 'You can track your order by entering the order number in this chat, or through the "My Orders" section in your account.',
+        'when will my order arrive': 'Orders usually arrive within 3-5 business days in Cairo, and 5-7 days for other governorates.',
+        'how to return product': 'You can return the product within 14 days of delivery. Contact us or use the return form.',
+        'what payment methods are available': 'We accept cash on delivery, bank transfer, and digital wallets.',
+        'how to change shipping address': 'You can change the address from your account or contact us before the order is shipped.'
+      }
+    };
+
+    const responses = faqResponses[lang as keyof typeof faqResponses];
+    const lowerMessage = message.toLowerCase();
     
-    const switchMessage: Message = {
-      id: Date.now().toString() + '_switch',
+    for (const [key, answer] of Object.entries(responses)) {
+      if (lowerMessage.includes(key)) {
+        const faqMessage: Message = {
+          id: Date.now().toString() + '_faq',
+          content: answer,
+          type: 'TEXT',
+          senderType: 'AI',
+          senderName: 'Soleva Assistant',
+          isFromAI: true,
+          timestamp: new Date()
+        };
+
+        setMessages(prev => [...prev, faqMessage]);
+        return;
+      }
+    }
+
+    // If no specific FAQ match, provide general help
+    const generalHelpMessage: Message = {
+      id: Date.now().toString() + '_general_help',
       content: lang === 'ar'
-        ? '🙋‍♀️ تم تحويلك إلى أحد موظفي خدمة العملاء. سيتم الرد عليك في أقرب وقت ممكن.'
-        : '🙋‍♀️ You\'ve been connected to a human agent. You\'ll receive a response shortly.',
+        ? 'يمكنني مساعدتك في:\n\n• تتبع الطلبات\n• معلومات المنتجات\n• الشحن والتوصيل\n• المرتجعات\n• طرق الدفع\n\nأو يمكنك طلب التحدث مع موظف خدمة العملاء.'
+        : 'I can help you with:\n\n• Order tracking\n• Product information\n• Shipping and delivery\n• Returns\n• Payment methods\n\nOr you can request to speak with a customer service agent.',
       type: 'TEXT',
-      senderType: 'SYSTEM',
-      isFromAI: false,
+      senderType: 'AI',
+      senderName: 'Soleva Assistant',
+      isFromAI: true,
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, switchMessage]);
+    setMessages(prev => [...prev, generalHelpMessage]);
+  };
 
-    // Notify admin of new human chat request
+  const formatProductRecommendations = (products: any[]): string => {
+    if (lang === 'ar') {
+      return `🛍️ إليك بعض المنتجات المقترحة:\n\n${products.map((product, index) => 
+        `${index + 1}. **${product.name}**\n   💰 ${product.price} ج.م\n   ⭐ ${product.rating || 'جديد'}\n   🔗 [عرض المنتج](${window.location.origin}/products/${product.id})`
+      ).join('\n\n')}\n\nهل تريد رؤية المزيد من المنتجات أم لديك أسئلة محددة؟`;
+    } else {
+      return `🛍️ Here are some recommended products:\n\n${products.map((product, index) => 
+        `${index + 1}. **${product.name}**\n   💰 ${product.price} EGP\n   ⭐ ${product.rating || 'New'}\n   🔗 [View Product](${window.location.origin}/products/${product.id})`
+      ).join('\n\n')}\n\nWould you like to see more products or do you have specific questions?`;
+    }
+  };
+
+  const switchToHumanMode = async () => {
+    // Check if user is logged in
+    if (!user) {
+      showToast(
+        lang === 'ar' 
+          ? 'يجب تسجيل الدخول أولاً لاستخدام خدمة الدردشة' 
+          : 'Please log in first to use the chat service'
+      );
+      return;
+    }
+
+    // Request human agent and check queue status
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'}/v1/chat/request-human`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'}/v1/chat/request-human`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(user ? { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` } : {})
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify({
-          conversationId: conversation?.id
+          conversationId: conversation?.id,
+          userId: user.id
         })
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.data.queued) {
+          // User is in queue
+          const queueMessage: Message = {
+            id: Date.now().toString() + '_queue',
+            content: lang === 'ar'
+              ? `🙋‍♀️ تم إضافتك إلى قائمة الانتظار. موقعك في الطابور: ${data.data.queuePosition}\n\nسيتم توصيلك بأحد موظفي خدمة العملاء في أقرب وقت ممكن.`
+              : `🙋‍♀️ You've been added to the waiting queue. Your position: ${data.data.queuePosition}\n\nYou'll be connected to a human agent as soon as one becomes available.`,
+            type: 'TEXT',
+            senderType: 'SYSTEM',
+            isFromAI: false,
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, queueMessage]);
+        } else {
+          // User is connected to human agent
+          setChatMode('HUMAN');
+          const switchMessage: Message = {
+            id: Date.now().toString() + '_switch',
+            content: lang === 'ar'
+              ? '🙋‍♀️ تم تحويلك إلى أحد موظفي خدمة العملاء. سيتم الرد عليك في أقرب وقت ممكن.'
+              : '🙋‍♀️ You\'ve been connected to a human agent. You\'ll receive a response shortly.',
+            type: 'TEXT',
+            senderType: 'SYSTEM',
+            isFromAI: false,
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, switchMessage]);
+        }
+      } else {
+        // Handle error
+        const errorMessage: Message = {
+          id: Date.now().toString() + '_error',
+          content: lang === 'ar'
+            ? 'عذراً، حدث خطأ في طلب التحدث مع موظف خدمة العملاء. يرجى المحاولة مرة أخرى.'
+            : 'Sorry, there was an error requesting a human agent. Please try again.',
+          type: 'TEXT',
+          senderType: 'SYSTEM',
+          isFromAI: false,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
     } catch (error) {
       console.error('Failed to request human agent:', error);
+      const errorMessage: Message = {
+        id: Date.now().toString() + '_error',
+        content: lang === 'ar'
+          ? 'عذراً، حدث خطأ في طلب التحدث مع موظف خدمة العملاء. يرجى المحاولة مرة أخرى.'
+          : 'Sorry, there was an error requesting a human agent. Please try again.',
+        type: 'TEXT',
+        senderType: 'SYSTEM',
+        isFromAI: false,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
     }
   };
 
@@ -532,10 +799,16 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
     }
   };
 
-  const openChat = () => {
+  const openChatAction = () => {
     setIsOpen(true);
     setUnreadCount(0);
     setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
+  const openChat = () => {
+    requireAuth(openChatAction, {
+      action: lang === 'ar' ? 'استخدام خدمة الدردشة' : 'use chat service'
+    });
   };
 
   const closeChat = () => {
@@ -548,20 +821,34 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
       {/* Chat Widget Button */}
       <AnimatePresence>
         {!isOpen && (
-          <motion.button
+          <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={openChat}
-            className="chat-widget-button"
+            className="chat-widget-container"
           >
-            <FiMessageCircle size={24} />
-            {unreadCount > 0 && (
-              <span className="unread-badge">{unreadCount}</span>
-            )}
-          </motion.button>
+            {/* Tooltip */}
+            <motion.div
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="chat-tooltip"
+            >
+              {lang === 'ar' ? 'هل يمكنني مساعدتك؟' : 'Can I help you?'}
+            </motion.div>
+            
+            {/* Chat Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={openChat}
+              className="chat-widget-button"
+            >
+              <FiMessageCircle size={24} />
+              {unreadCount > 0 && (
+                <span className="unread-badge">{unreadCount}</span>
+              )}
+            </motion.button>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -597,6 +884,13 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
                       <span className="typing-indicator">
                         {lang === 'ar' ? 'يكتب...' : 'Typing...'}
                       </span>
+                    ) : availability ? (
+                      <span className={`status-indicator ${availability.isLiveChatAvailable ? 'online' : 'offline'}`}>
+                        {availability.isLiveChatAvailable 
+                          ? (lang === 'ar' ? 'متاح الآن' : 'Online now')
+                          : (lang === 'ar' ? 'غير متاح' : 'Offline')
+                        }
+                      </span>
                     ) : (
                       <span className="online-status">
                         {lang === 'ar' ? 'متاح الآن' : 'Online now'}
@@ -631,6 +925,26 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
                   exit={{ height: 0, opacity: 0 }}
                   className="chat-content"
                 >
+                  {/* Availability Status */}
+                  {availability && (
+                    <div className={`availability-status ${availability.isLiveChatAvailable ? 'online' : 'offline'}`}>
+                      <div className="availability-icon">
+                        {availability.isLiveChatAvailable ? <FiWifi size={16} /> : <FiWifiOff size={16} />}
+                      </div>
+                      <div className="availability-text">
+                        {availability.isLiveChatAvailable ? (
+                          <span className="online-text">
+                            {lang === 'ar' ? 'وكلاؤنا المباشرون متاحون الآن' : 'Our live agents are available now'}
+                          </span>
+                        ) : (
+                          <span className="offline-text">
+                            {availability.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Messages */}
                   <div className="messages-container">
                     {loading ? (
@@ -673,7 +987,32 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
                             </div>
                             
                             <div className="message-text">
-                              {message.content}
+                              {message.type === 'PRODUCT_LINK' ? (
+                                <div className="product-message">
+                                  {message.content.split('\n').map((line, index) => {
+                                    if (line.includes('[عرض المنتج]') || line.includes('[View Product]')) {
+                                      const linkMatch = line.match(/\[([^\]]+)\]\(([^)]+)\)/);
+                                      if (linkMatch) {
+                                        return (
+                                          <div key={index} className="product-link">
+                                            <a 
+                                              href={linkMatch[2]} 
+                                              target="_blank" 
+                                              rel="noopener noreferrer"
+                                              className="product-link-button"
+                                            >
+                                              {linkMatch[1]}
+                                            </a>
+                                          </div>
+                                        );
+                                      }
+                                    }
+                                    return <div key={index}>{line}</div>;
+                                  })}
+                                </div>
+                              ) : (
+                                message.content
+                              )}
                             </div>
 
                             {message.attachments && message.attachments.length > 0 && (
@@ -771,10 +1110,43 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
       </AnimatePresence>
 
       <style>{`
-        .chat-widget-button {
+        .chat-widget-container {
           position: fixed;
           bottom: 24px;
           right: 24px;
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .chat-tooltip {
+          background: rgba(0, 0, 0, 0.9);
+          color: white;
+          padding: 8px 12px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          white-space: nowrap;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          position: relative;
+          animation: tooltipPulse 2s ease-in-out infinite;
+        }
+
+        .chat-tooltip::after {
+          content: '';
+          position: absolute;
+          right: -6px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-left: 6px solid rgba(0, 0, 0, 0.9);
+          border-top: 6px solid transparent;
+          border-bottom: 6px solid transparent;
+        }
+
+        .chat-widget-button {
           width: 60px;
           height: 60px;
           background: linear-gradient(135deg, #d1b16a 0%, #b8965a 100%);
@@ -783,7 +1155,6 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
           color: white;
           cursor: pointer;
           box-shadow: 0 8px 25px rgba(209, 177, 106, 0.4);
-          z-index: 1000;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -827,10 +1198,38 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
         }
 
         @media (max-width: 480px) {
+          .chat-widget-container {
+            bottom: 16px;
+            right: 16px;
+          }
+
+          .chat-tooltip {
+            display: none; /* Hide tooltip on mobile */
+          }
+
           .chat-window {
             width: calc(100vw - 32px);
             right: 16px;
             left: 16px;
+            bottom: 16px;
+            height: calc(100vh - 100px);
+            max-height: 600px;
+          }
+
+          .chat-content {
+            height: calc(100% - 60px);
+          }
+
+          .messages-container {
+            padding: 12px;
+          }
+
+          .message-content {
+            max-width: 85%;
+          }
+
+          .chat-input-container {
+            padding: 12px;
           }
         }
 
@@ -1127,6 +1526,33 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
           color: var(--primary);
         }
 
+        .product-message {
+          line-height: 1.6;
+        }
+
+        .product-link {
+          margin: 8px 0;
+        }
+
+        .product-link-button {
+          display: inline-block;
+          background: var(--primary);
+          color: white;
+          padding: 8px 16px;
+          border-radius: 20px;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 14px;
+          transition: all 0.2s;
+          box-shadow: 0 2px 8px rgba(209, 177, 106, 0.3);
+        }
+
+        .product-link-button:hover {
+          background: var(--primary-dark);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(209, 177, 106, 0.4);
+        }
+
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
@@ -1134,6 +1560,11 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
         @keyframes typing {
           0%, 60%, 100% { transform: translateY(0); }
           30% { transform: translateY(-10px); }
+        }
+
+        @keyframes tooltipPulse {
+          0%, 100% { opacity: 0.8; }
+          50% { opacity: 1; }
         }
 
         /* Dark theme adjustments */
@@ -1151,6 +1582,16 @@ ${order.estimatedDelivery ? `Est. Delivery: ${new Date(order.estimatedDelivery).
           border-color: rgba(255, 255, 255, 0.1);
         }
       `}</style>
+      
+      {/* Auth Warning Modal */}
+      <AuthWarningModal
+        isOpen={showWarning}
+        onClose={handleCloseWarning}
+        onLogin={handleLoginClick}
+        onSignUp={handleSignUpClick}
+        type={warningType}
+        action={actionDescription}
+      />
     </>
   );
 };

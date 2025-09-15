@@ -1,9 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiFacebook, FiInstagram, FiTwitter, FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
+import { FiFacebook, FiInstagram, FiMail, FiMapPin, FiMessageCircle } from 'react-icons/fi';
 import { useLang, useTranslation } from '../contexts/LangContext';
 import Logo from './Logo';
-import GlassCard from './GlassCard';
 
 export default function AppFooter() {
   const { lang } = useLang();
@@ -33,14 +31,14 @@ export default function AppFooter() {
 
   const contactInfo = [
     {
-      icon: <FiPhone size={16} />,
-      text: '+20 100 123 4567',
-      href: 'tel:+201001234567'
+      icon: <FiMessageCircle size={16} />,
+      text: '010 2835 4015',
+      href: 'https://wa.me/201028354015'
     },
     {
       icon: <FiMail size={16} />,
-      text: 'info@soleva.com',
-      href: 'mailto:info@soleva.com'
+      text: 'info@solevaeg.com',
+      href: 'mailto:info@solevaeg.com'
     },
     {
       icon: <FiMapPin size={16} />,
@@ -50,9 +48,10 @@ export default function AppFooter() {
   ];
 
   const socialLinks = [
-    { icon: <FiFacebook size={20} />, href: 'https://facebook.com/soleva', label: 'Facebook' },
-    { icon: <FiInstagram size={20} />, href: 'https://instagram.com/soleva', label: 'Instagram' },
-    { icon: <FiTwitter size={20} />, href: 'https://twitter.com/soleva', label: 'Twitter' }
+    { icon: <FiFacebook size={20} />, href: 'https://www.facebook.com/solevaeg', label: 'Facebook' },
+    { icon: <FiInstagram size={20} />, href: 'https://www.instagram.com/soleva.eg/', label: 'Instagram' },
+    // Twitter link hidden but kept for future use
+    // { icon: <FiTwitter size={20} />, href: 'https://twitter.com/soleva', label: 'Twitter' }
   ];
 
   return (

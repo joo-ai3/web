@@ -5,6 +5,8 @@ import { FiUser, FiLock, FiLogIn, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { useLang, useTranslation } from '../contexts/LangContext';
+import { useAuthGuard } from '../hooks/useAuthGuard';
+import AuthWarningModal from '../components/AuthWarningModal';
 import GlassCard from '../components/GlassCard';
 import GlassButton from '../components/GlassButton';
 import SocialLogin from '../components/SocialLogin';
@@ -15,6 +17,15 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { lang } = useLang();
   const t = useTranslation();
+  
+  const {
+    showWarning,
+    warningType,
+    handleLoginClick,
+    handleSignUpClick,
+    handleCloseWarning,
+    executePendingAction
+  } = useAuthGuard();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,9 +64,19 @@ export default function LoginPage() {
       
       if (result.success) {
         showToast(t("loginSuccess"));
-        navigate("/account");
+        // Execute pending action if there was one, otherwise go to account
+        const actionExecuted = executePendingAction();
+        if (!actionExecuted) {
+          navigate("/account");
+        }
       } else {
-        showToast(result.message || (lang === "ar" ? "فشل في تسجيل الدخول" : "Login failed"));
+        // Handle different error types
+        if (result.errorType === 'account_not_found') {
+          // Show signup modal for account not found
+          handleSignUpClick();
+        } else {
+          showToast(result.message || (lang === "ar" ? "فشل في تسجيل الدخول" : "Login failed"));
+        }
       }
     } catch (error) {
       showToast(lang === "ar" ? "حدث خطأ أثناء تسجيل الدخول" : "Login failed");
@@ -181,6 +202,15 @@ export default function LoginPage() {
           </div>
         </GlassCard>
       </motion.div>
+      
+      {/* Auth Warning Modal */}
+      <AuthWarningModal
+        isOpen={showWarning}
+        onClose={handleCloseWarning}
+        onLogin={handleLoginClick}
+        onSignUp={handleSignUpClick}
+        type={warningType}
+      />
     </div>
   );
 }
