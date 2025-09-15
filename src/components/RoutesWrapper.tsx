@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -20,6 +19,7 @@ import RegisterPage from '../pages/RegisterPage';
 import AccountPage from '../pages/AccountPage';
 import OrdersPage from '../pages/OrdersPage';
 import OrderTrackingPage from '../pages/OrderTrackingPage';
+import OrderDetailsPage from '../pages/OrderDetailsPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import FavoritesPage from '../pages/FavoritesPage';
 import ContactPage from '../pages/ContactPage';
@@ -82,7 +82,9 @@ export default function RoutesWrapper() {
               <Route path="/order-confirmation" element={<OrderConfirmation />} />
               <Route path="/account" element={<AccountPage />} />
               <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/orders/:orderId" element={<OrderDetailsPage />} />
               <Route path="/order-tracking" element={<OrderTrackingPage />} />
+              <Route path="/track/:orderNumber" element={<OrderTrackingPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </AnimatePresence>

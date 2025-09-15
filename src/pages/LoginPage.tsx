@@ -7,6 +7,7 @@ import { useToast } from '../contexts/ToastContext';
 import { useLang, useTranslation } from '../contexts/LangContext';
 import GlassCard from '../components/GlassCard';
 import GlassButton from '../components/GlassButton';
+import SocialLogin from '../components/SocialLogin';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -47,13 +48,15 @@ export default function LoginPage() {
     
     setIsLoading(true);
     
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await login(email, password);
       
-      login({ name: email.split('@')[0], email });
-      showToast(t("loginSuccess"));
-      navigate("/account");
+      if (result.success) {
+        showToast(t("loginSuccess"));
+        navigate("/account");
+      } else {
+        showToast(result.message || (lang === "ar" ? "فشل في تسجيل الدخول" : "Login failed"));
+      }
     } catch (error) {
       showToast(lang === "ar" ? "حدث خطأ أثناء تسجيل الدخول" : "Login failed");
     } finally {
@@ -162,6 +165,8 @@ export default function LoginPage() {
               )}
             </GlassButton>
           </form>
+
+          <SocialLogin mode="login" onSuccess={() => navigate("/account")} />
 
           <div className="mt-8 text-center">
             <p className="text-gray-600">

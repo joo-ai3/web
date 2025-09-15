@@ -7,9 +7,10 @@ import { useToast } from '../contexts/ToastContext';
 import { useLang, useTranslation } from '../contexts/LangContext';
 import GlassCard from '../components/GlassCard';
 import GlassButton from '../components/GlassButton';
+import SocialLogin from '../components/SocialLogin';
 
 export default function RegisterPage() {
-  const { login } = useAuth();
+  const { register } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const { lang } = useLang();
@@ -71,13 +72,20 @@ export default function RegisterPage() {
     
     setIsLoading(true);
     
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.confirmPassword
+      });
       
-      login({ name: formData.name, email: formData.email });
-      showToast(lang === "ar" ? "تم إنشاء الحساب بنجاح" : "Account created successfully");
-      navigate("/account");
+      if (result.success) {
+        showToast(lang === "ar" ? "تم إنشاء الحساب بنجاح" : "Account created successfully");
+        navigate("/account");
+      } else {
+        showToast(result.message || (lang === "ar" ? "فشل في إنشاء الحساب" : "Registration failed"));
+      }
     } catch (error) {
       showToast(lang === "ar" ? "حدث خطأ أثناء إنشاء الحساب" : "Registration failed");
     } finally {
@@ -235,6 +243,8 @@ export default function RegisterPage() {
               )}
             </GlassButton>
           </form>
+
+          <SocialLogin mode="register" onSuccess={() => navigate("/account")} />
 
           <div className="mt-8 text-center">
             <p className="text-gray-600">
